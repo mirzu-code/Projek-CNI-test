@@ -1,0 +1,204 @@
+.admin-page {
+  padding-bottom: 4rem;
+}
+
+.admin-header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 3rem 0;
+  position: relative;
+}
+
+.admin-header p {
+  color: var(--accent-color);
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.admin-container {
+  width: 95%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.btn-logout {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  border-color: rgba(255,255,255,0.3);
+}
+
+.btn-logout:hover {
+  background-color: white;
+  color: var(--primary-color);
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  margin-top: -2rem;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.stat-card.highlight {
+  border-color: var(--accent-color);
+  background-color: #fcfbf7;
+}
+
+.stat-card h3 {
+  font-size: 1rem;
+  color: var(--text-light);
+  font-family: var(--font-body);
+  margin-bottom: 1rem;
+}
+
+.stat-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.stat-card.highlight .stat-value {
+  color: var(--accent-color);
+}
+
+.reservations-table-container {
+  background: var(--bg-card);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  padding: 2rem;
+  overflow-x: auto;
+}
+
+.reservations-table-container h3 {
+  margin-bottom: 1.5rem;
+}
+
+.reservations-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.reservations-table th,
+.reservations-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.reservations-table th {
+  background-color: var(--bg-color);
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.time-badge {
+  display: inline-block;
+  background-color: var(--bg-color);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
+
+.preorder-badge {
+  display: inline-block;
+  background-color: #f0f7f4;
+  color: var(--primary-color);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-badge.confirmed {
+  background-color: #e6f4ea;
+  color: #137333;
+}
+
+.status-badge.pending {
+  background-color: #fef7e0;
+  color: #b06000;
+}
+
+.text-muted {
+  color: var(--text-light);
+  font-style: italic;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.mt-4 { margin-top: 2rem; }
+
+/* Login Styles */
+.admin-login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 70px);
+  background-color: var(--bg-color);
+}
+
+.admin-login-card {
+  background: var(--bg-card);
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.admin-login-card h2 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.admin-login-card p {
+  color: var(--text-light);
+  margin-bottom: 2rem;
+}
+
+.error-message {
+  color: #d32f2f;
+  background: #fde0e0;
+  padding: 0.8rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.hint {
+  font-size: 0.8rem !important;
+  color: var(--text-light) !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0 !important;
+}

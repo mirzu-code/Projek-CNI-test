@@ -1,0 +1,131 @@
+.my-booking-page {
+  padding-bottom: 4rem;
+  background-color: var(--bg-color);
+  min-height: calc(100vh - 70px);
+}
+
+.booking-header-banner {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 3rem 0;
+  text-align: center;
+}
+
+.no-booking {
+  max-width: 500px;
+  margin: 5rem auto;
+  text-align: center;
+  padding: 3rem;
+  background: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.no-booking .icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.ticket-card {
+  max-width: 600px;
+  margin: -2rem auto 0;
+  background: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background-color: #fcfbf7;
+  border-bottom: 2px dashed var(--border-color);
+}
+
+.ticket-header h3 {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--text-main);
+  letter-spacing: 1px;
+}
+
+.ticket-body {
+  padding: 2rem;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .ticket-body {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.qr-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.qr-placeholder img {
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.ticket-details {
+  flex: 1;
+  width: 100%;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row .label {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.detail-row .value {
+  font-weight: 600;
+  color: var(--text-main);
+  text-transform: capitalize;
+}
+
+.detail-row.highlight {
+  background: #f0f7f4;
+  padding: 0.8rem;
+  border-radius: 4px;
+  border-left: 3px solid var(--primary-color);
+}
+
+.ticket-footer {
+  padding: 1.5rem 2rem;
+  background-color: var(--bg-color);
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.ticket-footer p {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.full-width {
+  width: 100%;
+}
