@@ -29,16 +29,23 @@ const BookingFlow = () => {
     e.preventDefault();
     setIsProcessing(true);
     
-    // Simulate payment processing
     setTimeout(() => {
       setIsProcessing(false);
-      // Save booking to localStorage for "My Booking" page
-      const bookingData = {
+      
+      const newBooking = {
         ...formData,
-        id: 'RES-' + Math.floor(Math.random() * 10000),
+        id: 'RES-' + Math.floor(1000 + Math.random() * 9000),
         status: 'Confirmed'
       };
-      localStorage.setItem('activeBooking', JSON.stringify(bookingData));
+      
+      // 1. Save single active booking for customer portal
+      localStorage.setItem('activeBooking', JSON.stringify(newBooking));
+      
+      // 2. Append to all reservations for the Admin panel
+      const savedBookings = localStorage.getItem('allBookings');
+      const all = savedBookings ? JSON.parse(savedBookings) : [];
+      all.push(newBooking);
+      localStorage.setItem('allBookings', JSON.stringify(all));
       
       setStep(5);
     }, 2000);

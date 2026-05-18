@@ -1,10 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Admin.css';
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [reservations, setReservations] = useState([]);
+  const [selectedRes, setSelectedRes] = useState(null); // for managing a specific booking
+
+  // Initial mock data
+  const defaultReservations = [
+    { id: 'RES-3921', name: 'Ahmad Faiz', date: '2026-05-20', time: '18:00', pax: 4, preorder: true, dish: 'ayam-rendang', status: 'Confirmed' },
+    { id: 'RES-8821', name: 'Sarah Lee', date: '2026-05-20', time: '19:30', pax: 2, preorder: false, dish: '', status: 'Confirmed' },
+    { id: 'RES-1049', name: 'Mohd Amir', date: '2026-05-21', time: '21:00', pax: 6, preorder: true, dish: 'masak-lemak', status: 'Pending' },
+  ];
+
+  useEffect(() => {
+    // Load bookings from localStorage
+    const saved = localStorage.getItem('allBookings');
+    if (saved) {
+      setReservations(JSON.parse(saved));
+    } else {
+      // Initialize with default mock data
+      localStorage.setItem('allBookings', JSON.stringify(defaultReservations));
+      setReservations(defaultReservations);
+    }
+  }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -16,12 +37,46 @@ const Admin = () => {
     }
   };
 
-  // Mock data for reservations
-  const reservations = [
-    { id: 'RES-001', name: 'Ahmad Faiz', date: '2023-11-20', time: '18:00', pax: 4, preorder: 'Ayam Rendang Rembayung', status: 'Confirmed' },
-    { id: 'RES-002', name: 'Sarah Lee', date: '2023-11-20', time: '19:30', pax: 2, preorder: 'None', status: 'Confirmed' },
-    { id: 'RES-003', name: 'Mohd Amir', date: '2023-11-21', time: '21:00', pax: 6, preorder: 'Masak Lemak Cili Api Daging Salai', status: 'Pending' },
-  ];
+  const handleUpdateStatus = (id, newStatus) => {
+    const updated = reservations.map(res => 
+      res.id === id ? { ...res, status: newStatus } : res
+    );
+    setReservations(updated);
+    localStorage.setItem('allBookings', JSON.stringify(updated));
+    setSelectedRes(null);
+
+    // If the updated booking matches the user's active booking in localStorage, update that too
+    const active = localStorage.getItem('activeBooking');
+    if (active) {
+      const activeObj = JSON.parse(active);
+      if (activeObj.id === id) {
+        activeObj.status = newStatus;
+        localStorage.setItem('activeBooking', JSON.stringify(activeObj));
+      }
+    }
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this reservation?')) {
+      const updated = reservations.filter(res => res.id !== id);
+      setReservations(updated);
+      localStorage.setItem('allBookings', JSON.stringify(updated));
+      setSelectedRes(null);
+
+      const active = localStorage.getItem('activeBooking');
+      if (active) {
+        const activeObj = JSON.parse(active);
+        if (activeObj.id === id) {
+          localStorage.removeItem('activeBooking');
+        }
+      }
+    }
+  };
+
+  // Calculate dynamic stats
+  const totalBookings = reservations.length;
+  const totalPax = reservations.reduce((sum, res) => sum + parseInt(res.pax || 0), 0);
+  const totalPreorders = reservations.filter(res => res.preorder).length;
 
   if (!isAuthenticated) {
     return (
@@ -62,18 +117,43 @@ const Admin = () => {
       <div className="admin-container mt-4">
         <div className="dashboard-stats">
           <div className="stat-card">
-            <h3>Today's Bookings</h3>
-            <div className="stat-value">12</div>
+            <h3>Total Bookings</h3>
+            <div className="stat-value">{totalBookings}</div>
           </div>
           <div className="stat-card">
             <h3>Total Pax</h3>
-            <div className="stat-value">45</div>
+            <div className="stat-value">{totalPax}</div>
           </div>
           <div className="stat-card highlight">
             <h3>Pre-orders (Waste Saved)</h3>
-            <div className="stat-value">8</div>
+            <div className="stat-value">{totalPreorders}</div>
           </div>
         </div>
+
+        {/* Action Panel for selected booking */}
+        {selectedRes && (
+          <div className="action-panel animate-fade-in">
+            <h3>Manage Booking: {selectedRes.id}</h3>
+            <p>Guest: <strong>{selectedRes.name}</strong> ({selectedRes.pax} pax)</p>
+            <div className="action-buttons">
+              <button className="btn-primary btn-sm btn-success" onClick={() => handleUpdateStatus(selectedRes.id, 'Confirmed')}>
+                Confirm / Approve
+              </button>
+              <button className="btn-outline btn-sm btn-warn" onClick={() => handleUpdateStatus(selectedRes.id, 'Pending')}>
+                Set to Pending
+              </button>
+              <button className="btn-outline btn-sm btn-danger" onClick={() => handleUpdateStatus(selectedRes.id, 'Cancelled')}>
+                Cancel Reservation
+              </button>
+              <button className="btn-danger btn-sm" onClick={() => handleDelete(selectedRes.id)}>
+                Delete Completely
+              </button>
+              <button className="btn-outline btn-sm" onClick={() => setSelectedRes(null)}>
+                Close
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className="reservations-table-container">
           <h3>Upcoming Reservations</h3>
@@ -91,14 +171,14 @@ const Admin = () => {
             </thead>
             <tbody>
               {reservations.map(res => (
-                <tr key={res.id}>
+                <tr key={res.id} className={selectedRes?.id === res.id ? 'active-row' : ''}>
                   <td><strong>{res.id}</strong></td>
                   <td>{res.name}</td>
                   <td>{res.date} <br/> <span className="time-badge">{res.time}</span></td>
                   <td>{res.pax}</td>
                   <td>
-                    {res.preorder !== 'None' ? (
-                      <span className="preorder-badge">{res.preorder}</span>
+                    {res.preorder && res.dish ? (
+                      <span className="preorder-badge">{res.dish.replace('-', ' ')}</span>
                     ) : (
                       <span className="text-muted">None</span>
                     )}
@@ -109,7 +189,9 @@ const Admin = () => {
                     </span>
                   </td>
                   <td>
-                    <button className="btn-outline btn-sm">Manage</button>
+                    <button className="btn-outline btn-sm" onClick={() => setSelectedRes(res)}>
+                      Manage
+                    </button>
                   </td>
                 </tr>
               ))}
