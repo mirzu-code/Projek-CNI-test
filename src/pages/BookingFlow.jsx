@@ -35,7 +35,7 @@ const BookingFlow = () => {
       const newBooking = {
         ...formData,
         id: 'RES-' + Math.floor(1000 + Math.random() * 9000),
-        status: 'Confirmed'
+        status: 'Pending'
       };
       
       // 1. Save single active booking for customer portal
@@ -216,9 +216,9 @@ const BookingFlow = () => {
 
           {step === 5 && (
             <div className="form-step text-center success-step">
-              <div className="success-icon">✓</div>
-              <h3>Booking Confirmed!</h3>
-              <p>Thank you, {formData.name}. Your table is reserved for {formData.date} at {formData.time}.</p>
+              <div className="success-icon" style={{ backgroundColor: '#b06000' }}>⏳</div>
+              <h3>Booking Submitted!</h3>
+              <p>Thank you, {formData.name}. Your reservation for {formData.date} at {formData.time} is now **Pending Approval** from our team.</p>
               <p className="sdg-thanks">By booking digitally{formData.preorder ? ' and pre-ordering' : ''}, you have contributed to our SDG 9 sustainable infrastructure initiative.</p>
               <button className="btn-primary mt-3 full-width" onClick={() => navigate('/my-booking')}>View My Booking</button>
             </div>
