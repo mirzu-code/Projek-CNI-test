@@ -1,5 +1,5 @@
-﻿import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+﻿import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './BookingFlow.css';
 
 export const cuisineDishes = {
@@ -39,6 +39,7 @@ const cuisineMap = { malay: 1, chinese: 2, japanese: 3, western: 4, indian: 5 };
 
 const BookingFlow = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     date: '',
     time: '18:00',
@@ -50,6 +51,35 @@ const BookingFlow = () => {
     dish: ''
   });
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    const savedDraft = localStorage.getItem('bookingDraft');
+    const savedData = savedDraft ? JSON.parse(savedDraft) : null;
+    const preselectCuisine = location.state?.preselectCuisine || '';
+    const preselectDish = location.state?.preselectDish || '';
+
+    if (preselectCuisine || preselectDish) {
+      setFormData((prev) => ({
+        ...prev,
+        ...savedData,
+        preorder: true,
+        cuisineCategory: preselectCuisine || savedData?.cuisineCategory || '',
+        dish: preselectDish || savedData?.dish || ''
+      }));
+      return;
+    }
+
+    if (savedData) {
+      setFormData((prev) => ({
+        ...prev,
+        ...savedData
+      }));
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    localStorage.setItem('bookingDraft', JSON.stringify(formData));
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
