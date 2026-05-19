@@ -35,6 +35,14 @@ export const cuisineDishes = {
   ]
 };
 
+const cuisineThemes = [
+  { value: 'malay', label: 'Malay Cuisine', subtitle: 'Turmeric, Pandan, & Grill', icon: '🇲🇾', color: '#1a472a' },
+  { value: 'chinese', label: 'Chinese Cuisine', subtitle: 'Wok Hei & Steamed Delights', icon: '🇨🇳', color: '#b01e23' },
+  { value: 'japanese', label: 'Japanese Cuisine', subtitle: 'Sashimi & Artisan Broths', icon: '🇯🇵', color: '#111111' },
+  { value: 'western', label: 'Western Cuisine', subtitle: 'Bistro Grill & Dry-Aged Steak', icon: '🥩', color: '#2b3e50' },
+  { value: 'indian', label: 'Indian Cuisine', subtitle: 'Claypot Dum & Tandoor Oven', icon: '🍛', color: '#a35d00' }
+];
+
 const cuisineMap = { malay: 1, chinese: 2, japanese: 3, western: 4, indian: 5 };
 
 const BookingFlow = () => {
@@ -42,26 +50,20 @@ const BookingFlow = () => {
   const location = useLocation();
   const [formData, setFormData] = useState({
     date: '',
-    time: '18:00',
+    time: '',
     pax: '2',
     name: '',
     phone: '',
-    preorder: false,
-    cuisineCategory: '',
-    dish: ''
+    cuisineCategory: 'malay'
   });
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const preselectCuisine = location.state?.preselectCuisine || '';
-    const preselectDish = location.state?.preselectDish || '';
-
-    if (preselectCuisine || preselectDish) {
+    const preselectCuisine = location.state?.preselectCuisine;
+    if (preselectCuisine) {
       setFormData((prev) => ({
         ...prev,
-        preorder: true,
-        cuisineCategory: preselectCuisine || prev.cuisineCategory,
-        dish: preselectDish || prev.dish
+        cuisineCategory: preselectCuisine
       }));
     }
   }, [location.state]);
@@ -88,9 +90,8 @@ const BookingFlow = () => {
       date: formData.date,
       time: formData.time,
       pax: formData.pax,
-      preorder: formData.preorder,
       cuisineCategory: formData.cuisineCategory,
-      dish: formData.dish,
+      dish: null,
       tableId: null,
       tableNumber: '',
       tableCapacity: null,
@@ -104,83 +105,75 @@ const BookingFlow = () => {
     <div className="booking-page animate-fade-in">
       <div className="booking-container">
         <div className="booking-header">
-          <h2>Reserve Your Table</h2>
-          <p>Isi maklumat anda dan teruskan ke pembayaran.</p>
+          <h2>Select Date, Time & Guests</h2>
+          <p>Choose your ideal slot and preferred cuisine theme for a sustainable dining experience.</p>
         </div>
 
-        <form className="booking-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Date</label>
-            <input type="date" name="date" value={formData.date} onChange={handleChange} required />
-          </div>
+        <div className="booking-form-wrapper">
+          <form className="booking-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Date</label>
+              <input type="date" name="date" value={formData.date} onChange={handleChange} required />
+            </div>
 
-          <div className="form-group">
-            <label>Time</label>
-            <select name="time" value={formData.time} onChange={handleChange} required>
-              <option value="18:00">6:00 PM</option>
-              <option value="19:30">7:30 PM</option>
-              <option value="21:00">9:00 PM</option>
-            </select>
-          </div>
+            <div className="form-group">
+              <label>Time</label>
+              <select name="time" value={formData.time} onChange={handleChange} required>
+                <option value="">Select Time Slot</option>
+                <option value="18:00">6:00 PM</option>
+                <option value="19:30">7:30 PM</option>
+                <option value="21:00">9:00 PM</option>
+              </select>
+              <span className="help-text">Slots are strictly managed to avoid overcrowding (SDG 9).</span>
+            </div>
 
-          <div className="form-group">
-            <label>Guests</label>
-            <select name="pax" value={formData.pax} onChange={handleChange}>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                <option key={num} value={num}>{num} Person(s)</option>
-              ))}
-            </select>
-          </div>
+            <div className="form-group">
+              <label>Number of Guests (Pax)</label>
+              <select name="pax" value={formData.pax} onChange={handleChange}>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                  <option key={num} value={num}>{num} Person(s)</option>
+                ))}
+              </select>
+              <span className="help-text">Table for {formData.pax} will be assigned ({formData.pax}-seat table).</span>
+            </div>
 
-          <div className="form-group">
-            <label>Name</label>
-            <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required />
-          </div>
-
-          <div className="form-group">
-            <label>Phone</label>
-            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="0123456789" required />
-          </div>
-
-          <div className="form-group checkbox-group">
-            <label>
-              <input type="checkbox" name="preorder" checked={formData.preorder} onChange={handleChange} />
-              Pre-order a main dish
-            </label>
-          </div>
-
-          {formData.preorder && (
-            <>
-              <div className="form-group">
-                <label>Cuisine</label>
-                <select name="cuisineCategory" value={formData.cuisineCategory} onChange={handleChange} required>
-                  <option value="">Select cuisine</option>
-                  <option value="malay">Malay</option>
-                  <option value="chinese">Chinese</option>
-                  <option value="japanese">Japanese</option>
-                  <option value="western">Western</option>
-                  <option value="indian">Indian</option>
-                </select>
+            <div className="form-group">
+              <label>Choose Cuisine Theme (Preferred)</label>
+              <div className="cuisine-select-grid">
+                {cuisineThemes.map((theme) => (
+                  <button
+                    key={theme.value}
+                    type="button"
+                    className={`cuisine-select-card ${formData.cuisineCategory === theme.value ? 'selected' : ''}`}
+                    style={{ '--cuisine-theme-color': theme.color }}
+                    onClick={() => handleChange({ target: { name: 'cuisineCategory', value: theme.value } })}
+                  >
+                    <span className="cuisine-flag">{theme.icon}</span>
+                    <div className="cuisine-info">
+                      <strong>{theme.label}</strong>
+                      <span>{theme.subtitle}</span>
+                    </div>
+                    <div className="select-check">✓</div>
+                  </button>
+                ))}
               </div>
+            </div>
 
-              {formData.cuisineCategory && (
-                <div className="form-group">
-                  <label>Dish</label>
-                  <select name="dish" value={formData.dish} onChange={handleChange} required>
-                    <option value="">Select dish</option>
-                    {cuisineDishes[formData.cuisineCategory].map((dish) => (
-                      <option key={dish.value} value={dish.value}>{dish.label}</option>
-                    ))}
-                  </select>
-                </div>
-              )}
-            </>
-          )}
+            <div className="form-group">
+              <label>Name</label>
+              <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required />
+            </div>
 
-          {errorMessage && <div className="error-text">{errorMessage}</div>}
+            <div className="form-group">
+              <label>Phone</label>
+              <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="0123456789" required />
+            </div>
 
-          <button type="submit" className="btn-primary mt-3">Continue to Checkout</button>
-        </form>
+            {errorMessage && <div className="error-text">{errorMessage}</div>}
+
+            <button type="submit" className="btn-primary full-width mt-3">Continue — Pick Your Table</button>
+          </form>
+        </div>
       </div>
     </div>
   );
