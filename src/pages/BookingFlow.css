@@ -260,6 +260,49 @@
   margin-top: 0.8rem;
 }
 
+.cuisine-card-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.cuisine-dish-list {
+  padding: 1rem 1rem 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0 0 8px 8px;
+  background: var(--bg-color);
+}
+
+.cuisine-dish-item {
+  padding: 0.75rem 0;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cuisine-dish-item:last-child {
+  border-bottom: none;
+}
+
+.cuisine-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.cuisine-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  color: white;
+  background: var(--cuisine-theme-color);
+}
+
 .cuisine-select-card {
   display: flex;
   align-items: center;

@@ -56,6 +56,7 @@ const BookingFlow = () => {
     phone: '',
     cuisineCategory: 'malay'
   });
+  const [expandedCuisine, setExpandedCuisine] = useState('malay');
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -65,6 +66,7 @@ const BookingFlow = () => {
         ...prev,
         cuisineCategory: preselectCuisine
       }));
+      setExpandedCuisine(preselectCuisine);
     }
   }, [location.state]);
 
@@ -74,6 +76,14 @@ const BookingFlow = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  const handleCuisineClick = (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      cuisineCategory: value
+    }));
+    setExpandedCuisine((prev) => (prev === value ? '' : value));
   };
 
   const handleSubmit = (e) => {
@@ -98,7 +108,7 @@ const BookingFlow = () => {
       cuisine_id: cuisineMap[formData.cuisineCategory] || null
     };
 
-    navigate('/checkout', { state: { bookingData } });
+    navigate('/select-table', { state: { bookingData } });
   };
 
   return (
@@ -141,20 +151,34 @@ const BookingFlow = () => {
               <label>Choose Cuisine Theme (Preferred)</label>
               <div className="cuisine-select-grid">
                 {cuisineThemes.map((theme) => (
-                  <button
-                    key={theme.value}
-                    type="button"
-                    className={`cuisine-select-card ${formData.cuisineCategory === theme.value ? 'selected' : ''}`}
-                    style={{ '--cuisine-theme-color': theme.color }}
-                    onClick={() => handleChange({ target: { name: 'cuisineCategory', value: theme.value } })}
-                  >
-                    <span className="cuisine-flag">{theme.icon}</span>
-                    <div className="cuisine-info">
-                      <strong>{theme.label}</strong>
-                      <span>{theme.subtitle}</span>
-                    </div>
-                    <div className="select-check">✓</div>
-                  </button>
+                  <div key={theme.value} className={`cuisine-card-wrap ${expandedCuisine === theme.value ? 'expanded' : ''}`}>
+                    <button
+                      type="button"
+                      className={`cuisine-select-card ${formData.cuisineCategory === theme.value ? 'selected' : ''}`}
+                      style={{ '--cuisine-theme-color': theme.color }}
+                      onClick={() => handleCuisineClick(theme.value)}
+                    >
+                      <span className="cuisine-flag">{theme.icon}</span>
+                      <div className="cuisine-info">
+                        <strong>{theme.label}</strong>
+                        <span>{theme.subtitle}</span>
+                      </div>
+                      <div className="cuisine-actions">
+                        <span className="cuisine-toggle">{expandedCuisine === theme.value ? '−' : '+'}</span>
+                        <div className="select-check">✓</div>
+                      </div>
+                    </button>
+
+                    {expandedCuisine === theme.value && (
+                      <div className="cuisine-dish-list">
+                        {cuisineDishes[theme.value]?.map((dish) => (
+                          <div key={dish.value} className="cuisine-dish-item">
+                            {dish.label}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
             </div>
@@ -171,7 +195,7 @@ const BookingFlow = () => {
 
             {errorMessage && <div className="error-text">{errorMessage}</div>}
 
-            <button type="submit" className="btn-primary full-width mt-3">Continue — Pick Your Table</button>
+            <button type="submit" className="btn-primary full-width mt-3">Continue — Choose Table</button>
           </form>
         </div>
       </div>

@@ -13,6 +13,7 @@ import WesternCuisine from './pages/WesternCuisine';
 import IndianCuisine from './pages/IndianCuisine';
 import About from './pages/About';
 import Checkout from './pages/Checkout';
+import SelectTable from './pages/SelectTable';
 import SplashScreen from './components/SplashScreen';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/book" element={<BookingFlow />} />
+            <Route path="/select-table" element={<SelectTable />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/my-booking" element={<MyBooking />} />
