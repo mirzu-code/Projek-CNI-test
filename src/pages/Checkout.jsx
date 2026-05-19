@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { cuisineDishes } from './BookingFlow';
 import './Checkout.css';
+import { supabase } from '../supabaseClient';
 
 const Checkout = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  
+
   // Retrieve reservation details passed from BookingFlow
   const bookingData = state?.bookingData;
-  
+
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [isProcessing, setIsProcessing] = useState(false);
   const [showOtpModal, setShowOtpModal] = useState(false);
@@ -17,7 +18,7 @@ const Checkout = () => {
   const [otpError, setOtpError] = useState('');
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [processingStatus, setProcessingStatus] = useState('Connecting to secure gateway...');
-  
+
   // Card details state
   const [cardData, setCardData] = useState({
     number: '',
@@ -87,7 +88,7 @@ const Checkout = () => {
     e.preventDefault();
     setIsProcessing(true);
     setProcessingStatus('Securing session with PCI-DSS 256-bit encryption...');
-    
+
     // Simulate gateway handshakes
     setTimeout(() => {
       setProcessingStatus('Authorizing transaction amount of RM 50.00...');
@@ -102,46 +103,76 @@ const Checkout = () => {
   };
 
   // Verify OTP simulation
-  const handleOtpVerify = (e) => {
+  // Verify OTP simulation & Save to Supabase
+  const handleOtpVerify = async (e) => {
     e.preventDefault();
     if (otpCode !== '123456') {
       setOtpError('Invalid OTP code. For test, please enter "123456" or click the autofill button.');
       return;
     }
-    
+
     setOtpError('');
     setShowOtpModal(false);
     setIsProcessing(true);
     setProcessingStatus('Capturing deposit and generating booking ticket...');
-    
-    setTimeout(() => {
-      setIsProcessing(false);
-      setPaymentSuccess(true);
-      
-      // Save Reservation in system
+
+    try {
+      // 1. Sediakan data padan dengan struktur table `bookings` di Supabase
+      const bookingPayload = {
+        customer_name: bookingData.name,
+        customer_phone: bookingData.phone,
+        booking_date: bookingData.date, // Format mesti YYYY-MM-DD
+        booking_time: bookingData.time, // Format mesti HH:MM:SS atau HH:MM
+        total_guests: parseInt(bookingData.pax, 10),
+        status: 'Pending',
+        table_id: bookingData.tableId ? parseInt(bookingData.tableId, 10) : null
+        // Nota: Pastikan key di atas (cth: tableId atau table_id) sepadan dengan data dari BookingFlow
+      };
+
+      // 2. Hantar data terus masuk ke pangkalan data Supabase
+      const { data, error } = await supabase
+        .from('bookings')
+        .insert([bookingPayload])
+        .select(); // Ambil balik data yang berjaya di-insert termasuk ID automatik
+
+      if (error) {
+        throw error;
+      }
+
+      // Data yang berjaya disimpan dari database
+      const savedDataFromSupabase = data[0];
+
+      // 3. Simpan sesi aktif ke localStorage untuk kegunaan UI / Customer Portal jika perlu
       const newBooking = {
         ...bookingData,
-        id: 'RES-' + Math.floor(1000 + Math.random() * 9000),
-        status: 'Pending',
+        id: 'RES-' + savedDataFromSupabase.id, // Gunakan ID sebenar dari Supabase
+        status: savedDataFromSupabase.status,
         paymentRef: 'TXN-' + Math.floor(100000 + Math.random() * 900000),
         depositPaid: true
       };
-      
-      // 1. Save single active booking for customer portal
+
       localStorage.setItem('activeBooking', JSON.stringify(newBooking));
-      
-      // 2. Append to all reservations for the Admin panel
+
+      // (Opsional) Kekalkan backup local untuk Admin panel lama jika masih mahu
       const savedBookings = localStorage.getItem('allBookings');
       const all = savedBookings ? JSON.parse(savedBookings) : [];
       all.push(newBooking);
       localStorage.setItem('allBookings', JSON.stringify(all));
-      
-      // Navigate to MyBooking after 2.5 seconds of beautiful success representation
+
+      // Tukar skrin kepada status kejayaan animasi
+      setIsProcessing(false);
+      setPaymentSuccess(true);
+
+      // Alihkan pengguna ke page tiket/booking mereka selepas 2.5 saat
       setTimeout(() => {
         navigate('/my-booking');
       }, 2500);
-      
-    }, 2000);
+
+    } catch (err) {
+      console.error("Ralat ketika menyimpan tempahan:", err.message);
+      setIsProcessing(false);
+      alert("Gagal menyimpan tempahan ke database: " + err.message);
+    }
   };
 
   return (
@@ -176,7 +207,7 @@ const Checkout = () => {
             <div className="otp-body">
               <p>An authentication code has been simulated and sent to your registered phone number: <strong>{bookingData.phone}</strong>.</p>
               <p className="otp-desc">Please enter the 6-digit One-Time PIN (OTP) below to authorize the transaction of <strong>RM 50.00</strong> to <strong>REMBAYUNG HERITAGE STORE</strong>.</p>
-              
+
               <form onSubmit={handleOtpVerify}>
                 <div className="form-group text-center">
                   <input
@@ -190,11 +221,11 @@ const Checkout = () => {
                   />
                   {otpError && <p className="otp-error">{otpError}</p>}
                 </div>
-                
+
                 <div className="otp-autofill" onClick={() => setOtpCode('123456')}>
                   💡 Autofill Demo OTP (123456)
                 </div>
-                
+
                 <div className="otp-actions">
                   <button type="button" className="btn-outline" onClick={() => setShowOtpModal(false)}>Cancel Payment</button>
                   <button type="submit" className="btn-primary" disabled={otpCode.length !== 6}>Verify & Pay RM 50.00</button>
@@ -229,22 +260,22 @@ const Checkout = () => {
           <div className="checkout-box">
             <h2>Payment Details</h2>
             <p className="checkout-subtitle">Secure transaction encrypted with 256-bit SSL infrastructure.</p>
-            
+
             {/* Payment Options */}
             <div className="checkout-tabs">
-              <button 
+              <button
                 className={`tab-btn ${paymentMethod === 'card' ? 'active' : ''}`}
                 onClick={() => setPaymentMethod('card')}
               >
                 💳 Credit/Debit Card
               </button>
-              <button 
+              <button
                 className={`tab-btn ${paymentMethod === 'fpx' ? 'active' : ''}`}
                 onClick={() => setPaymentMethod('fpx')}
               >
                 🏦 FPX Banking
               </button>
-              <button 
+              <button
                 className={`tab-btn ${paymentMethod === 'ewallet' ? 'active' : ''}`}
                 onClick={() => setPaymentMethod('ewallet')}
               >
@@ -369,7 +400,7 @@ const Checkout = () => {
             {paymentMethod === 'ewallet' && (
               <div className="ewallet-payment text-center animate-fade-in">
                 <p className="tab-desc">Scan the secure dynamic QR code using your e-wallet app to pay instant deposit fee.</p>
-                
+
                 <div className="qr-container">
                   <div className="qr-box">
                     <div className="qr-scan-line"></div>
@@ -389,7 +420,7 @@ const Checkout = () => {
                     <span>Boost</span>
                   </div>
                 </div>
-                
+
                 <button className="btn-primary full-width mt-4" onClick={handlePaymentSubmit}>
                   I Have Scanned & Paid
                 </button>
@@ -403,9 +434,9 @@ const Checkout = () => {
           <div className="invoice-box">
             <h3>Reservation Invoice</h3>
             <span className="invoice-tag">PRE-AUTHORIZED DEPOSIT</span>
-            
+
             <div className="invoice-divider"></div>
-            
+
             <div className="invoice-details">
               <div className="detail-item">
                 <span>Guest Name:</span>
@@ -467,7 +498,7 @@ const Checkout = () => {
                 <span className="amount-total">RM 50.00</span>
               </div>
             </div>
-            
+
             <div className="payment-security-assurance">
               <span className="shield-icon">🛡️</span>
               <div>
