@@ -1,0 +1,52 @@
+.western-theme {
+  --bistro-blue: #2c3e50;
+  --bistro-accent: #d4af37;
+  --bistro-hover: #1a252f;
+  --bistro-sky: #3498db;
+}
+
+.blue-hover:hover {
+  color: var(--bistro-sky) !important;
+}
+
+/* Western Hero Banner */
+.western-hero {
+  background-image: url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1920&q=80');
+}
+
+.western-overlay {
+  background: rgba(44, 62, 80, 0.72) !important; /* Bistro Navy overlay */
+}
+
+.bronze-text {
+  color: var(--bistro-accent) !important;
+}
+
+/* Card overrides */
+.western-card:hover {
+  border-color: var(--bistro-blue) !important;
+}
+
+.blue-text {
+  color: var(--bistro-blue) !important;
+  font-weight: 700;
+}
+
+.western-badge {
+  background-color: rgba(44, 62, 80, 0.08) !important;
+  color: var(--bistro-blue) !important;
+}
+
+.western-btn {
+  background-color: var(--bistro-blue) !important;
+}
+
+.western-btn:hover {
+  background-color: var(--bistro-hover) !important;
+  box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3) !important;
+}
+
+/* Philosophy Section override */
+.western-philosophy {
+  background-color: var(--bistro-blue) !important;
+}

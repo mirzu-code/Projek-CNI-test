@@ -5,6 +5,14 @@ import Home from './pages/Home';
 import BookingFlow from './pages/BookingFlow';
 import Admin from './pages/Admin';
 import MyBooking from './pages/MyBooking';
+import Menu from './pages/Menu';
+import MalayCuisine from './pages/MalayCuisine';
+import ChineseCuisine from './pages/ChineseCuisine';
+import JapaneseCuisine from './pages/JapaneseCuisine';
+import WesternCuisine from './pages/WesternCuisine';
+import IndianCuisine from './pages/IndianCuisine';
+import About from './pages/About';
+import Checkout from './pages/Checkout';
 import SplashScreen from './components/SplashScreen';
 
 function App() {
@@ -19,8 +27,16 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/book" element={<BookingFlow />} />
+            <Route path="/checkout" element={<Checkout />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/my-booking" element={<MyBooking />} />
+            <Route path="/menu" element={<Menu />} />
+            <Route path="/menu/malay" element={<MalayCuisine />} />
+            <Route path="/menu/chinese" element={<ChineseCuisine />} />
+            <Route path="/menu/japanese" element={<JapaneseCuisine />} />
+            <Route path="/menu/western" element={<WesternCuisine />} />
+            <Route path="/menu/indian" element={<IndianCuisine />} />
+            <Route path="/about" element={<About />} />
           </Routes>
         </main>
       </div>
@@ -29,3 +45,4 @@ function App() {
 }
 
 export default App;
+

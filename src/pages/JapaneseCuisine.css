@@ -1,0 +1,63 @@
+.japanese-theme {
+  --jp-charcoal: #1a1a1a;
+  --jp-black: #111111;
+  --jp-pink: #e83e8c;
+  --jp-light-gray: #f4f4f4;
+  --jp-border: #dcdcdc;
+}
+
+.black-hover:hover {
+  color: var(--jp-black) !important;
+}
+
+/* Japanese Hero Banner */
+.japanese-hero {
+  background-image: url('https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1920&q=80');
+}
+
+.japanese-overlay {
+  background: rgba(17, 17, 17, 0.75) !important; /* Zen charcoal dark overlay */
+}
+
+.pink-text {
+  color: var(--jp-pink) !important;
+}
+
+/* Card overrides */
+.jp-card {
+  background: white !important;
+  border: 1px solid var(--jp-border) !important;
+  border-radius: 4px !important; /* Minimalist sharp edges */
+}
+
+.jp-card:hover {
+  border-color: var(--jp-black) !important;
+  transform: translateY(-3px) !important; /* Subtle translation */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+.jp-price {
+  color: var(--jp-black) !important;
+}
+
+.jp-badge {
+  background-color: rgba(232, 62, 140, 0.08) !important;
+  color: var(--jp-pink) !important;
+  border-radius: 2px !important;
+}
+
+.jp-btn {
+  background-color: var(--jp-black) !important;
+  border-radius: 2px !important; /* sharp corners */
+}
+
+.jp-btn:hover {
+  background-color: #333333 !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Philosophy Section override */
+.jp-philosophy {
+  background-color: var(--jp-charcoal) !important;
+  border-radius: 4px !important;
+}

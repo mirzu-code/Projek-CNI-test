@@ -2,10 +2,42 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './BookingFlow.css';
 
+export const cuisineDishes = {
+  malay: [
+    { value: 'masak-lemak', label: 'Daging Salai Masak Lemak Cili Api (RM 45)' },
+    { value: 'ayam-rendang', label: 'Ayam Rendang Rembayung (RM 38)' },
+    { value: 'ikan-bakar', label: 'Ikan Bakar Petai (RM 55)' },
+    { value: 'nasi-lemak', label: 'Nasi Lemak Pandan Heritage (RM 32)' }
+  ],
+  chinese: [
+    { value: 'steamed-fish', label: 'Ginger Onion Steamed Sea Bass (RM 65)' },
+    { value: 'szechuan-tofu', label: 'Szechuan Chili Maple Tofu (RM 28)' },
+    { value: 'chicken-rice', label: 'Hainanese Chicken Rice Platter (RM 35)' },
+    { value: 'cantonese-noodles', label: 'Cantonese Egg Gravy Noodles (RM 30)' }
+  ],
+  japanese: [
+    { value: 'wagyu-ramen', label: 'Wagyu Beef Black Garlic Ramen (RM 75)' },
+    { value: 'salmon-don', label: 'Truffle Salmon Sashimi Don (RM 58)' },
+    { value: 'premium-sushi', label: 'Chef Choice Premium Sushi Platter (RM 85)' },
+    { value: 'tempura-moriawase', label: 'Crispy Seafood & Veg Tempura (RM 48)' }
+  ],
+  western: [
+    { value: 'angus-steak', label: 'Black Angus Ribeye Steak (RM 120)' },
+    { value: 'seared-salmon', label: 'Pan-Seared Citrus Salmon (RM 68)' },
+    { value: 'truffle-pasta', label: 'Truffle Wild Mushroom Fettuccine (RM 45)' },
+    { value: 'rembayung-burger', label: 'Signature Double Wagyu Burger (RM 55)' }
+  ],
+  indian: [
+    { value: 'lamb-biryani', label: 'Aromatic Lamb Shank Biryani (RM 78)' },
+    { value: 'butter-chicken', label: 'Tandoori Butter Chicken Masala (RM 42)' },
+    { value: 'paneer-tikka', label: 'Paneer Tikka Butter Masala (RM 38)' },
+    { value: 'naan-platter', label: 'Garlic Cheese Naan Platter (RM 25)' }
+  ]
+};
+
 const BookingFlow = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [formData, setFormData] = useState({
     date: '',
     time: '',
@@ -13,42 +45,28 @@ const BookingFlow = () => {
     name: '',
     phone: '',
     preorder: false,
+    cuisineCategory: '',
     dish: '',
     paymentMethod: 'fpx'
   });
 
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    setFormData({ ...formData, [e.target.name]: value });
+    // Reset dish if cuisine changes
+    if (e.target.name === 'cuisineCategory') {
+      setFormData({ ...formData, cuisineCategory: value, dish: '' });
+    } else if (e.target.name === 'preorder' && !value) {
+      setFormData({ ...formData, preorder: value, cuisineCategory: '', dish: '' });
+    } else {
+      setFormData({ ...formData, [e.target.name]: value });
+    }
   };
 
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsProcessing(true);
-    
-    setTimeout(() => {
-      setIsProcessing(false);
-      
-      const newBooking = {
-        ...formData,
-        id: 'RES-' + Math.floor(1000 + Math.random() * 9000),
-        status: 'Pending'
-      };
-      
-      // 1. Save single active booking for customer portal
-      localStorage.setItem('activeBooking', JSON.stringify(newBooking));
-      
-      // 2. Append to all reservations for the Admin panel
-      const savedBookings = localStorage.getItem('allBookings');
-      const all = savedBookings ? JSON.parse(savedBookings) : [];
-      all.push(newBooking);
-      localStorage.setItem('allBookings', JSON.stringify(all));
-      
-      setStep(5);
-    }, 2000);
+  const handleProceedToPayment = () => {
+    navigate('/checkout', { state: { bookingData: formData } });
   };
 
   return (
@@ -62,8 +80,6 @@ const BookingFlow = () => {
             <span className={step >= 2 ? 'active' : ''}>2. Details</span>
             <div className="line"></div>
             <span className={step >= 3 ? 'active' : ''}>3. Review</span>
-            <div className="line"></div>
-            <span className={step >= 4 ? 'active' : ''}>4. Pay</span>
           </div>
         </div>
 
@@ -111,27 +127,46 @@ const BookingFlow = () => {
               
               <div className="sdg-highlight">
                 <h4>Support SDG 9: Reduce Food Waste</h4>
-                <label className="checkbox-label">
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-light)', marginBottom: '0.8rem' }}>
+                  Pre-ordering your main dish helps our kitchen procure ingredients with 100% precision, preventing culinary scrap and conserving resources.
+                </p>
+                <label className="checkbox-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>
                   <input type="checkbox" name="preorder" checked={formData.preorder} onChange={handleChange} />
-                  I want to pre-order my main dish to help optimize kitchen resources.
+                  I want to pre-order my main dish
                 </label>
                 
                 {formData.preorder && (
-                  <div className="form-group mt-2 animate-fade-in">
-                    <label>Select Main Dish</label>
-                    <select name="dish" value={formData.dish} onChange={handleChange}>
-                      <option value="">Select a dish...</option>
-                      <option value="masak-lemak">Masak Lemak Cili Api Daging Salai (RM 45)</option>
-                      <option value="ayam-rendang">Ayam Rendang Rembayung (RM 38)</option>
-                      <option value="ikan-bakar">Ikan Bakar Petai (RM 55)</option>
-                    </select>
+                  <div className="preorder-selections animate-fade-in" style={{ marginTop: '1rem', borderLeft: '3px solid var(--accent-color)', paddingLeft: '1rem' }}>
+                    <div className="form-group">
+                      <label>Cuisine Category</label>
+                      <select name="cuisineCategory" value={formData.cuisineCategory} onChange={handleChange} required>
+                        <option value="">Select a cuisine...</option>
+                        <option value="malay">🇲🇾 Malay Cuisine</option>
+                        <option value="chinese">🇨🇳 Chinese Cuisine</option>
+                        <option value="japanese">🇯🇵 Japanese Cuisine</option>
+                        <option value="western">🥩 Western Cuisine</option>
+                        <option value="indian">🍛 Indian Cuisine</option>
+                      </select>
+                    </div>
+                    
+                    {formData.cuisineCategory && (
+                      <div className="form-group mt-2">
+                        <label>Select Main Dish</label>
+                        <select name="dish" value={formData.dish} onChange={handleChange} required>
+                          <option value="">Select a dish...</option>
+                          {cuisineDishes[formData.cuisineCategory]?.map(dish => (
+                            <option key={dish.value} value={dish.value}>{dish.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
               
               <div className="button-group">
                 <button className="btn-outline" onClick={prevStep}>Back</button>
-                <button className="btn-primary" onClick={nextStep} disabled={!formData.name || !formData.phone || (formData.preorder && !formData.dish)}>Review</button>
+                <button className="btn-primary" onClick={nextStep} disabled={!formData.name || !formData.phone || (formData.preorder && (!formData.cuisineCategory || !formData.dish))}>Review</button>
               </div>
             </div>
           )}
@@ -159,7 +194,11 @@ const BookingFlow = () => {
                 {formData.preorder && (
                   <div className="summary-item highlight">
                     <span>Pre-order (SDG 9):</span>
-                    <strong>{formData.dish.replace('-', ' ')}</strong>
+                    <strong style={{ color: 'var(--accent-color)' }}>
+                      {formData.cuisineCategory.charAt(0).toUpperCase() + formData.cuisineCategory.slice(1)} - {
+                        cuisineDishes[formData.cuisineCategory]?.find(d => d.value === formData.dish)?.label.split(' (')[0] || formData.dish
+                      }
+                    </strong>
                   </div>
                 )}
                 <div className="summary-item total-fee">
@@ -169,58 +208,8 @@ const BookingFlow = () => {
               </div>
               <div className="button-group">
                 <button className="btn-outline" onClick={prevStep}>Back</button>
-                <button className="btn-primary" onClick={nextStep}>Proceed to Payment</button>
+                <button className="btn-primary animate-pulse" onClick={handleProceedToPayment}>Proceed to Secure Payment</button>
               </div>
-            </div>
-          )}
-
-          {step === 4 && (
-            <div className="form-step">
-              <h3>Payment Method</h3>
-              <p className="payment-desc">Please secure your reservation with a RM 50.00 deposit.</p>
-              
-              <div className="payment-options">
-                <label className={`payment-card ${formData.paymentMethod === 'fpx' ? 'selected' : ''}`}>
-                  <input type="radio" name="paymentMethod" value="fpx" checked={formData.paymentMethod === 'fpx'} onChange={handleChange} />
-                  <div className="payment-info">
-                    <span className="payment-icon">🏦</span>
-                    <strong>FPX Online Banking</strong>
-                  </div>
-                </label>
-                
-                <label className={`payment-card ${formData.paymentMethod === 'card' ? 'selected' : ''}`}>
-                  <input type="radio" name="paymentMethod" value="card" checked={formData.paymentMethod === 'card'} onChange={handleChange} />
-                  <div className="payment-info">
-                    <span className="payment-icon">💳</span>
-                    <strong>Credit / Debit Card</strong>
-                  </div>
-                </label>
-                
-                <label className={`payment-card ${formData.paymentMethod === 'ewallet' ? 'selected' : ''}`}>
-                  <input type="radio" name="paymentMethod" value="ewallet" checked={formData.paymentMethod === 'ewallet'} onChange={handleChange} />
-                  <div className="payment-info">
-                    <span className="payment-icon">📱</span>
-                    <strong>E-Wallet (TNG, GrabPay)</strong>
-                  </div>
-                </label>
-              </div>
-
-              <div className="button-group">
-                <button className="btn-outline" onClick={prevStep} disabled={isProcessing}>Back</button>
-                <button className="btn-primary" onClick={handleSubmit} disabled={isProcessing}>
-                  {isProcessing ? 'Processing...' : 'Pay RM 50.00'}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {step === 5 && (
-            <div className="form-step text-center success-step">
-              <div className="success-icon" style={{ backgroundColor: '#b06000' }}>⏳</div>
-              <h3>Booking Submitted!</h3>
-              <p>Thank you, {formData.name}. Your reservation for {formData.date} at {formData.time} is now **Pending Approval** from our team.</p>
-              <p className="sdg-thanks">By booking digitally{formData.preorder ? ' and pre-ordering' : ''}, you have contributed to our SDG 9 sustainable infrastructure initiative.</p>
-              <button className="btn-primary mt-3 full-width" onClick={() => navigate('/my-booking')}>View My Booking</button>
             </div>
           )}
         </div>
