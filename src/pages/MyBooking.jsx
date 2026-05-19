@@ -56,6 +56,13 @@ const MyBooking = () => {
       }
 
       const record = data[0];
+      const cuisineMap = {
+        1: 'malay',
+        2: 'chinese',
+        3: 'japanese',
+        4: 'western',
+        5: 'indian'
+      };
       const foundBooking = {
         id: record.id ? `RES-${record.id}` : null,
         date: record.booking_date,
@@ -65,7 +72,7 @@ const MyBooking = () => {
         phone: record.customer_phone,
         status: record.status || 'Pending',
         preorder: !!record.dish,
-        cuisineCategory: record.cuisine_category || '',
+        cuisineCategory: cuisineMap[record.cuisine_id] || '',
         dish: record.dish || '',
         tableId: record.table_id,
         tableNumber: record.table_number || (record.table_id ? `Table ${record.table_id}` : ''),

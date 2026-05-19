@@ -1,13 +1,42 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '../supabaseClient'; // Pastikan path ini betul ikut projek anda
 import { cuisineDishes } from './BookingFlow';
 import './MalayCuisine.css';
 
 const MalayCuisine = () => {
+  // Sediakan state untuk simpan harga dari database
+  const [dbPrices, setDbPrices] = useState({});
+
+  useEffect(() => {
+    async function fetchPrices() {
+      // Tarik nama dan harga dari table menus untuk Malay Cuisine (cuisine_id: 1)
+      const { data, error } = await supabase
+        .from('menus')
+        .select('name, price')
+        .eq('cuisine_id', 1);
+
+      if (!error && data) {
+        // Tukar susunan data jadi bentuk: { "Nama Lauk": 45.00 } supaya senang diganti nanti
+        const priceMap = {};
+        data.forEach(item => {
+          priceMap[item.name] = `RM ${parseFloat(item.price).toFixed(2)}`;
+        });
+        setDbPrices(priceMap);
+      } else {
+        console.error("Gagal sync harga dari Supabase:", error);
+      }
+    }
+
+    fetchPrices();
+  }, []);
+
+  // DATA ASAL ANDA (100% TIADA PERUBAHAN)
   const dishesInfo = [
     {
       value: 'masak-lemak',
       name: 'Daging Salai Masak Lemak Cili Api',
-      price: 'RM 45.00',
+      price: dbPrices['Daging Salai Masak Lemak Cili Api'] || 'RM 45.00', // <-- Ambil harga DB, kalau tak jumpa guna harga asal
       description: 'Slow-smoked premium beef brisket simmered in a fiery, rich gravy of fresh coconut milk, turmeric, bird\'s eye chilies (cili api), and sliced local starfruit.',
       tags: ['🔥 Spicy', '⭐ Chef Special', 'Sustainably Sourced'],
       ingredients: ['Smoked Beef Brisket', 'Fresh Turmeric', 'Bird\'s Eye Chilies', 'Coconut Cream', 'Belimbing Buluh'],
@@ -16,7 +45,7 @@ const MalayCuisine = () => {
     {
       value: 'ayam-rendang',
       name: 'Ayam Rendang Rembayung',
-      price: 'RM 38.00',
+      price: dbPrices['Ayam Rendang Rembayung'] || 'RM 38.00', // <-- Ambil harga DB
       description: 'Tender chicken slow-braised for 6 hours in a luxurious complex spice paste (kerisik), toasted coconut, lemongrass, galangal, and fresh kaffir lime leaves.',
       tags: ['Traditional Recipe', 'Gluten Free'],
       ingredients: ['Kampung Chicken', 'Toasted Coconut (Kerisik)', 'Lemongrass', 'Galangal', 'Kaffir Lime Leaves'],
@@ -25,7 +54,7 @@ const MalayCuisine = () => {
     {
       value: 'ikan-bakar',
       name: 'Ikan Bakar Petai',
-      price: 'RM 55.00',
+      price: dbPrices['Ikan Bakar Petai'] || 'RM 55.00', // <-- Ambil harga DB
       description: 'Fresh red snapper wrapped in banana leaf, charcoal-grilled to perfection with a thick marinade of spicy red chili paste, toasted shrimp paste, and fresh petai beans.',
       tags: ['🔥 Spicy', 'Seafood Delight'],
       ingredients: ['Fresh Red Snapper', 'Stink Beans (Petai)', 'Chili Sambal Paste', 'Tamarind Juice', 'Banana Leaf Wrap'],
@@ -34,7 +63,7 @@ const MalayCuisine = () => {
     {
       value: 'nasi-lemak',
       name: 'Nasi Lemak Pandan Heritage',
-      price: 'RM 32.00',
+      price: dbPrices['Nasi Lemak Pandan Heritage'] || 'RM 32.00', // <-- Ambil harga DB
       description: 'Basmati rice steamed with fresh pandan juice and coconut milk. Served with aromatic sweet-spicy anchovy sambal, spiced fried chicken, boiled eggs, and roasted peanuts.',
       tags: ['Signature Dish', 'All-Time Favorite'],
       ingredients: ['Pandan-infused Basmati Rice', 'Heritage Sambal Tumis', 'Crispy Rempah Fried Chicken', 'Roasted Peanuts', 'Hardboiled Egg'],
