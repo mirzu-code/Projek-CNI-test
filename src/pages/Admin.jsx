@@ -11,6 +11,19 @@ const Admin = () => {
   const [selectedRes, setSelectedRes] = useState(null); // for managing a specific booking
   const [newBookingAlert, setNewBookingAlert] = useState(null);
 
+  const [menus, setMenus] = useState([]);
+  const [menuForm, setMenuForm] = useState({ id: '', name: '', price: '', cuisine_id: '1', description: '', image: '', is_active: true });
+  const [menuError, setMenuError] = useState('');
+  const [menuMode, setMenuMode] = useState('add');
+
+  const cuisineOptions = [
+    { value: '1', label: 'Malay' },
+    { value: '2', label: 'Chinese' },
+    { value: '3', label: 'Japanese' },
+    { value: '4', label: 'Western' },
+    { value: '5', label: 'Indian' }
+  ];
+
   // Entrance Scanner Simulator States
   const [manualScanId, setManualScanId] = useState('');
   const [scannerMessage, setScannerMessage] = useState('SCANNER ACTIVE - PRESENT CUSTOMER TICKET QR');
@@ -187,6 +200,27 @@ const Admin = () => {
     tableCapacity: record.table_capacity || null,
   });
 
+  const loadMenus = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('menus')
+        .select('*')
+        .order('cuisine_id', { ascending: true })
+        .order('id', { ascending: false });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        setMenus(data.map((item) => ({ ...item, is_active: item.is_active !== false })));
+      }
+    } catch (err) {
+      console.warn('Supabase menus load failed:', err.message);
+      setMenus([]);
+    }
+  };
+
   useEffect(() => {
     const loadReservations = async () => {
       try {
@@ -219,6 +253,7 @@ const Admin = () => {
     };
 
     loadReservations();
+    loadMenus();
 
     const bookingChannel = supabase.channel('public:bookings');
 
@@ -247,6 +282,122 @@ const Admin = () => {
       setError('');
     } else {
       setError('Incorrect password');
+    }
+  };
+
+  const handleMenuChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setMenuForm((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const resetMenuForm = () => {
+    setMenuForm({ id: '', name: '', price: '', cuisine_id: '1', description: '', image: '', is_active: true });
+    setMenuMode('add');
+    setMenuError('');
+  };
+
+  const handleEditMenu = (menu) => {
+    setMenuForm({
+      id: menu.id,
+      name: menu.name || '',
+      price: menu.price != null ? String(menu.price) : '',
+      cuisine_id: menu.cuisine_id != null ? String(menu.cuisine_id) : '1',
+      description: menu.description || '',
+      image: menu.image || '',
+      is_active: menu.is_active !== false
+    });
+    setMenuMode('edit');
+    setMenuError('');
+  };
+
+  const handleMenuSubmit = async (e) => {
+    e.preventDefault();
+    setMenuError('');
+
+    if (!menuForm.name || !menuForm.price || !menuForm.cuisine_id) {
+      setMenuError('Sila lengkapkan nama, harga dan kategori menu.');
+      return;
+    }
+
+    const payload = {
+      name: menuForm.name,
+      price: parseFloat(menuForm.price) || 0,
+      cuisine_id: parseInt(menuForm.cuisine_id, 10),
+      description: menuForm.description || null,
+      image: menuForm.image || null,
+      is_active: menuForm.is_active
+    };
+
+    try {
+      if (menuMode === 'edit' && menuForm.id) {
+        const { error } = await supabase
+          .from('menus')
+          .update(payload)
+          .eq('id', parseInt(menuForm.id, 10));
+
+        if (error) {
+          throw error;
+        }
+      } else {
+        const { error } = await supabase
+          .from('menus')
+          .insert([payload]);
+
+        if (error) {
+          throw error;
+        }
+      }
+
+      await loadMenus();
+      resetMenuForm();
+    } catch (err) {
+      console.warn('Supabase menu save failed:', err.message);
+      setMenuError('Gagal menyimpan item menu: ' + (err.message || 'Unknown error'));
+    }
+  };
+
+  const handleToggleMenuActive = async (menu) => {
+    const updatedStatus = !(menu.is_active !== false);
+    try {
+      const { error } = await supabase
+        .from('menus')
+        .update({ is_active: updatedStatus })
+        .eq('id', menu.id);
+
+      if (error) {
+        throw error;
+      }
+
+      setMenus((current) => current.map((item) => item.id === menu.id ? { ...item, is_active: updatedStatus } : item));
+    } catch (err) {
+      console.warn('Supabase menu toggle failed:', err.message);
+    }
+  };
+
+  const handleDeleteMenu = async (menu) => {
+    if (!window.confirm('Delete this menu item permanently?')) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('menus')
+        .delete()
+        .eq('id', menu.id);
+
+      if (error) {
+        throw error;
+      }
+
+      setMenus((current) => current.filter((item) => item.id !== menu.id));
+      if (menuForm.id === menu.id) {
+        resetMenuForm();
+      }
+    } catch (err) {
+      console.warn('Supabase menu delete failed:', err.message);
     }
   };
 
@@ -485,6 +636,100 @@ const Admin = () => {
                   </div>
                 )}
               </div>
+            </div>
+      </div>
+
+      <div className="admin-container mt-4">
+        <div className="menu-management-panel">
+          <div className="menu-management-header">
+            <h3>Admin Menu Management</h3>
+            <p>Tambah, edit, close atau padam item menu yang dikendalikan dari Supabase.</p>
+          </div>
+
+          <div className="menu-management-grid">
+            <div className="menu-form-card">
+              <h4>{menuMode === 'edit' ? 'Edit Menu Item' : 'Tambah Menu Item Baru'}</h4>
+              <form className="admin-menu-form" onSubmit={handleMenuSubmit}>
+                <div className="form-group">
+                  <label>Menu item name</label>
+                  <input name="name" value={menuForm.name} onChange={handleMenuChange} placeholder="Dish name" required />
+                </div>
+                <div className="form-group">
+                  <label>Price (RM)</label>
+                  <input name="price" type="number" step="0.01" value={menuForm.price} onChange={handleMenuChange} placeholder="45.00" required />
+                </div>
+                <div className="form-group">
+                  <label>Cuisine category</label>
+                  <select name="cuisine_id" value={menuForm.cuisine_id} onChange={handleMenuChange} required>
+                    {cuisineOptions.map((option) => (
+                      <option key={option.value} value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <textarea name="description" value={menuForm.description} onChange={handleMenuChange} placeholder="Optional dish description" />
+                </div>
+                <div className="form-group">
+                  <label>Image URL</label>
+                  <input name="image" value={menuForm.image} onChange={handleMenuChange} placeholder="Optional image URL" />
+                </div>
+                <div className="form-group checkbox-group">
+                  <label>
+                    <input type="checkbox" name="is_active" checked={menuForm.is_active} onChange={handleMenuChange} />
+                    Keep menu item active
+                  </label>
+                </div>
+                {menuError && <div className="error-message">{menuError}</div>}
+                <div className="form-actions">
+                  <button type="submit" className="btn-primary">{menuMode === 'edit' ? 'Save Changes' : 'Add Menu Item'}</button>
+                  {menuMode === 'edit' && (
+                    <button type="button" className="btn-outline" onClick={resetMenuForm}>Cancel</button>
+                  )}
+                </div>
+              </form>
+            </div>
+
+            <div className="menu-list-card">
+              <h4>Existing Menu Items</h4>
+              {menus.length === 0 ? (
+                <p className="text-muted">No menu items loaded yet. Create one to populate Supabase.</p>
+              ) : (
+                <table className="menu-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Cuisine</th>
+                      <th>Price</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {menus.map((menu) => (
+                      <tr key={menu.id}>
+                        <td>{menu.id}</td>
+                        <td>{menu.name}</td>
+                        <td>{cuisineOptions.find((opt) => opt.value === String(menu.cuisine_id))?.label || menu.cuisine_id}</td>
+                        <td>RM {parseFloat(menu.price || 0).toFixed(2)}</td>
+                        <td>
+                          <span className={`status-badge ${menu.is_active ? 'open' : 'closed'}`}>
+                            {menu.is_active ? 'Open' : 'Closed'}
+                          </span>
+                        </td>
+                        <td className="menu-action-buttons">
+                          <button type="button" className="btn-sm btn-outline" onClick={() => handleEditMenu(menu)}>Edit</button>
+                          <button type="button" className="btn-sm btn-success" onClick={() => handleToggleMenuActive(menu)}>
+                            {menu.is_active ? 'Close' : 'Open'}
+                          </button>
+                          <button type="button" className="btn-sm btn-danger" onClick={() => handleDeleteMenu(menu)}>Delete</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>
