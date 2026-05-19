@@ -9,7 +9,8 @@ const JapaneseCuisine = () => {
       price: 'RM 75.00',
       description: 'Slow-simmered 18-hour creamy tonkotsu broth, layered with organic black garlic aroma oil, house-made rye noodles, and topped with blowtorched melt-in-your-mouth A5 Wagyu beef slices.',
       tags: ['⭐ Masterpiece', '18-Hour Broth', 'Premium Selection'],
-      ingredients: ['A5 Miyazaki Wagyu', 'Black Garlic Mayu Oil', '18-Hour Tonkotsu Essence', 'Organic Hen Egg', 'Bamboo Shoots']
+      ingredients: ['A5 Miyazaki Wagyu', 'Black Garlic Mayu Oil', '18-Hour Tonkotsu Essence', 'Organic Hen Egg', 'Bamboo Shoots'],
+      image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'salmon-don',
@@ -17,7 +18,8 @@ const JapaneseCuisine = () => {
       price: 'RM 58.00',
       description: 'Prismatic, thick slices of premium fresh Norwegian salmon sashimis, seasoned with a rich white truffle soy sauce, served over hand-seasoned warm sushi rice with ikura (salmon roe).',
       tags: ['Truffle Infused', 'Cold Delight'],
-      ingredients: ['Norwegian Salmon Sashimi', 'White Truffle Essence', 'Ikura (Salmon Caviar)', 'Vinegared Sushi Rice', 'Shiso Leaf']
+      ingredients: ['Norwegian Salmon Sashimi', 'White Truffle Essence', 'Ikura (Salmon Caviar)', 'Vinegared Sushi Rice', 'Shiso Leaf'],
+      image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'premium-sushi',
@@ -25,7 +27,8 @@ const JapaneseCuisine = () => {
       price: 'RM 85.00',
       description: 'A delicate curation of 8 hand-pressed nigiri and 6 signature maki rolls, featuring prime selection of salmon belly, fatty tuna (otoro), sweet shrimp, and dynamic unagi (grilled eel).',
       tags: ['⭐ Chef Special', 'Zen Curation'],
-      ingredients: ['Bluefin Tuna belly', 'Salmon Belly', 'Hokkaido Sweet Shrimp', 'Grilled Fresh Water Eel', 'Wasabi Root']
+      ingredients: ['Bluefin Tuna belly', 'Salmon Belly', 'Hokkaido Sweet Shrimp', 'Grilled Fresh Water Eel', 'Wasabi Root'],
+      image: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'tempura-moriawase',
@@ -33,7 +36,8 @@ const JapaneseCuisine = () => {
       price: 'RM 48.00',
       description: 'A classic, feather-light crispy assortment of fresh jumbo tiger prawns, soft sweet potato, lotus root, and eggplant, fried in clean tea seed oil. Served with warm dashi dipping broth.',
       tags: ['Classic Japanese', 'Crispy & Light'],
-      ingredients: ['Jumbo Tiger Prawns', 'Sweet Potato', 'Lotus Root', 'Sweet Dashi Broth', 'Grated Daikon Radish']
+      ingredients: ['Jumbo Tiger Prawns', 'Sweet Potato', 'Lotus Root', 'Sweet Dashi Broth', 'Grated Daikon Radish'],
+      image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=600&q=80'
     }
   ];
 
@@ -59,36 +63,42 @@ const JapaneseCuisine = () => {
           <div className="dishes-grid">
             {dishesInfo.map((dish, index) => (
               <div key={index} className="dish-detail-card jp-card">
-                <div className="dish-card-header">
-                  <div className="dish-title-price">
-                    <h3>{dish.name}</h3>
-                    <span className="dish-detail-price jp-price">{dish.price}</span>
-                  </div>
-                  <div className="dish-badge-row">
-                    {dish.tags.map((tag, tIdx) => (
-                      <span key={tIdx} className="dish-detail-badge jp-badge">{tag}</span>
-                    ))}
-                  </div>
+                <div className="dish-image-wrapper">
+                  <img src={dish.image} alt={dish.name} className="dish-serve-image" />
                 </div>
-
-                <p className="dish-card-desc">{dish.description}</p>
-
-                <div className="dish-ingredients">
-                  <strong>Key Ingredients:</strong>
-                  <div className="ingredients-pills">
-                    {dish.ingredients.map((ing, iIdx) => (
-                      <span key={iIdx} className="ingredient-pill">{ing}</span>
-                    ))}
+                <div className="dish-card-body-content">
+                  <div className="dish-card-header">
+                    <div className="dish-title-price">
+                      <h3>{dish.name}</h3>
+                      <span className="dish-detail-price jp-price">{dish.price}</span>
+                    </div>
+                    <div className="dish-badge-row">
+                      {dish.tags.map((tag, tIdx) => (
+                        <span key={tIdx} className="dish-detail-badge jp-badge">{tag}</span>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                <div className="dish-card-actions">
-                  <Link 
-                    to="/book" 
-                    className="btn-primary dish-preorder-btn jp-btn"
-                  >
-                    <span>Pre-order & Reserve</span>
-                  </Link>
+                  <p className="dish-card-desc">{dish.description}</p>
+
+                  <div className="dish-ingredients">
+                    <strong>Key Ingredients:</strong>
+                    <div className="ingredients-pills">
+                      {dish.ingredients.map((ing, iIdx) => (
+                        <span key={iIdx} className="ingredient-pill">{ing}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="dish-card-actions">
+                    <Link 
+                      to="/book" 
+                      state={{ preselectCuisine: 'japanese', preselectDish: dish.value }}
+                      className="btn-primary dish-preorder-btn jp-btn"
+                    >
+                      <span>Pre-order & Reserve</span>
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

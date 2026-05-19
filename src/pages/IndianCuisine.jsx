@@ -9,7 +9,8 @@ const IndianCuisine = () => {
       price: 'RM 78.00',
       description: 'Ultra-tender Australian lamb shank, slow-cooked in a sealed clay pot (Dum cooking) with long-grain aged Basmati rice, premium saffron strands, rose water, and a complex bouquet of freshly ground whole spices.',
       tags: ['⭐ Claypot Dum Cooking', 'Saffron Infused', 'Premium Meat'],
-      ingredients: ['Australian Lamb Shank', 'Aged Basmati Rice', 'Kashmiri Saffron', 'Clarified Butter (Ghee)', 'Fried Onions']
+      ingredients: ['Australian Lamb Shank', 'Aged Basmati Rice', 'Kashmiri Saffron', 'Clarified Butter (Ghee)', 'Fried Onions'],
+      image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'butter-chicken',
@@ -17,7 +18,8 @@ const IndianCuisine = () => {
       price: 'RM 42.00',
       description: 'Boneless chicken thighs marinated in spiced Greek yogurt, roasted inside a 400°C clay tandoor oven, and then smothered in a rich, buttery, velvety cashew-tomato sauce finished with dried fenugreek leaves (kasuri methi).',
       tags: ['Tandoor Masterpiece', 'Mildly Spiced'],
-      ingredients: ['Clay Oven Grilled Chicken', 'Cashew Paste', 'Fresh Cream & Butter', 'Tomato Puree', 'Fenugreek Leaves']
+      ingredients: ['Clay Oven Grilled Chicken', 'Cashew Paste', 'Fresh Cream & Butter', 'Tomato Puree', 'Fenugreek Leaves'],
+      image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'paneer-tikka',
@@ -25,7 +27,8 @@ const IndianCuisine = () => {
       price: 'RM 38.00',
       description: 'House-made fresh cottage cheese blocks (Paneer) skewered with capsicums and onions, charcoal-grilled in our tandoor, and simmered in a mildly sweet, velvety tomato gravy.',
       tags: ['🌱 Vegetarian', 'Housemade Cheese'],
-      ingredients: ['Housemade Cottage Cheese', 'Bell Peppers', 'Spiced Masala Gravy', 'Greek Yogurt Marinade', 'Fresh Coriander']
+      ingredients: ['Housemade Cottage Cheese', 'Bell Peppers', 'Spiced Masala Gravy', 'Greek Yogurt Marinade', 'Fresh Coriander'],
+      image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'naan-platter',
@@ -33,7 +36,8 @@ const IndianCuisine = () => {
       price: 'RM 25.00',
       description: 'A basket of three premium, fluffy flatbreads hand-kneaded, slapped against the walls of our clay tandoor oven, and stuffed with fresh mozzarella cheese, topped with raw minced garlic and fresh melted ghee.',
       tags: ['Fresh from Tandoor', 'Perfect Accompaniment'],
-      ingredients: ['Wheat Flour Dough', 'Fresh Minced Garlic', 'Mozzarella Cheese', 'Ghee Glaze', 'Fresh Mint Chutney Side']
+      ingredients: ['Wheat Flour Dough', 'Fresh Minced Garlic', 'Mozzarella Cheese', 'Ghee Glaze', 'Fresh Mint Chutney Side'],
+      image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?auto=format&fit=crop&w=600&q=80'
     }
   ];
 
@@ -59,36 +63,42 @@ const IndianCuisine = () => {
           <div className="dishes-grid">
             {dishesInfo.map((dish, index) => (
               <div key={index} className="dish-detail-card indian-card">
-                <div className="dish-card-header">
-                  <div className="dish-title-price">
-                    <h3>{dish.name}</h3>
-                    <span className="dish-detail-price orange-text">{dish.price}</span>
-                  </div>
-                  <div className="dish-badge-row">
-                    {dish.tags.map((tag, tIdx) => (
-                      <span key={tIdx} className="dish-detail-badge indian-badge">{tag}</span>
-                    ))}
-                  </div>
+                <div className="dish-image-wrapper">
+                  <img src={dish.image} alt={dish.name} className="dish-serve-image" />
                 </div>
-
-                <p className="dish-card-desc">{dish.description}</p>
-
-                <div className="dish-ingredients">
-                  <strong>Key Ingredients:</strong>
-                  <div className="ingredients-pills">
-                    {dish.ingredients.map((ing, iIdx) => (
-                      <span key={iIdx} className="ingredient-pill">{ing}</span>
-                    ))}
+                <div className="dish-card-body-content">
+                  <div className="dish-card-header">
+                    <div className="dish-title-price">
+                      <h3>{dish.name}</h3>
+                      <span className="dish-detail-price orange-text">{dish.price}</span>
+                    </div>
+                    <div className="dish-badge-row">
+                      {dish.tags.map((tag, tIdx) => (
+                        <span key={tIdx} className="dish-detail-badge indian-badge">{tag}</span>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                <div className="dish-card-actions">
-                  <Link 
-                    to="/book" 
-                    className="btn-primary dish-preorder-btn indian-btn"
-                  >
-                    <span>Pre-order & Reserve</span>
-                  </Link>
+                  <p className="dish-card-desc">{dish.description}</p>
+
+                  <div className="dish-ingredients">
+                    <strong>Key Ingredients:</strong>
+                    <div className="ingredients-pills">
+                      {dish.ingredients.map((ing, iIdx) => (
+                        <span key={iIdx} className="ingredient-pill">{ing}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="dish-card-actions">
+                    <Link 
+                      to="/book" 
+                      state={{ preselectCuisine: 'indian', preselectDish: dish.value }}
+                      className="btn-primary dish-preorder-btn indian-btn"
+                    >
+                      <span>Pre-order & Reserve</span>
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

@@ -9,7 +9,8 @@ const ChineseCuisine = () => {
       price: 'RM 65.00',
       description: 'Pristine fresh sea bass steamed to flaky perfection, topped with julienned young ginger, spring onions, fresh coriander, and drizzled with a premium seasoned hot soy sauce.',
       tags: ['⭐ Signature', 'Healthy Option', 'Fresh Seafood'],
-      ingredients: ['Fresh Sea Bass', 'Young Ginger', 'Spring Onion', 'Shao Hsing Culinary Essence', 'House Seasoned Soy']
+      ingredients: ['Fresh Sea Bass', 'Young Ginger', 'Spring Onion', 'Shao Hsing Culinary Essence', 'House Seasoned Soy'],
+      image: 'https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'szechuan-tofu',
@@ -17,7 +18,8 @@ const ChineseCuisine = () => {
       price: 'RM 28.00',
       description: 'Silken tofu cubes sautéed with a fiery house-crafted Szechuan pepper oil, fermented broad beans paste (doubanjiang), garlic, and a hint of organic maple syrup for a sweet-spicy crunch.',
       tags: ['🔥 Spicy', '🌱 Vegetarian'],
-      ingredients: ['Silken Tofu', 'Szechuan Peppercorns', 'Broad Bean Paste', 'Organic Maple Syrup', 'Woodear Mushrooms']
+      ingredients: ['Silken Tofu', 'Szechuan Peppercorns', 'Broad Bean Paste', 'Organic Maple Syrup', 'Woodear Mushrooms'],
+      image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'chicken-rice',
@@ -25,7 +27,8 @@ const ChineseCuisine = () => {
       price: 'RM 35.00',
       description: 'Traditional poached corn-fed chicken, served with highly aromatic chicken-fat ginger rice, homemade crushed ginger dip, thick dark soy paste, and a fiery red chili lime sambal.',
       tags: ['Ancestral Recipe', 'All-Time Favorite'],
-      ingredients: ['Corn-Fed Chicken', 'Fragrant Jasmine Rice', 'Fresh Garlic & Ginger', 'Red Chili & Calamansi', 'Pandan Leaves']
+      ingredients: ['Corn-Fed Chicken', 'Fragrant Jasmine Rice', 'Fresh Garlic & Ginger', 'Red Chili & Calamansi', 'Pandan Leaves'],
+      image: 'https://images.unsplash.com/photo-1626202378250-983c25e6f8c1?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'cantonese-noodles',
@@ -33,7 +36,8 @@ const ChineseCuisine = () => {
       price: 'RM 30.00',
       description: 'Flat rice noodles charcoal-seared to achieve ultimate wok hei (breath of the wok), drowned in a rich, silky egg gravy loaded with wild mushrooms, pak choy, and premium shrimp.',
       tags: ['Wok Hei Masterclass', 'Comfort Food'],
-      ingredients: ['Flat Rice Noodles (Hor Fun)', 'Fresh Chicken Egg', 'Pak Choy', 'Wild Shiitake Mushrooms', 'Fresh King Shrimps']
+      ingredients: ['Flat Rice Noodles (Hor Fun)', 'Fresh Chicken Egg', 'Pak Choy', 'Wild Shiitake Mushrooms', 'Fresh King Shrimps'],
+      image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=600&q=80'
     }
   ];
 
@@ -59,36 +63,42 @@ const ChineseCuisine = () => {
           <div className="dishes-grid">
             {dishesInfo.map((dish, index) => (
               <div key={index} className="dish-detail-card chinese-card">
-                <div className="dish-card-header">
-                  <div className="dish-title-price">
-                    <h3>{dish.name}</h3>
-                    <span className="dish-detail-price red-text">{dish.price}</span>
-                  </div>
-                  <div className="dish-badge-row">
-                    {dish.tags.map((tag, tIdx) => (
-                      <span key={tIdx} className="dish-detail-badge chinese-badge">{tag}</span>
-                    ))}
-                  </div>
+                <div className="dish-image-wrapper">
+                  <img src={dish.image} alt={dish.name} className="dish-serve-image" />
                 </div>
-
-                <p className="dish-card-desc">{dish.description}</p>
-
-                <div className="dish-ingredients">
-                  <strong>Key Ingredients:</strong>
-                  <div className="ingredients-pills">
-                    {dish.ingredients.map((ing, iIdx) => (
-                      <span key={iIdx} className="ingredient-pill">{ing}</span>
-                    ))}
+                <div className="dish-card-body-content">
+                  <div className="dish-card-header">
+                    <div className="dish-title-price">
+                      <h3>{dish.name}</h3>
+                      <span className="dish-detail-price red-text">{dish.price}</span>
+                    </div>
+                    <div className="dish-badge-row">
+                      {dish.tags.map((tag, tIdx) => (
+                        <span key={tIdx} className="dish-detail-badge chinese-badge">{tag}</span>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                <div className="dish-card-actions">
-                  <Link 
-                    to="/book" 
-                    className="btn-primary dish-preorder-btn chinese-btn"
-                  >
-                    <span>Pre-order & Reserve</span>
-                  </Link>
+                  <p className="dish-card-desc">{dish.description}</p>
+
+                  <div className="dish-ingredients">
+                    <strong>Key Ingredients:</strong>
+                    <div className="ingredients-pills">
+                      {dish.ingredients.map((ing, iIdx) => (
+                        <span key={iIdx} className="ingredient-pill">{ing}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="dish-card-actions">
+                    <Link 
+                      to="/book" 
+                      state={{ preselectCuisine: 'chinese', preselectDish: dish.value }}
+                      className="btn-primary dish-preorder-btn chinese-btn"
+                    >
+                      <span>Pre-order & Reserve</span>
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

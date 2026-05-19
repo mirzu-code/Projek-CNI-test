@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './BookingFlow.css';
 
 export const cuisineDishes = {
@@ -37,6 +37,7 @@ export const cuisineDishes = {
 
 const BookingFlow = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     date: '',
@@ -49,6 +50,17 @@ const BookingFlow = () => {
     dish: '',
     paymentMethod: 'fpx'
   });
+
+  useEffect(() => {
+    if (location.state?.preselectCuisine && location.state?.preselectDish) {
+      setFormData(prev => ({
+        ...prev,
+        preorder: true,
+        cuisineCategory: location.state.preselectCuisine,
+        dish: location.state.preselectDish
+      }));
+    }
+  }, [location.state]);
 
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
