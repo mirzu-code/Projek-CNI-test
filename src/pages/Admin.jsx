@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { Html5QrcodeScanner } from 'html5-qrcode';
 import './Admin.css';
 
 const Admin = () => {
@@ -14,6 +15,59 @@ const Admin = () => {
   const [isScanning, setIsScanning] = useState(false);
   const [scannerSuccessRes, setScannerSuccessRes] = useState(null);
   const [scannerError, setScannerError] = useState(false);
+
+  // Live Camera Scanner States
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const scannerRef = useRef(null);
+  const reservationsRef = useRef(reservations);
+
+  useEffect(() => {
+    reservationsRef.current = reservations;
+  }, [reservations]);
+
+  useEffect(() => {
+    if (isCameraActive) {
+      if (scannerRef.current) {
+        scannerRef.current.clear().catch(e => console.error(e));
+      }
+
+      scannerRef.current = new Html5QrcodeScanner(
+        "qr-reader",
+        { fps: 10, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 },
+        /* verbose= */ false
+      );
+
+      scannerRef.current.render(
+        (decodedText) => {
+          // Use our robust check-in handler for live scanned QR!
+          handleScanVerify(decodedText);
+          
+          if (scannerRef.current) {
+            scannerRef.current.pause(true);
+            setTimeout(() => {
+              if (scannerRef.current) {
+                scannerRef.current.resume();
+              }
+            }, 3000); // Resume scanning after 3 seconds for next guest
+          }
+        },
+        (error) => {
+          // Ignore general scan failures
+        }
+      );
+    } else {
+      if (scannerRef.current) {
+        scannerRef.current.clear().catch(error => console.error("Failed to clear scanner", error));
+        scannerRef.current = null;
+      }
+    }
+
+    return () => {
+      if (scannerRef.current) {
+        scannerRef.current.clear().catch(error => console.error("Failed to clear scanner on unmount", error));
+      }
+    };
+  }, [isCameraActive]);
 
   const playScanChime = (isSuccess = true) => {
     try {
@@ -67,7 +121,8 @@ const Admin = () => {
     setScannerMessage('SCANNING TICKET CODE IN REAL-TIME...');
 
     setTimeout(() => {
-      const match = reservations.find(res => res.id.toLowerCase() === scanId.trim().toLowerCase());
+      // Use the ref so the closure always has the latest reservations
+      const match = reservationsRef.current.find(res => res.id.toLowerCase() === scanId.trim().toLowerCase());
       setIsScanning(false);
       
       if (match) {
@@ -82,7 +137,7 @@ const Admin = () => {
           setScannerMessage(`VERIFICATION SUCCESSFUL: Welcome ${match.name}!`);
           
           // Update status in bookings array
-          const updated = reservations.map(res => 
+          const updated = reservationsRef.current.map(res => 
             res.id === match.id ? { ...res, status: 'Checked In' } : res
           );
           setReservations(updated);
@@ -235,8 +290,20 @@ const Admin = () => {
           <div className="scanner-card">
             <div className="scanner-header-row">
               <h3>🚪 Traditional Malay Glasshouse Entrance QR Scanner</h3>
-              <span className="scanner-tag">SDG 9 DIGITAL CHECK-IN</span>
+              <div className="scanner-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <button 
+                  className={`btn-sm ${isCameraActive ? 'btn-danger' : 'btn-success'}`}
+                  onClick={() => setIsCameraActive(!isCameraActive)}
+                  style={{ whiteSpace: 'nowrap' }}
+                >
+                  {isCameraActive ? '🛑 Stop Camera' : '🎥 Start Live Camera'}
+                </button>
+                <span className="scanner-tag">SDG 9 DIGITAL CHECK-IN</span>
+              </div>
             </div>
+            
+            {/* The Live QR Reader Div */}
+            <div id="qr-reader" style={{ display: isCameraActive ? 'block' : 'none', marginBottom: '2rem', borderRadius: '8px', overflow: 'hidden' }}></div>
             
             <div className="scanner-grid">
               {/* Left Column: neon CRT scan viewbox */}
