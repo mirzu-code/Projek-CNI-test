@@ -54,17 +54,20 @@ const BookingFlow = () => {
     pax: '2',
     name: '',
     phone: '',
-    cuisineCategory: 'malay'
+    cuisineCategory: 'malay',
+    dish: ''
   });
   const [expandedCuisine, setExpandedCuisine] = useState('malay');
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const preselectCuisine = location.state?.preselectCuisine;
+    const preselectDish = location.state?.preselectDish;
     if (preselectCuisine) {
       setFormData((prev) => ({
         ...prev,
-        cuisineCategory: preselectCuisine
+        cuisineCategory: preselectCuisine,
+        dish: preselectDish || prev.dish
       }));
       setExpandedCuisine(preselectCuisine);
     }
@@ -81,9 +84,19 @@ const BookingFlow = () => {
   const handleCuisineClick = (value) => {
     setFormData((prev) => ({
       ...prev,
-      cuisineCategory: value
+      cuisineCategory: value,
+      dish: prev.cuisineCategory === value ? prev.dish : ''
     }));
     setExpandedCuisine((prev) => (prev === value ? '' : value));
+  };
+
+  const handleDishClick = (dishValue, cuisineValue) => {
+    setFormData((prev) => ({
+      ...prev,
+      cuisineCategory: cuisineValue,
+      dish: dishValue
+    }));
+    setExpandedCuisine(cuisineValue);
   };
 
   const handleSubmit = (e) => {
@@ -101,7 +114,7 @@ const BookingFlow = () => {
       time: formData.time,
       pax: formData.pax,
       cuisineCategory: formData.cuisineCategory,
-      dish: null,
+      dish: formData.dish || null,
       tableId: null,
       tableNumber: '',
       tableCapacity: null,
@@ -172,9 +185,15 @@ const BookingFlow = () => {
                     {expandedCuisine === theme.value && (
                       <div className="cuisine-dish-list">
                         {cuisineDishes[theme.value]?.map((dish) => (
-                          <div key={dish.value} className="cuisine-dish-item">
-                            {dish.label}
-                          </div>
+                          <button
+                            key={dish.value}
+                            type="button"
+                            className={`cuisine-dish-item ${formData.dish === dish.value ? 'selected-dish' : ''}`}
+                            onClick={() => handleDishClick(dish.value, theme.value)}
+                          >
+                            <span>{dish.label}</span>
+                            {formData.dish === dish.value && <span className="dish-selected-tag">Selected</span>}
+                          </button>
                         ))}
                       </div>
                     )}
@@ -182,6 +201,12 @@ const BookingFlow = () => {
                 ))}
               </div>
             </div>
+
+            {formData.dish && (
+              <div className="selected-dish-summary">
+                Selected dish: {cuisineDishes[formData.cuisineCategory]?.find((d) => d.value === formData.dish)?.label || formData.dish}
+              </div>
+            )}
 
             <div className="form-group">
               <label>Name</label>
