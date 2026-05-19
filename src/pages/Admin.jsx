@@ -8,6 +8,106 @@ const Admin = () => {
   const [reservations, setReservations] = useState([]);
   const [selectedRes, setSelectedRes] = useState(null); // for managing a specific booking
 
+  // Entrance Scanner Simulator States
+  const [manualScanId, setManualScanId] = useState('');
+  const [scannerMessage, setScannerMessage] = useState('SCANNER ACTIVE - PRESENT CUSTOMER TICKET QR');
+  const [isScanning, setIsScanning] = useState(false);
+  const [scannerSuccessRes, setScannerSuccessRes] = useState(null);
+  const [scannerError, setScannerError] = useState(false);
+
+  const playScanChime = (isSuccess = true) => {
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (isSuccess) {
+        // Success high double-beep
+        const osc1 = audioCtx.createOscillator();
+        const gain1 = audioCtx.createGain();
+        osc1.connect(gain1);
+        gain1.connect(audioCtx.destination);
+        osc1.frequency.setValueAtTime(659.25, audioCtx.currentTime); // E5
+        gain1.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain1.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+        osc1.start();
+        osc1.stop(audioCtx.currentTime + 0.08);
+        
+        setTimeout(() => {
+          const osc2 = audioCtx.createOscillator();
+          const gain2 = audioCtx.createGain();
+          osc2.connect(gain2);
+          gain2.connect(audioCtx.destination);
+          osc2.frequency.setValueAtTime(783.99, audioCtx.currentTime); // G5
+          gain2.gain.setValueAtTime(0.12, audioCtx.currentTime);
+          gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+          osc2.start();
+          osc2.stop(audioCtx.currentTime + 0.12);
+        }, 80);
+      } else {
+        // Error low double buzz
+        const osc1 = audioCtx.createOscillator();
+        const gain1 = audioCtx.createGain();
+        osc1.connect(gain1);
+        gain1.connect(audioCtx.destination);
+        osc1.type = 'sawtooth';
+        osc1.frequency.setValueAtTime(150, audioCtx.currentTime);
+        gain1.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain1.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+        osc1.start();
+        osc1.stop(audioCtx.currentTime + 0.25);
+      }
+    } catch (err) {
+      console.warn("Web Audio API blocked or not supported: ", err);
+    }
+  };
+
+  const handleScanVerify = (scanId) => {
+    if (!scanId) return;
+    setIsScanning(true);
+    setScannerError(false);
+    setScannerSuccessRes(null);
+    setScannerMessage('SCANNING TICKET CODE IN REAL-TIME...');
+
+    setTimeout(() => {
+      const match = reservations.find(res => res.id.toLowerCase() === scanId.trim().toLowerCase());
+      setIsScanning(false);
+      
+      if (match) {
+        if (match.status === 'Checked In') {
+          playScanChime(false);
+          setScannerError(true);
+          setScannerMessage(`ALREADY CHECKED IN: ${match.id} - ${match.name}`);
+        } else {
+          // Success! Check-in!
+          playScanChime(true);
+          setScannerSuccessRes(match);
+          setScannerMessage(`VERIFICATION SUCCESSFUL: Welcome ${match.name}!`);
+          
+          // Update status in bookings array
+          const updated = reservations.map(res => 
+            res.id === match.id ? { ...res, status: 'Checked In' } : res
+          );
+          setReservations(updated);
+          localStorage.setItem('allBookings', JSON.stringify(updated));
+
+          // Sync with active customer booking
+          const active = localStorage.getItem('activeBooking');
+          if (active) {
+            const activeObj = JSON.parse(active);
+            if (activeObj.id === match.id) {
+              activeObj.status = 'Checked In';
+              localStorage.setItem('activeBooking', JSON.stringify(activeObj));
+            }
+          }
+        }
+      } else {
+        // Not found
+        playScanChime(false);
+        setScannerError(true);
+        setScannerMessage(`INVALID TICKET CODE: "${scanId.toUpperCase()}" NOT FOUND`);
+      }
+      setManualScanId('');
+    }, 1000);
+  };
+
   // Initial mock data
   const defaultReservations = [
     { id: 'RES-3921', name: 'Ahmad Faiz', date: '2026-05-20', time: '18:00', pax: 4, preorder: true, dish: 'ayam-rendang', status: 'Confirmed' },
@@ -127,6 +227,97 @@ const Admin = () => {
           <div className="stat-card highlight">
             <h3>Pre-orders (Waste Saved)</h3>
             <div className="stat-value">{totalPreorders}</div>
+          </div>
+        </div>
+
+        {/* Entrance Gate QR Scanner Panel */}
+        <div className="scanner-section-container animate-fade-in">
+          <div className="scanner-card">
+            <div className="scanner-header-row">
+              <h3>🚪 Traditional Malay Glasshouse Entrance QR Scanner</h3>
+              <span className="scanner-tag">SDG 9 DIGITAL CHECK-IN</span>
+            </div>
+            
+            <div className="scanner-grid">
+              {/* Left Column: neon CRT scan viewbox */}
+              <div className="scanner-monitor-panel">
+                <div className={`crt-scan-viewport ${isScanning ? 'is-scanning' : ''} ${scannerError ? 'has-error' : ''} ${scannerSuccessRes ? 'has-success' : ''}`}>
+                  <div className="crt-glow-overlay"></div>
+                  <div className="scan-corner top-left"></div>
+                  <div className="scan-corner top-right"></div>
+                  <div className="scan-corner bottom-left"></div>
+                  <div className="scan-corner bottom-right"></div>
+                  
+                  {/* Laser Sweeper */}
+                  <div className="scanner-laser-line"></div>
+                  
+                  <div className="viewport-info text-center">
+                    <div className="gate-icon">{isScanning ? '🔄' : scannerError ? '❌' : scannerSuccessRes ? '✅' : '📷'}</div>
+                    <div className="flashing-scanner-status">
+                      {isScanning ? 'VERIFYING CODE...' : scannerError ? 'ACCESS DENIED' : scannerSuccessRes ? 'ACCESS GRANTED' : 'SCANNER ACTIVE'}
+                    </div>
+                    <p className="scanner-feed-sub">{scannerMessage}</p>
+                    
+                    {scannerSuccessRes && (
+                      <div className="viewport-result-card animate-zoom-in">
+                        <strong>{scannerSuccessRes.name}</strong>
+                        <span>{scannerSuccessRes.pax} pax • {scannerSuccessRes.dish ? scannerSuccessRes.dish.replace('-', ' ') : 'Table Only'}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Right Column: controls */}
+              <div className="scanner-controls-panel">
+                <h4>Entrance Gate Controls</h4>
+                <p>Simulate a physical ticket scan at the glasshouse gate or type a code manually to verify.</p>
+                
+                <div className="control-group">
+                  <label>Type / Paste Ticket ID</label>
+                  <div className="scan-input-row">
+                    <input 
+                      type="text" 
+                      placeholder="e.g. RES-3921" 
+                      value={manualScanId}
+                      onChange={(e) => setManualScanId(e.target.value.toUpperCase())}
+                      onKeyDown={(e) => e.key === 'Enter' && handleScanVerify(manualScanId)}
+                      disabled={isScanning}
+                    />
+                    <button 
+                      className="btn-primary" 
+                      onClick={() => handleScanVerify(manualScanId)}
+                      disabled={isScanning || !manualScanId}
+                    >
+                      Scan manual
+                    </button>
+                  </div>
+                </div>
+
+                <div className="control-group mt-3">
+                  <label>Simulate QR Scan from Active Tickets</label>
+                  <select 
+                    onChange={(e) => handleScanVerify(e.target.value)}
+                    value=""
+                    disabled={isScanning}
+                  >
+                    <option value="">-- Choose a customer ticket to scan --</option>
+                    {reservations.filter(res => res.status !== 'Checked In').map(res => (
+                      <option key={res.id} value={res.id}>
+                        [QR CODE] {res.id} - {res.name} ({res.pax} pax)
+                      </option>
+                    ))}
+                  </select>
+                  <small className="help-text">Select any pending/confirmed booking to simulate the customer presenting their QR code at the entrance reader.</small>
+                </div>
+                
+                {scannerSuccessRes && (
+                  <div className="scanner-success-feedback animate-fade-in mt-3">
+                    🔊 <strong>Check-in Registered:</strong> A welcome chime was played. Guest table for {scannerSuccessRes.name} is ready for seating.
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 

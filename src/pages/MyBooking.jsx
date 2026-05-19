@@ -7,10 +7,18 @@ const MyBooking = () => {
   const [booking, setBooking] = useState(null);
 
   useEffect(() => {
-    const savedBooking = localStorage.getItem('activeBooking');
-    if (savedBooking) {
-      setBooking(JSON.parse(savedBooking));
-    }
+    const loadBooking = () => {
+      const savedBooking = localStorage.getItem('activeBooking');
+      if (savedBooking) {
+        setBooking(JSON.parse(savedBooking));
+      }
+    };
+    
+    loadBooking();
+    
+    // Live Polling every 1.5 seconds to synchronize check-in state!
+    const interval = setInterval(loadBooking, 1500);
+    return () => clearInterval(interval);
   }, []);
 
   if (!booking) {
@@ -36,10 +44,20 @@ const MyBooking = () => {
       </div>
       
       <div className="container mt-4">
-        <div className="ticket-card">
+        <div className={`ticket-card ${booking.status === 'Checked In' ? 'is-checked-in' : ''}`}>
+          {booking.status === 'Checked In' && (
+            <div className="checked-in-seal-overlay animate-zoom-in">
+              <div className="seal-inner">
+                <span className="seal-text">VERIFIED</span>
+                <span className="seal-status">ARRIVED</span>
+                <span className="seal-date">{new Date().toLocaleDateString('en-MY', { day: '2-digit', month: 'short' }).toUpperCase()}</span>
+              </div>
+            </div>
+          )}
+          
           <div className="ticket-header">
             <h3>{booking.id}</h3>
-            <span className={`status-badge ${booking.status.toLowerCase()}`}>{booking.status}</span>
+            <span className={`status-badge ${booking.status.toLowerCase().replace(' ', '-')}`}>{booking.status}</span>
           </div>
           
           <div className="ticket-body">

@@ -48,7 +48,8 @@ const BookingFlow = () => {
     preorder: false,
     cuisineCategory: '',
     dish: '',
-    paymentMethod: 'fpx'
+    paymentMethod: 'fpx',
+    preferredCuisine: ''
   });
 
   useEffect(() => {
@@ -57,7 +58,8 @@ const BookingFlow = () => {
         ...prev,
         preorder: true,
         cuisineCategory: location.state.preselectCuisine,
-        dish: location.state.preselectDish
+        dish: location.state.preselectDish,
+        preferredCuisine: location.state.preselectCuisine
       }));
     }
   }, [location.state]);
@@ -66,9 +68,9 @@ const BookingFlow = () => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     // Reset dish if cuisine changes
     if (e.target.name === 'cuisineCategory') {
-      setFormData({ ...formData, cuisineCategory: value, dish: '' });
+      setFormData({ ...formData, cuisineCategory: value, preferredCuisine: value, dish: '' });
     } else if (e.target.name === 'preorder' && !value) {
-      setFormData({ ...formData, preorder: value, cuisineCategory: '', dish: '' });
+      setFormData({ ...formData, preorder: value, cuisineCategory: '', preferredCuisine: '', dish: '' });
     } else {
       setFormData({ ...formData, [e.target.name]: value });
     }
@@ -121,7 +123,42 @@ const BookingFlow = () => {
                   ))}
                 </select>
               </div>
-              <button className="btn-primary full-width" onClick={nextStep} disabled={!formData.date || !formData.time}>Continue</button>
+
+              <div className="form-group mt-3">
+                <label>Choose Cuisine Theme (Preferred)</label>
+                <div className="cuisine-select-grid">
+                  {[
+                    { id: 'malay', name: 'Malay Cuisine', flag: '🇲🇾', color: '#1a472a', desc: 'Turmeric, Pandan, & Grill' },
+                    { id: 'chinese', name: 'Chinese Cuisine', flag: '🇨🇳', color: '#8b0000', desc: 'Wok Hei & Steamed Delights' },
+                    { id: 'japanese', name: 'Japanese Cuisine', flag: '🇯🇵', color: '#111111', desc: 'Sashimi & Artisan Broths' },
+                    { id: 'western', name: 'Western Cuisine', flag: '🥩', color: '#2c3e50', desc: 'Bistro Grill & Dry-Aged Steak' },
+                    { id: 'indian', name: 'Indian Cuisine', flag: '🍛', color: '#e67e22', desc: 'Claypot Dum & Tandoor Oven' }
+                  ].map(c => (
+                    <div 
+                      key={c.id} 
+                      className={`cuisine-select-card ${formData.preferredCuisine === c.id ? 'selected' : ''}`}
+                      style={{ '--cuisine-theme-color': c.color }}
+                      onClick={() => {
+                        setFormData(prev => ({
+                          ...prev,
+                          preferredCuisine: c.id,
+                          cuisineCategory: c.id,
+                          dish: prev.cuisineCategory === c.id ? prev.dish : ''
+                        }));
+                      }}
+                    >
+                      <div className="cuisine-flag">{c.flag}</div>
+                      <div className="cuisine-info">
+                        <strong>{c.name}</strong>
+                        <span>{c.desc}</span>
+                      </div>
+                      <div className="select-check">✓</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button className="btn-primary full-width mt-3" onClick={nextStep} disabled={!formData.date || !formData.time || !formData.preferredCuisine}>Continue</button>
             </div>
           )}
 

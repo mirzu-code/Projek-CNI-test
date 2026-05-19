@@ -251,3 +251,96 @@
     width: 10px;
   }
 }
+
+/* Cuisine Selector grid and card styles */
+.cuisine-select-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+
+.cuisine-select-card {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.2rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  background: white;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cuisine-select-card:hover {
+  border-color: var(--cuisine-theme-color);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+.cuisine-select-card.selected {
+  border-color: var(--cuisine-theme-color) !important;
+  background-color: rgba(26, 71, 42, 0.02) !important;
+  box-shadow: 0 0 0 2px var(--cuisine-theme-color), 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+}
+
+.cuisine-select-card.selected::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background-color: var(--cuisine-theme-color);
+}
+
+.cuisine-flag {
+  font-size: 2.2rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.cuisine-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.cuisine-info strong {
+  font-size: 1rem;
+  color: var(--text-main);
+  transition: color 0.2s ease;
+}
+
+.cuisine-select-card:hover .cuisine-info strong {
+  color: var(--cuisine-theme-color);
+}
+
+.cuisine-info span {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  line-height: 1.2;
+}
+
+.select-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--cuisine-theme-color);
+  color: white;
+  font-size: 0.75rem;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cuisine-select-card.selected .select-check {
+  transform: translateY(-50%) scale(1);
+}
