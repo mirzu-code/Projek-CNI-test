@@ -7,13 +7,22 @@ const Checkout = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const bookingData = state?.bookingData;
-
+  const [activeTab, setActiveTab] = useState('fpx');
+  const [selectedBank, setSelectedBank] = useState('maybank');
   const [isProcessing, setIsProcessing] = useState(false);
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [otpCode, setOtpCode] = useState('');
   const [otpError, setOtpError] = useState('');
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [processingStatus, setProcessingStatus] = useState('Connecting to secure gateway...');
+
+  const fpxBanks = [
+    { id: 'maybank', label: 'Maybank', icon: 'M' },
+    { id: 'cimb', label: 'CIMB', icon: 'C' },
+    { id: 'ambank', label: 'Ambank', icon: 'A' },
+    { id: 'rhb', label: 'RHB', icon: 'R' },
+    { id: 'hongleong', label: 'Hong Leong', icon: 'H' }
+  ];
 
   useEffect(() => {
     if (!bookingData) {
@@ -36,6 +45,7 @@ const Checkout = () => {
   const handlePaymentSubmit = (e) => {
     e.preventDefault();
     setIsProcessing(true);
+    setProcessingStatus('Connecting to secure gateway...');
     setTimeout(() => {
       setIsProcessing(false);
       setShowOtpModal(true);
@@ -92,58 +102,180 @@ const Checkout = () => {
     }
   };
 
+  const totalDeposit = 50;
+
   return (
     <div className="checkout-page animate-fade-in">
-      <div className="checkout-container">
-        <h2>Checkout</h2>
-        <div className="checkout-summary">
-          <p><strong>Name:</strong> {bookingData.name}</p>
-          <p><strong>Phone:</strong> {bookingData.phone}</p>
-          <p><strong>Date:</strong> {bookingData.date}</p>
-          <p><strong>Time:</strong> {bookingData.time}</p>
-          <p><strong>Guests:</strong> {bookingData.pax}</p>
-          {bookingData.preorder && bookingData.dish && (
-            <p><strong>Pre-order:</strong> {bookingData.dish.replace('-', ' ')}</p>
+      <div className="checkout-grid">
+        <div className="checkout-box">
+          <h2>Checkout</h2>
+          <p className="checkout-subtitle">Complete your booking with FPX payment and confirm your table reservation.</p>
+
+          <div className="checkout-tabs">
+            <button
+              type="button"
+              className={`tab-btn ${activeTab === 'fpx' ? 'active' : ''}`}
+              onClick={() => setActiveTab('fpx')}
+            >
+              FPX Bank
+            </button>
+            <button
+              type="button"
+              className={`tab-btn ${activeTab === 'ewallet' ? 'active' : ''}`}
+              onClick={() => setActiveTab('ewallet')}
+            >
+              E-Wallet
+            </button>
+          </div>
+
+          {activeTab === 'fpx' ? (
+            <div>
+              <p className="tab-desc">Pilih bank FPX anda untuk membayar deposit RM 50.00 secara selamat.</p>
+              <div className="bank-grid">
+                {fpxBanks.map((bank) => (
+                  <button
+                    key={bank.id}
+                    type="button"
+                    className={`bank-card ${selectedBank === bank.id ? 'selected' : ''}`}
+                    onClick={() => setSelectedBank(bank.id)}
+                  >
+                    <div className="bank-icon">{bank.icon}</div>
+                    <strong>{bank.label}</strong>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="qr-container">
+              <div className="qr-box">
+                <div className="qr-scan-line" />
+                <div className="qr-squares">
+                  <div className="qr-square top-left" />
+                  <div className="qr-square top-right" />
+                  <div className="qr-square bottom-left" />
+                  <div className="qr-dot-matrix" />
+                </div>
+              </div>
+              <div className="qr-brand-row">
+                <span>Scan & Pay</span>
+                <span className="divider">•</span>
+                <span>Secure via E-Wallet</span>
+              </div>
+            </div>
+          )}
+
+          <div className="payment-security-assurance">
+            <div className="shield-icon">🔒</div>
+            <div>
+              <strong>Secure checkout</strong>
+              <p>Semua transaksi dihantar melalui pintu masuk FPX yang selamat dan dilindungi.</p>
+            </div>
+          </div>
+
+          <form className="payment-form" onSubmit={handlePaymentSubmit}>
+            <div className="form-row">
+              <div className="form-group flex-1">
+                <label>Deposit Amount</label>
+                <input type="text" value={`RM ${totalDeposit}.00`} readOnly />
+              </div>
+              <div className="form-group flex-1">
+                <label>Selected Bank</label>
+                <input type="text" value={fpxBanks.find((bank) => bank.id === selectedBank)?.label || 'FPX'} readOnly />
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Payment Reference</label>
+              <input type="text" value={`REF-${bookingData.phone}-${bookingData.date}`} readOnly />
+            </div>
+            <button type="submit" className="btn-primary full-width mt-3">Pay RM {totalDeposit}.00</button>
+          </form>
+
+          {isProcessing && (
+            <div className="gateway-overlay">
+              <div className="gateway-card">
+                <div className="lock-spinner">
+                  <div className="spinner-ring" />
+                  <div className="lock-icon">🔒</div>
+                </div>
+                <h3>Processing Payment</h3>
+                <p className="status-text">{processingStatus}</p>
+                <div className="compliance-badges">
+                  <span className="dot">●</span>
+                  FPX Secure
+                  <span className="dot">●</span>
+                  3D Secure
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showOtpModal && (
+            <div className="otp-modal-overlay">
+              <div className="otp-modal">
+                <div className="otp-header">
+                  <span className="bank-brand">FPX Authorization</span>
+                  <h3>Enter OTP</h3>
+                </div>
+                <div className="otp-body">
+                  <p>Sila masukkan 6 digit kod OTP yang dihantar ke telefon anda.</p>
+                  <p className="otp-desc">Gunakan kod 123456 untuk ujian.</p>
+                  <form onSubmit={handleOtpVerify}>
+                    <input
+                      className="otp-input"
+                      type="text"
+                      value={otpCode}
+                      onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                      maxLength="6"
+                      placeholder="123456"
+                      required
+                    />
+                    {otpError && <div className="error-text">{otpError}</div>}
+                    <button type="submit" className="btn-primary mt-3 full-width">Verify OTP</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {paymentSuccess && (
+            <div className="success-message">
+              <p>Payment success! Redirecting you to your booking...</p>
+            </div>
           )}
         </div>
 
-        <form className="checkout-form" onSubmit={handlePaymentSubmit}>
-          <div className="form-group">
-            <label>Payment Deposit</label>
-            <p>Deposit RM 50.00 akan dikenakan untuk menjamin meja anda.</p>
+        <div className="invoice-box">
+          <h3>Booking Summary</h3>
+          <span className="invoice-tag">Deposit</span>
+          <div className="invoice-divider" />
+          <div className="invoice-details">
+            <div className="detail-item"><span>Name</span><strong>{bookingData.name}</strong></div>
+            <div className="detail-item"><span>Phone</span><strong>{bookingData.phone}</strong></div>
+            <div className="detail-item"><span>Date</span><strong>{bookingData.date}</strong></div>
+            <div className="detail-item"><span>Time</span><strong>{bookingData.time}</strong></div>
+            <div className="detail-item"><span>Guests</span><strong>{bookingData.pax} Person(s)</strong></div>
+            {bookingData.tableNumber && (
+              <div className="detail-item"><span>Table</span><strong>{bookingData.tableNumber}</strong></div>
+            )}
+            {bookingData.dish && (
+              <div className="detail-item"><span>Pre-order</span><strong>{bookingData.dish.replace('-', ' ')}</strong></div>
+            )}
           </div>
 
-          <button type="submit" className="btn-primary">Pay RM 50.00</button>
-        </form>
+          <div className="invoice-divider" />
+          <div className="invoice-pricing">
+            <div className="price-item"><span>Deposit</span><strong>RM {totalDeposit}.00</strong></div>
+            <div className="price-total"><span>Total</span><span className="amount-total">RM {totalDeposit}.00</span></div>
+          </div>
 
-        {isProcessing && <div className="gateway-overlay"><p>{processingStatus}</p></div>}
-
-        {showOtpModal && (
-          <div className="otp-modal-overlay">
-            <div className="otp-modal">
-              <h3>Enter OTP</h3>
-              <p>Sila masukkan 6 digit kod OTP: 123456</p>
-              <form onSubmit={handleOtpVerify}>
-                <input
-                  type="text"
-                  value={otpCode}
-                  onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
-                  maxLength="6"
-                  placeholder="123456"
-                  required
-                />
-                {otpError && <div className="error-text">{otpError}</div>}
-                <button type="submit" className="btn-primary mt-2">Verify OTP</button>
-              </form>
+          <div className="payment-security-assurance mt-4">
+            <div className="shield-icon">✅</div>
+            <div>
+              <strong>Secure & Verified</strong>
+              <p>Bayaran anda akan disahkan oleh sistem bank FPX dan direkod dengan selamat.</p>
             </div>
           </div>
-        )}
-
-        {paymentSuccess && (
-          <div className="success-message">
-            <p>Payment success! Redirecting you to your booking...</p>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );
