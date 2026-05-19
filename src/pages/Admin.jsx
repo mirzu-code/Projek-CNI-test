@@ -15,6 +15,7 @@ const Admin = () => {
   const [menuForm, setMenuForm] = useState({ id: '', name: '', price: '', cuisine_id: '1', description: '', image: '', is_active: true });
   const [menuError, setMenuError] = useState('');
   const [menuMode, setMenuMode] = useState('add');
+  const [expandedCuisine, setExpandedCuisine] = useState('1');
 
   const cuisineOptions = [
     { value: '1', label: 'Malay' },
@@ -696,40 +697,60 @@ const Admin = () => {
               {menus.length === 0 ? (
                 <p className="text-muted">No menu items loaded yet. Create one to populate Supabase.</p>
               ) : (
-                <table className="menu-table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Name</th>
-                      <th>Cuisine</th>
-                      <th>Price</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {menus.map((menu) => (
-                      <tr key={menu.id}>
-                        <td>{menu.id}</td>
-                        <td>{menu.name}</td>
-                        <td>{cuisineOptions.find((opt) => opt.value === String(menu.cuisine_id))?.label || menu.cuisine_id}</td>
-                        <td>RM {parseFloat(menu.price || 0).toFixed(2)}</td>
-                        <td>
-                          <span className={`status-badge ${menu.is_active ? 'open' : 'closed'}`}>
-                            {menu.is_active ? 'Open' : 'Closed'}
-                          </span>
-                        </td>
-                        <td className="menu-action-buttons">
-                          <button type="button" className="btn-sm btn-outline" onClick={() => handleEditMenu(menu)}>Edit</button>
-                          <button type="button" className="btn-sm btn-success" onClick={() => handleToggleMenuActive(menu)}>
-                            {menu.is_active ? 'Close' : 'Open'}
-                          </button>
-                          <button type="button" className="btn-sm btn-danger" onClick={() => handleDeleteMenu(menu)}>Delete</button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div className="cuisine-groups">
+                  {cuisineOptions.map((option) => {
+                    const cuisineMenus = menus.filter((menu) => String(menu.cuisine_id) === option.value);
+                    const isExpanded = expandedCuisine === option.value;
+
+                    return (
+                      <div key={option.value} className="cuisine-group-card">
+                        <button
+                          type="button"
+                          className={`cuisine-group-toggle ${isExpanded ? 'expanded' : ''}`}
+                          onClick={() => setExpandedCuisine((prev) => (prev === option.value ? '' : option.value))}
+                        >
+                          <div>
+                            <strong>{option.label}</strong>
+                            <span className="cuisine-group-count">{cuisineMenus.length} item(s)</span>
+                          </div>
+                          <span className="toggle-symbol">{isExpanded ? '−' : '+'}</span>
+                        </button>
+
+                        {isExpanded && (
+                          <div className="cuisine-menu-list">
+                            {cuisineMenus.length === 0 ? (
+                              <div className="empty-cuisine-state">Tiada item untuk {option.label} lagi.</div>
+                            ) : (
+                              cuisineMenus.map((menu) => (
+                                <div key={menu.id} className="cuisine-menu-item">
+                                  <div className="menu-item-info">
+                                    <div>
+                                      <h5>{menu.name}</h5>
+                                      <p>{menu.description || 'No description provided.'}</p>
+                                    </div>
+                                    <div className="menu-item-meta">
+                                      <span>RM {parseFloat(menu.price || 0).toFixed(2)}</span>
+                                      <span className={`status-badge ${menu.is_active ? 'open' : 'closed'}`}>
+                                        {menu.is_active ? 'Open' : 'Closed'}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div className="menu-action-buttons">
+                                    <button type="button" className="btn-sm btn-outline" onClick={() => handleEditMenu(menu)}>Edit</button>
+                                    <button type="button" className="btn-sm btn-success" onClick={() => handleToggleMenuActive(menu)}>
+                                      {menu.is_active ? 'Close' : 'Open'}
+                                    </button>
+                                    <button type="button" className="btn-sm btn-danger" onClick={() => handleDeleteMenu(menu)}>Delete</button>
+                                  </div>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               )}
             </div>
           </div>
