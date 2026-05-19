@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 import './MyBooking.css';
 
 const MyBooking = () => {
   const navigate = useNavigate();
   const [booking, setBooking] = useState(null);
+  const [searchPhone, setSearchPhone] = useState('');
+  const [searchError, setSearchError] = useState('');
+  const [loadingBooking, setLoadingBooking] = useState(false);
 
   useEffect(() => {
     const loadBooking = () => {
@@ -21,14 +25,90 @@ const MyBooking = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleSearchBooking = async (e) => {
+    e.preventDefault();
+    setSearchError('');
+
+    const normalizedPhone = searchPhone.trim();
+    if (!normalizedPhone) {
+      setSearchError('Please enter your phone number to search for the booking.');
+      return;
+    }
+
+    setLoadingBooking(true);
+
+    try {
+      const { data, error } = await supabase
+        .from('bookings')
+        .select('*')
+        .eq('customer_phone', normalizedPhone)
+        .order('id', { ascending: false })
+        .limit(1);
+
+      if (error) {
+        throw error;
+      }
+
+      if (!data || data.length === 0) {
+        setSearchError('No booking found for that phone number.');
+        setBooking(null);
+        return;
+      }
+
+      const record = data[0];
+      const foundBooking = {
+        id: record.id ? `RES-${record.id}` : null,
+        date: record.booking_date,
+        time: record.booking_time,
+        pax: record.total_guests ? String(record.total_guests) : '',
+        name: record.customer_name,
+        phone: record.customer_phone,
+        status: record.status || 'Pending',
+        preorder: !!record.dish,
+        cuisineCategory: record.cuisine_category || '',
+        dish: record.dish || '',
+        tableId: record.table_id,
+        tableNumber: record.table_number || (record.table_id ? `Table ${record.table_id}` : ''),
+        tableCapacity: record.table_capacity || null
+      };
+
+      localStorage.setItem('activeBooking', JSON.stringify(foundBooking));
+      setBooking(foundBooking);
+    } catch (err) {
+      setSearchError('Search failed: ' + (err.message || 'Unknown error'));
+    } finally {
+      setLoadingBooking(false);
+    }
+  };
+
   if (!booking) {
     return (
       <div className="my-booking-page animate-fade-in">
         <div className="no-booking">
           <div className="icon">📭</div>
           <h2>No Active Booking Found</h2>
-          <p>It looks like you haven't made a reservation yet, or your past reservation has been completed.</p>
-          <Link to="/book" className="btn-primary mt-3">Make a Reservation</Link>
+          <p>Either your booking is not stored locally, or you're using a different device/browser.</p>
+          <p>Search by your phone number to load the reservation from the cloud database.</p>
+
+          <form className="booking-search-form" onSubmit={handleSearchBooking}>
+            <div className="form-group">
+              <label htmlFor="searchPhone">Phone Number</label>
+              <input
+                id="searchPhone"
+                type="text"
+                value={searchPhone}
+                onChange={(e) => setSearchPhone(e.target.value)}
+                placeholder="e.g. 0123456789"
+              />
+            </div>
+            <button className="btn-primary mt-2" type="submit" disabled={loadingBooking}>
+              {loadingBooking ? 'Searching...' : 'Search Booking'}
+            </button>
+          </form>
+
+          {searchError && <p className="error-text">{searchError}</p>}
+
+          <Link to="/book" className="btn-outline mt-3">Make a Reservation</Link>
         </div>
       </div>
     );
