@@ -458,6 +458,12 @@ const Checkout = () => {
                 <span>Guests Count:</span>
                 <strong>{bookingData.pax} Person(s)</strong>
               </div>
+              {bookingData.tableNumber && (
+                <div className="detail-item" style={{ color: 'var(--primary-color)' }}>
+                  <span>Assigned Table:</span>
+                  <strong>{bookingData.tableNumber} ({bookingData.tableCapacity} seats)</strong>
+                </div>
+              )}
             </div>
 
             <div className="invoice-divider"></div>
