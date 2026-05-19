@@ -637,7 +637,8 @@ const Admin = () => {
                 )}
               </div>
             </div>
-      </div>
+          </div>
+        </div>
 
       <div className="admin-container mt-4">
         <div className="menu-management-panel">
@@ -804,6 +805,7 @@ const Admin = () => {
         </div>
       </div>
     </div>
+  </div>
   );
 };
 
