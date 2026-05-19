@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
+import { supabase } from '../supabaseClient';
 import './Admin.css';
 
 const Admin = () => {
@@ -8,6 +9,7 @@ const Admin = () => {
   const [error, setError] = useState('');
   const [reservations, setReservations] = useState([]);
   const [selectedRes, setSelectedRes] = useState(null); // for managing a specific booking
+  const [newBookingAlert, setNewBookingAlert] = useState(null);
 
   // Entrance Scanner Simulator States
   const [manualScanId, setManualScanId] = useState('');
@@ -170,16 +172,72 @@ const Admin = () => {
     { id: 'RES-1049', name: 'Mohd Amir', date: '2026-05-21', time: '21:00', pax: 6, preorder: true, dish: 'masak-lemak', status: 'Pending' },
   ];
 
+  const mapBookingRecord = (record) => ({
+    recordId: record.id,
+    id: record.id ? `RES-${record.id}` : `RES-${Math.floor(1000 + Math.random() * 9000)}`,
+    name: record.customer_name || '',
+    date: record.booking_date || '',
+    time: record.booking_time || '',
+    pax: record.total_guests ? String(record.total_guests) : '0',
+    preorder: !!record.dish,
+    dish: record.dish || '',
+    status: record.status || 'Pending',
+    tableId: record.table_id || null,
+    tableNumber: record.table_number || (record.table_id ? `Table ${record.table_id}` : ''),
+    tableCapacity: record.table_capacity || null,
+  });
+
   useEffect(() => {
-    // Load bookings from localStorage
-    const saved = localStorage.getItem('allBookings');
-    if (saved) {
-      setReservations(JSON.parse(saved));
-    } else {
-      // Initialize with default mock data
-      localStorage.setItem('allBookings', JSON.stringify(defaultReservations));
-      setReservations(defaultReservations);
-    }
+    const loadReservations = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('bookings')
+          .select('*')
+          .order('id', { ascending: false });
+
+        if (error) {
+          throw error;
+        }
+
+        if (data && data.length > 0) {
+          const mapped = data.map(mapBookingRecord);
+          setReservations(mapped);
+          localStorage.setItem('allBookings', JSON.stringify(mapped));
+          return;
+        }
+      } catch (err) {
+        console.warn('Supabase bookings load failed:', err.message);
+      }
+
+      const saved = localStorage.getItem('allBookings');
+      if (saved) {
+        setReservations(JSON.parse(saved));
+      } else {
+        localStorage.setItem('allBookings', JSON.stringify(defaultReservations));
+        setReservations(defaultReservations);
+      }
+    };
+
+    loadReservations();
+
+    const bookingChannel = supabase.channel('public:bookings');
+
+    bookingChannel.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bookings' }, (payload) => {
+      const newBooking = mapBookingRecord(payload.new);
+      setReservations((current) => [newBooking, ...current]);
+      setNewBookingAlert(newBooking);
+    });
+
+    bookingChannel.on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'bookings' }, (payload) => {
+      const updatedBooking = mapBookingRecord(payload.new);
+      setReservations((current) => current.map(res => res.recordId === updatedBooking.recordId ? updatedBooking : res));
+    });
+
+    bookingChannel.subscribe();
+
+    return () => {
+      bookingChannel.unsubscribe();
+    };
   }, []);
 
   const handleLogin = (e) => {
@@ -192,7 +250,10 @@ const Admin = () => {
     }
   };
 
-  const handleUpdateStatus = (id, newStatus) => {
+  const handleUpdateStatus = async (id, newStatus) => {
+    const reservation = reservations.find(res => res.id === id);
+    const recordId = reservation?.recordId || parseInt(id.replace('RES-', ''), 10);
+
     const updated = reservations.map(res => 
       res.id === id ? { ...res, status: newStatus } : res
     );
@@ -200,7 +261,21 @@ const Admin = () => {
     localStorage.setItem('allBookings', JSON.stringify(updated));
     setSelectedRes(null);
 
-    // If the updated booking matches the user's active booking in localStorage, update that too
+    try {
+      if (recordId) {
+        const { error } = await supabase
+          .from('bookings')
+          .update({ status: newStatus })
+          .eq('id', recordId);
+
+        if (error) {
+          throw error;
+        }
+      }
+    } catch (err) {
+      console.warn('Failed to update booking status in Supabase:', err.message);
+    }
+
     const active = localStorage.getItem('activeBooking');
     if (active) {
       const activeObj = JSON.parse(active);
@@ -211,12 +286,29 @@ const Admin = () => {
     }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this reservation?')) {
+      const reservation = reservations.find(res => res.id === id);
+      const recordId = reservation?.recordId || parseInt(id.replace('RES-', ''), 10);
       const updated = reservations.filter(res => res.id !== id);
       setReservations(updated);
       localStorage.setItem('allBookings', JSON.stringify(updated));
       setSelectedRes(null);
+
+      try {
+        if (recordId) {
+          const { error } = await supabase
+            .from('bookings')
+            .delete()
+            .eq('id', recordId);
+
+          if (error) {
+            throw error;
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to delete booking from Supabase:', err.message);
+      }
 
       const active = localStorage.getItem('activeBooking');
       if (active) {
@@ -268,6 +360,15 @@ const Admin = () => {
           <button className="btn-outline btn-logout" onClick={() => setIsAuthenticated(false)}>Logout</button>
         </div>
       </div>
+
+      {newBookingAlert && (
+        <div className="admin-alert new-booking-alert animate-fade-in">
+          <strong>New booking received:</strong> {newBookingAlert.name} — {newBookingAlert.date} {newBookingAlert.time}
+          <button className="btn-sm btn-outline" onClick={() => setNewBookingAlert(null)} style={{ marginLeft: '1rem' }}>
+            Dismiss
+          </button>
+        </div>
+      )}
       
       <div className="admin-container mt-4">
         <div className="dashboard-stats">

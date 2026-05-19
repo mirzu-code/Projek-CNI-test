@@ -125,7 +125,12 @@ const Checkout = () => {
         booking_time: bookingData.time, // Format mesti HH:MM:SS atau HH:MM
         total_guests: parseInt(bookingData.pax, 10),
         status: 'Pending',
-        table_id: bookingData.tableId ? parseInt(bookingData.tableId, 10) : null
+        table_id: bookingData.tableId ? parseInt(bookingData.tableId, 10) : null,
+        table_number: bookingData.tableNumber || null,
+        table_capacity: bookingData.tableCapacity || null,
+        preorder: bookingData.preorder || false,
+        cuisine_category: bookingData.cuisineCategory || null,
+        dish: bookingData.dish || null
         // Nota: Pastikan key di atas (cth: tableId atau table_id) sepadan dengan data dari BookingFlow
       };
 
