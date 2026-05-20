@@ -146,14 +146,14 @@ const Admin = () => {
     }
   };
 
-  const handleScanVerify = (scanId) => {
+  const handleScanVerify = async (scanId) => {
     if (!scanId) return;
     setIsScanning(true);
     setScannerError(false);
     setScannerSuccessRes(null);
     setScannerMessage('SCANNING TICKET CODE IN REAL-TIME...');
 
-    setTimeout(() => {
+    setTimeout(async () => {
       // Use the ref so the closure always has the latest reservations
       const match = reservationsRef.current.find(res => res.id.toLowerCase() === scanId.trim().toLowerCase());
       setIsScanning(false);
@@ -168,23 +168,9 @@ const Admin = () => {
           playScanChime(true);
           setScannerSuccessRes(match);
           setScannerMessage(`VERIFICATION SUCCESSFUL: Welcome ${match.name}!`);
-          
-          // Update status in bookings array
-          const updated = reservationsRef.current.map(res => 
-            res.id === match.id ? { ...res, status: 'Checked In' } : res
-          );
-          setReservations(updated);
-          localStorage.setItem('allBookings', JSON.stringify(updated));
 
-          // Sync with active customer booking
-          const active = localStorage.getItem('activeBooking');
-          if (active) {
-            const activeObj = JSON.parse(active);
-            if (activeObj.id === match.id) {
-              activeObj.status = 'Checked In';
-              localStorage.setItem('activeBooking', JSON.stringify(activeObj));
-            }
-          }
+          // Persist check-in status to Supabase so admin and customer sync
+          await handleUpdateStatus(match.id, 'Checked In');
         }
       } else {
         // Not found
