@@ -51,6 +51,24 @@
   margin-bottom: 2rem;
 }
 
+.table-panel-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.table-detail-panel {
+  margin-top: 0;
+}
+
+.table-detail-placeholder {
+  padding: 1.5rem;
+  border: 1px dashed var(--border-color);
+  border-radius: 10px;
+  background: #fafafa;
+}
+
 .table-availability-grid {
   display: grid;
   gap: 1rem;
@@ -158,6 +176,27 @@
   border-radius: 12px;
   background: white;
   border: 1px solid #e5e7eb;
+}
+
+@media (max-width: 1100px) {
+  .table-panel-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .table-availability-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .table-availability-card {
+    min-width: 0;
+  }
+
+  .qr-ticket-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .qr-ticket-info {

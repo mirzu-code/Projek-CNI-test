@@ -571,6 +571,64 @@ const Admin = () => {
     });
   };
 
+  const handleAssignTableToBooking = async (table) => {
+    if (!selectedRes) {
+      window.alert('Please select a booking from the reservations list first.');
+      return;
+    }
+
+    if (table.seats < parseInt(selectedRes.pax || '0', 10)) {
+      window.alert('Selected table cannot fit this booking. Choose a larger table.');
+      return;
+    }
+
+    const bookedTable = getTableBooking(table.id);
+    if (bookedTable && bookedTable.id !== selectedRes.id) {
+      window.alert('This table is already booked by another reservation.');
+      return;
+    }
+
+    const recordId = selectedRes.recordId || parseInt(selectedRes.id.replace(/^RES-/, ''), 10);
+    if (!recordId) {
+      window.alert('Unable to update booking record: invalid booking ID.');
+      return;
+    }
+
+    try {
+      const payload = {
+        table_id: table.id,
+        table_number: table.name,
+        table_capacity: table.seats
+      };
+
+      const { error } = await supabase
+        .from('bookings')
+        .update(payload)
+        .eq('id', recordId);
+
+      if (error) throw error;
+
+      const updatedReservations = reservations.map((res) =>
+        res.id === selectedRes.id
+          ? { ...res, ...payload, tableId: table.id, tableNumber: table.name, tableCapacity: table.seats }
+          : res
+      );
+      setReservations(updatedReservations);
+      localStorage.setItem('allBookings', JSON.stringify(updatedReservations));
+
+      const updatedSelectedRes = { ...selectedRes, ...payload, tableId: table.id, tableNumber: table.name, tableCapacity: table.seats };
+      setSelectedRes(updatedSelectedRes);
+      setSelectedTableDetails((prev) => prev ? { ...prev, booking: updatedSelectedRes } : prev);
+
+      await refreshReservations();
+      await refreshTableLocks();
+    } catch (err) {
+      const message = err?.message || err || 'Unknown error while assigning table';
+      console.warn('Failed to assign table to booking:', message);
+      window.alert('Failed to assign table: ' + message);
+    }
+  };
+
   const holdTable = async (table) => {
     const reason = window.prompt('Enter a note for this hold (e.g. walk-in / WhatsApp order):', 'Admin hold');
     if (reason === null) return;
@@ -698,110 +756,128 @@ const Admin = () => {
 
         <div className="table-availability-panel">
           <h3>Table Availability / Locks</h3>
-          <div className="table-availability-grid">
-            {TABLES.map((table) => {
-              const booking = getTableBooking(table.id);
-              const lock = getTableLock(table.id);
-              const booked = !!booking;
-              const isLocked = !!lock;
-              const isAdminHold = isLocked && lock.lock_token === 'admin';
-              const status = booked
-                ? `Booked by ${booking.name}`
-                : isLocked
-                ? lock.locked_by || 'Reserved'
-                : 'Available';
-              const statusClass = booked ? 'booked' : isLocked ? 'locked' : 'available';
+          <div className="table-panel-layout">
+            <div className="table-availability-grid">
+              {TABLES.map((table) => {
+                const booking = getTableBooking(table.id);
+                const lock = getTableLock(table.id);
+                const booked = !!booking;
+                const isLocked = !!lock;
+                const status = booked
+                  ? `Booked by ${booking.name}`
+                  : isLocked
+                  ? lock.locked_by || 'Reserved'
+                  : 'Available';
+                const statusClass = booked ? 'booked' : isLocked ? 'locked' : 'available';
 
-              return (
-                <div key={table.id} className={`table-availability-card ${statusClass}`}>
-                  <div className="table-availability-name">{table.name}</div>
-                  <div className="table-availability-seats">{table.seats} seats</div>
-                  <div className="table-availability-status">{status}</div>
-                  {booked && booking && (
-                    <div className="table-availability-booking">
-                      <strong>{booking.id}</strong> • {booking.date} {booking.time}
-                    </div>
-                  )}
-                  {isLocked && lock.locked_by && (
-                    <div className="table-availability-expiry">
-                      {lock.lock_token === 'admin' ? 'Admin hold' : 'Held until'}{' '}
-                      {lock.lock_expires_at ? new Date(lock.lock_expires_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'until released'}
-                    </div>
-                  )}
-                  <div className="table-availability-actions">
-                    {!booked && !isLocked && (
-                      <button type="button" className="btn-sm btn-outline" onClick={() => holdTable(table)}>
-                        Hold Table
-                      </button>
+                return (
+                  <div key={table.id} className={`table-availability-card ${statusClass}`}>
+                    <div className="table-availability-name">{table.name}</div>
+                    <div className="table-availability-seats">{table.seats} seats</div>
+                    <div className="table-availability-status">{status}</div>
+                    {booked && booking && (
+                      <div className="table-availability-booking">
+                        <strong>{booking.id}</strong> • {booking.date} {booking.time}
+                      </div>
                     )}
-                    {isLocked && !booked && (
-                      <button type="button" className="btn-sm btn-danger" onClick={() => releaseTable(table)}>
-                        Release Hold
-                      </button>
+                    {isLocked && lock.locked_by && (
+                      <div className="table-availability-expiry">
+                        {lock.lock_token === 'admin' ? 'Admin hold' : 'Held until'}{' '}
+                        {lock.lock_expires_at ? new Date(lock.lock_expires_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'until released'}
+                      </div>
                     )}
-                    <button type="button" className="btn-sm btn-outline" onClick={() => handleShowTableDetails(table)}>
-                      View Details
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {selectedTableDetails && (
-            <div className="table-detail-panel">
-              <div className="table-detail-header">
-                <h3>{selectedTableDetails.table.name} Details</h3>
-                <button className="btn-sm btn-outline" type="button" onClick={() => setSelectedTableDetails(null)}>
-                  Close
-                </button>
-              </div>
-              {selectedTableDetails.booking ? (
-                <div className="table-detail-content">
-                  <p><strong>Booking ID:</strong> {selectedTableDetails.booking.id}</p>
-                  <p><strong>Guest:</strong> {selectedTableDetails.booking.name}</p>
-                  <p><strong>Phone:</strong> {selectedTableDetails.booking.phone || 'Not provided'}</p>
-                  <p><strong>Date & Time:</strong> {selectedTableDetails.booking.date} {selectedTableDetails.booking.time}</p>
-                  <p><strong>Pax:</strong> {selectedTableDetails.booking.pax}</p>
-                  <p><strong>Status:</strong> {selectedTableDetails.booking.status}</p>
-                  <p><strong>Pre-order:</strong> {selectedTableDetails.booking.preorder ? selectedTableDetails.booking.dish.replace('-', ' ') : 'None'}</p>
-                  <div className="qr-ticket-card">
-                    <img
-                      src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`Booking:${selectedTableDetails.booking.id}\nName:${selectedTableDetails.booking.name}\nTable:${selectedTableDetails.booking.tableNumber}\nDate:${selectedTableDetails.booking.date}\nTime:${selectedTableDetails.booking.time}`)}`}
-                      alt="Booking QR Code"
-                    />
-                    <div className="qr-ticket-info">
-                      <p><strong>Ticket QR</strong></p>
-                      <p>Send this ticket to the customer via WhatsApp.</p>
-                      {selectedTableDetails.booking.phone ? (
-                        <a
-                          className="btn-sm btn-success"
-                          href={`https://api.whatsapp.com/send?phone=${selectedTableDetails.booking.phone.replace(/\D/g, '')}&text=${encodeURIComponent(`Hello ${selectedTableDetails.booking.name}, your booking ${selectedTableDetails.booking.id} for ${selectedTableDetails.booking.tableNumber} on ${selectedTableDetails.booking.date} at ${selectedTableDetails.booking.time} is confirmed.`)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Send WhatsApp
-                        </a>
-                      ) : (
-                        <p className="text-muted">No phone number available for WhatsApp.</p>
+                    <div className="table-availability-actions">
+                      {!booked && !isLocked && (
+                        <button type="button" className="btn-sm btn-outline" onClick={() => holdTable(table)}>
+                          Hold Table
+                        </button>
                       )}
+                      {isLocked && !booked && (
+                        <button type="button" className="btn-sm btn-danger" onClick={() => releaseTable(table)}>
+                          Release Hold
+                        </button>
+                      )}
+                      <button type="button" className="btn-sm btn-outline" onClick={() => handleShowTableDetails(table)}>
+                        View Details
+                      </button>
                     </div>
                   </div>
-                </div>
-              ) : selectedTableDetails.lock ? (
-                <div className="table-detail-content">
-                  <p><strong>Locked by:</strong> {selectedTableDetails.lock.locked_by}</p>
-                  <p><strong>Lock type:</strong> {selectedTableDetails.lock.lock_token === 'admin' ? 'Admin hold' : 'Reserved'}</p>
-                  <p><strong>Expires:</strong> {selectedTableDetails.lock.lock_expires_at ? new Date(selectedTableDetails.lock.lock_expires_at).toLocaleString() : 'Until released'}</p>
+                );
+              })}
+            </div>
+
+            <div className="table-detail-panel">
+              {!selectedTableDetails ? (
+                <div className="table-detail-placeholder">
+                  <h4>Select a table to see details</h4>
+                  <p>Click "View Details" on any table card. You can also assign a selected booking to this table.</p>
                 </div>
               ) : (
-                <div className="table-detail-content">
-                  <p>This table is currently available.</p>
-                </div>
+                <>
+                  <div className="table-detail-header">
+                    <h3>{selectedTableDetails.table.name} Details</h3>
+                    <button className="btn-sm btn-outline" type="button" onClick={() => setSelectedTableDetails(null)}>
+                      Close
+                    </button>
+                  </div>
+                  {selectedTableDetails.booking ? (
+                    <div className="table-detail-content">
+                      <p><strong>Booking ID:</strong> {selectedTableDetails.booking.id}</p>
+                      <p><strong>Guest:</strong> {selectedTableDetails.booking.name}</p>
+                      <p><strong>Phone:</strong> {selectedTableDetails.booking.phone || 'Not provided'}</p>
+                      <p><strong>Date & Time:</strong> {selectedTableDetails.booking.date} {selectedTableDetails.booking.time}</p>
+                      <p><strong>Pax:</strong> {selectedTableDetails.booking.pax}</p>
+                      <p><strong>Status:</strong> {selectedTableDetails.booking.status}</p>
+                      <p><strong>Pre-order:</strong> {selectedTableDetails.booking.preorder ? selectedTableDetails.booking.dish.replace('-', ' ') : 'None'}</p>
+                      <div className="qr-ticket-card">
+                        <img
+                          src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`Booking:${selectedTableDetails.booking.id}\nName:${selectedTableDetails.booking.name}\nTable:${selectedTableDetails.booking.tableNumber}\nDate:${selectedTableDetails.booking.date}\nTime:${selectedTableDetails.booking.time}`)}`}
+                          alt="Booking QR Code"
+                        />
+                        <div className="qr-ticket-info">
+                          <p><strong>Ticket QR</strong></p>
+                          <p>Send this ticket to the customer via WhatsApp.</p>
+                          {selectedTableDetails.booking.phone ? (
+                            <a
+                              className="btn-sm btn-success"
+                              href={`https://api.whatsapp.com/send?phone=${selectedTableDetails.booking.phone.replace(/\D/g, '')}&text=${encodeURIComponent(`Hello ${selectedTableDetails.booking.name}, your booking ${selectedTableDetails.booking.id} for ${selectedTableDetails.booking.tableNumber} on ${selectedTableDetails.booking.date} at ${selectedTableDetails.booking.time} is confirmed.`)}`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              Send WhatsApp
+                            </a>
+                          ) : (
+                            <p className="text-muted">No phone number available for WhatsApp.</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ) : selectedTableDetails.lock ? (
+                    <div className="table-detail-content">
+                      <p><strong>Locked by:</strong> {selectedTableDetails.lock.locked_by}</p>
+                      <p><strong>Lock type:</strong> {selectedTableDetails.lock.lock_token === 'admin' ? 'Admin hold' : 'Reserved'}</p>
+                      <p><strong>Expires:</strong> {selectedTableDetails.lock.lock_expires_at ? new Date(selectedTableDetails.lock.lock_expires_at).toLocaleString() : 'Until released'}</p>
+                    </div>
+                  ) : (
+                    <div className="table-detail-content">
+                      <p>This table is currently available.</p>
+                      {selectedRes ? (
+                        <button
+                          type="button"
+                          className="btn-primary"
+                          onClick={() => handleAssignTableToBooking(selectedTableDetails.table)}
+                        >
+                          Assign selected booking to this table
+                        </button>
+                      ) : (
+                        <p className="text-muted">To assign a booking to this table, select a reservation from the list first.</p>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
             </div>
-          )}
-
+          </div>
         </div>
 
         {/* Entrance Gate QR Scanner Panel */}
