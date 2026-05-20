@@ -12,6 +12,14 @@ const Admin = () => {
   const [selectedRes, setSelectedRes] = useState(null); // for managing a specific booking
   const [newBookingAlert, setNewBookingAlert] = useState(null);
   const [tableLocks, setTableLocks] = useState([]);
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
+
+  const isPortraitMobile = () => typeof window !== 'undefined' && window.matchMedia('(max-width: 980px) and (orientation: portrait)').matches;
+
+  const handleNavClick = (section) => {
+    setActiveSection(section);
+    if (isPortraitMobile()) setIsSidePanelOpen(false);
+  };
 
   const TABLES = [
     { id: 1, name: 'Table 1', seats: 2 },
@@ -787,10 +795,19 @@ const Admin = () => {
   return (
     <div className="admin-page animate-fade-in">
       <div className="admin-header">
-        <div className="admin-container">
-          <h2>Restaurant Management Dashboard</h2>
-          <p>SDG 9 Initiative: Digital Capacity & Resource Planning</p>
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <div className="admin-container admin-header-row">
+          <div className="admin-header-title">
+            <button className="admin-menu-toggle" type="button" onClick={() => setIsSidePanelOpen(true)}>
+              <span />
+              <span />
+              <span />
+            </button>
+            <div>
+              <h2>Restaurant Management Dashboard</h2>
+              <p>SDG 9 Initiative: Digital Capacity & Resource Planning</p>
+            </div>
+          </div>
+          <div className="admin-header-actions">
             <Link to="/admin-table-status" className="btn-outline btn-sm" style={{ color: 'white', borderColor: 'rgba(255,255,255,0.5)' }}>
               Table Status
             </Link>
@@ -810,29 +827,30 @@ const Admin = () => {
       
       <div className="admin-container mt-4">
         <div className="admin-dashboard-layout">
-          <aside className="admin-side-panel">
+          <aside className={`admin-side-panel ${isSidePanelOpen ? 'open' : 'closed'}`}>
             <div className="admin-side-panel-header">
               <h3>Admin Sections</h3>
               <p>Navigate between tasks.</p>
             </div>
             <nav className="admin-side-nav">
-              <button className={`side-nav-button ${activeSection === 'overview' ? 'active' : ''}`} onClick={() => setActiveSection('overview')}>
+              <button className={`side-nav-button ${activeSection === 'overview' ? 'active' : ''}`} onClick={() => handleNavClick('overview')}>
                 Overview
               </button>
-              <button className={`side-nav-button ${activeSection === 'table' ? 'active' : ''}`} onClick={() => setActiveSection('table')}>
+              <button className={`side-nav-button ${activeSection === 'table' ? 'active' : ''}`} onClick={() => handleNavClick('table')}>
                 Table Availability
               </button>
-              <button className={`side-nav-button ${activeSection === 'menu' ? 'active' : ''}`} onClick={() => setActiveSection('menu')}>
+              <button className={`side-nav-button ${activeSection === 'menu' ? 'active' : ''}`} onClick={() => handleNavClick('menu')}>
                 Adjust Menu
               </button>
-              <button className={`side-nav-button ${activeSection === 'reservations' ? 'active' : ''}`} onClick={() => setActiveSection('reservations')}>
+              <button className={`side-nav-button ${activeSection === 'reservations' ? 'active' : ''}`} onClick={() => handleNavClick('reservations')}>
                 Upcoming Reservations
               </button>
-              <button className={`side-nav-button ${activeSection === 'scanner' ? 'active' : ''}`} onClick={() => setActiveSection('scanner')}>
+              <button className={`side-nav-button ${activeSection === 'scanner' ? 'active' : ''}`} onClick={() => handleNavClick('scanner')}>
                 QR Scanner
               </button>
             </nav>
           </aside>
+          <div className={`side-panel-backdrop ${isSidePanelOpen ? 'open' : ''}`} onClick={() => setIsSidePanelOpen(false)} />
           <main className="admin-main-panel">
             <div className="admin-container mt-4" style={{ display: ['overview', 'table', 'scanner'].includes(activeSection) ? 'block' : 'none' }}>
               <div className="dashboard-stats" style={{ display: activeSection === 'overview' ? 'grid' : 'none' }}>
