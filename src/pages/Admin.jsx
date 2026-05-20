@@ -220,6 +220,7 @@ const Admin = () => {
   });
 
   const [selectedTableDetails, setSelectedTableDetails] = useState(null);
+  const [activeSection, setActiveSection] = useState('overview');
 
   const refreshReservations = async () => {
     try {
@@ -739,11 +740,37 @@ const Admin = () => {
       )}
       
       <div className="admin-container mt-4">
-        <div className="dashboard-stats">
-          <div className="stat-card">
-            <h3>Total Bookings</h3>
-            <div className="stat-value">{totalBookings}</div>
-          </div>
+        <div className="admin-dashboard-layout">
+          <aside className="admin-side-panel">
+            <div className="admin-side-panel-header">
+              <h3>Admin Sections</h3>
+              <p>Navigate between tasks.</p>
+            </div>
+            <nav className="admin-side-nav">
+              <button className={`side-nav-button ${activeSection === 'overview' ? 'active' : ''}`} onClick={() => setActiveSection('overview')}>
+                Overview
+              </button>
+              <button className={`side-nav-button ${activeSection === 'table' ? 'active' : ''}`} onClick={() => setActiveSection('table')}>
+                Table Availability
+              </button>
+              <button className={`side-nav-button ${activeSection === 'menu' ? 'active' : ''}`} onClick={() => setActiveSection('menu')}>
+                Adjust Menu
+              </button>
+              <button className={`side-nav-button ${activeSection === 'reservations' ? 'active' : ''}`} onClick={() => setActiveSection('reservations')}>
+                Upcoming Reservations
+              </button>
+              <button className={`side-nav-button ${activeSection === 'scanner' ? 'active' : ''}`} onClick={() => setActiveSection('scanner')}>
+                QR Scanner
+              </button>
+            </nav>
+          </aside>
+          <main className="admin-main-panel">
+            <div className="admin-container mt-4" style={{ display: ['overview', 'table', 'scanner'].includes(activeSection) ? 'block' : 'none' }}>
+              <div className="dashboard-stats" style={{ display: activeSection === 'overview' ? 'grid' : 'none' }}>
+                <div className="stat-card">
+                  <h3>Total Bookings</h3>
+                  <div className="stat-value">{totalBookings}</div>
+                </div>
           <div className="stat-card">
             <h3>Total Pax</h3>
             <div className="stat-value">{totalPax}</div>
@@ -754,7 +781,7 @@ const Admin = () => {
           </div>
         </div>
 
-        <div className="table-availability-panel">
+        <div className="table-availability-panel" style={{ display: activeSection === 'table' ? 'block' : 'none' }}>
           <h3>Table Availability / Locks</h3>
           <div className="table-panel-layout">
             <div className="table-availability-grid">
@@ -881,7 +908,7 @@ const Admin = () => {
         </div>
 
         {/* Entrance Gate QR Scanner Panel */}
-        <div className="scanner-section-container animate-fade-in">
+        <div className="scanner-section-container animate-fade-in" style={{ display: activeSection === 'scanner' ? 'block' : 'none' }}>
           <div className="scanner-card">
             <div className="scanner-header-row">
               <h3>🚪 Traditional Malay Glasshouse Entrance QR Scanner</h3>
@@ -983,8 +1010,8 @@ const Admin = () => {
           </div>
         </div>
 
-      <div className="admin-container mt-4">
-        <div className="menu-management-panel">
+      <div className="admin-container mt-4" style={{ display: ['menu', 'reservations'].includes(activeSection) ? 'block' : 'none' }}>
+        <div className="menu-management-panel" style={{ display: activeSection === 'menu' ? 'block' : 'none' }}>
           <div className="menu-management-header">
             <h3>Admin Menu Management</h3>
             <p>Tambah, edit, close atau padam item menu yang dikendalikan dari Supabase.</p>
@@ -1098,33 +1125,34 @@ const Admin = () => {
           </div>
         </div>
 
-        {/* Action Panel for selected booking */}
-        {selectedRes && (
-          <div className="action-panel animate-fade-in">
-            <h3>Manage Booking: {selectedRes.id}</h3>
-            <p>Guest: <strong>{selectedRes.name}</strong> ({selectedRes.pax} pax)</p>
-            <p>Table: <strong>{selectedRes.tableNumber || 'Not assigned'}</strong></p>
-            <div className="action-buttons">
-              <button className="btn-primary btn-sm btn-success" onClick={() => handleUpdateStatus(selectedRes.id, 'Confirmed')}>
-                Confirm / Approve
-              </button>
-              <button className="btn-outline btn-sm btn-warn" onClick={() => handleUpdateStatus(selectedRes.id, 'Pending')}>
-                Set to Pending
-              </button>
-              <button className="btn-outline btn-sm btn-danger" onClick={() => handleUpdateStatus(selectedRes.id, 'Cancelled')}>
-                Cancel Reservation
-              </button>
-              <button className="btn-danger btn-sm" onClick={() => handleDelete(selectedRes.id)}>
-                Delete Completely
-              </button>
-              <button className="btn-outline btn-sm" onClick={() => setSelectedRes(null)}>
-                Close
-              </button>
+        <div style={{ display: activeSection === 'reservations' ? 'block' : 'none' }}>
+          {/* Action Panel for selected booking */}
+          {selectedRes && (
+            <div className="action-panel animate-fade-in">
+              <h3>Manage Booking: {selectedRes.id}</h3>
+              <p>Guest: <strong>{selectedRes.name}</strong> ({selectedRes.pax} pax)</p>
+              <p>Table: <strong>{selectedRes.tableNumber || 'Not assigned'}</strong></p>
+              <div className="action-buttons">
+                <button className="btn-primary btn-sm btn-success" onClick={() => handleUpdateStatus(selectedRes.id, 'Confirmed')}>
+                  Confirm / Approve
+                </button>
+                <button className="btn-outline btn-sm btn-warn" onClick={() => handleUpdateStatus(selectedRes.id, 'Pending')}>
+                  Set to Pending
+                </button>
+                <button className="btn-outline btn-sm btn-danger" onClick={() => handleUpdateStatus(selectedRes.id, 'Cancelled')}>
+                  Cancel Reservation
+                </button>
+                <button className="btn-danger btn-sm" onClick={() => handleDelete(selectedRes.id)}>
+                  Delete Completely
+                </button>
+                <button className="btn-outline btn-sm" onClick={() => setSelectedRes(null)}>
+                  Close
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <div className="reservations-table-container">
+          <div className="reservations-table-container">
           <h3>Upcoming Reservations</h3>
           <table className="reservations-table">
             <thead>
@@ -1170,7 +1198,9 @@ const Admin = () => {
           </table>
         </div>
       </div>
+    </main>
     </div>
+  </div>
   </div>
   );
 };
