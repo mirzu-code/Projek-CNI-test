@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import BookingFlow from './pages/BookingFlow';
 import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
+import AdminTableStatus from './pages/AdminTableStatus';
 import MyBooking from './pages/MyBooking';
 import Menu from './pages/Menu';
 import MalayCuisine from './pages/MalayCuisine';
@@ -41,6 +42,7 @@ function App() {
             <Route path="/menu/indian" element={<IndianCuisine />} />
             <Route path="/about" element={<About />} />
             <Route path="/admin-dashboard" element={<Admin />} />
+            <Route path="/admin-table-status" element={<AdminTableStatus />} />
           </Routes>
         </main>
       </div>

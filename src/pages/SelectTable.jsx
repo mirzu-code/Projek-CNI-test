@@ -53,7 +53,7 @@ const SelectTable = () => {
         supabase
           .from('table_locks')
           .select('*')
-          .gte('lock_expires_at', now)
+          .or(`lock_expires_at.is.null,lock_expires_at.gte.${now}`)
       ]);
 
       if (bookingsError) {
@@ -90,7 +90,7 @@ const SelectTable = () => {
       const { data, error } = await supabase
         .from('table_locks')
         .select('*')
-        .gte('lock_expires_at', now);
+        .or(`lock_expires_at.is.null,lock_expires_at.gte.${now}`);
 
       if (!error) {
         setTableLocks(data || []);
@@ -145,15 +145,19 @@ const SelectTable = () => {
   const lockDurationMs = 2 * 60 * 1000;
 
   const getLockForTable = (tableId) => {
-    return tableLocks.find((lock) => lock.table_id === tableId);
+    const now = Date.now();
+    return tableLocks.find((lock) => {
+      if (lock.table_id !== tableId) return false;
+      if (!lock.lock_expires_at) return true;
+      return new Date(lock.lock_expires_at).getTime() > now;
+    });
   };
 
   const isTableLockedByOther = (table) => {
     const lock = getLockForTable(table.id);
     if (!lock) return false;
-    const expiresAt = new Date(lock.lock_expires_at).getTime();
-    if (expiresAt <= Date.now()) return false;
-    return lock.lock_token !== lockToken;
+    if (!lock.lock_expires_at) return lock.lock_token !== lockToken;
+    return new Date(lock.lock_expires_at).getTime() > Date.now() && lock.lock_token !== lockToken;
   };
 
   const reserveTableLock = async (table) => {
@@ -320,7 +324,7 @@ const SelectTable = () => {
                   const isBooked = bookedTables.includes(table.id);
                   const tooSmall = table.seats < guests;
                   const lock = getLockForTable(table.id);
-                  const isLocked = !!lock && new Date(lock.lock_expires_at).getTime() > Date.now();
+                  const isLocked = !!lock;
                   const isSelected = selectedTable?.id === table.id;
                   const isLockedByOther = isLocked && lock.lock_token !== lockToken;
                   const cardClasses = [
@@ -331,10 +335,14 @@ const SelectTable = () => {
                     .filter(Boolean)
                     .join(' ');
 
+                  const lockLabel = lock?.lock_expires_at
+                    ? new Date(lock.lock_expires_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    : 'until released';
+
                   const statusLabel = isBooked
                     ? 'Booked'
                     : isLockedByOther
-                    ? `Locked (${new Date(lock.lock_expires_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`
+                    ? `Locked (${lockLabel})`
                     : tooSmall
                     ? 'Too small'
                     : isSelected

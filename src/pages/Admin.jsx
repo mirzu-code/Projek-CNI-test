@@ -308,7 +308,7 @@ const Admin = () => {
         const { data, error } = await supabase
           .from('table_locks')
           .select('*')
-          .gte('lock_expires_at', now);
+          .or(`lock_expires_at.is.null,lock_expires_at.gte.${now}`);
 
         if (!error) {
           setTableLocks(data || []);
@@ -545,6 +545,71 @@ const Admin = () => {
     }
   };
 
+  const getTableLock = (tableId) => {
+    const now = Date.now();
+    return tableLocks.find((lock) => {
+      if (lock.table_id !== tableId) return false;
+      if (!lock.lock_expires_at) return true;
+      return new Date(lock.lock_expires_at).getTime() > now;
+    });
+  };
+
+  const getTableBooking = (tableId) => {
+    return reservations.find((res) => res.tableId === tableId && res.status !== 'Cancelled');
+  };
+
+  const holdTable = async (table) => {
+    const reason = window.prompt('Enter a note for this hold (e.g. walk-in / WhatsApp order):', 'Admin hold');
+    if (reason === null) return;
+
+    try {
+      const { data: existing, error: existingError } = await supabase
+        .from('table_locks')
+        .select('*')
+        .eq('table_id', table.id)
+        .maybeSingle();
+
+      if (existingError) throw existingError;
+
+      const payload = {
+        table_id: table.id,
+        locked_by: reason || 'Admin hold',
+        lock_token: 'admin',
+        lock_expires_at: null
+      };
+
+      if (existing) {
+        const { error } = await supabase
+          .from('table_locks')
+          .update(payload)
+          .eq('table_id', table.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('table_locks')
+          .insert([payload]);
+        if (error) throw error;
+      }
+
+      await refreshTableLocks();
+    } catch (err) {
+      console.warn('Failed to hold table:', err.message);
+    }
+  };
+
+  const releaseTable = async (table) => {
+    try {
+      const { error } = await supabase
+        .from('table_locks')
+        .delete()
+        .eq('table_id', table.id);
+      if (error) throw error;
+      await refreshTableLocks();
+    } catch (err) {
+      console.warn('Failed to release table:', err.message);
+    }
+  };
+
   // Calculate dynamic stats
   const totalBookings = reservations.length;
   const totalPax = reservations.reduce((sum, res) => sum + parseInt(res.pax || 0), 0);
@@ -582,7 +647,12 @@ const Admin = () => {
         <div className="admin-container">
           <h2>Restaurant Management Dashboard</h2>
           <p>SDG 9 Initiative: Digital Capacity & Resource Planning</p>
-          <button className="btn-outline btn-logout" onClick={() => setIsAuthenticated(false)}>Logout</button>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <Link to="/admin-table-status" className="btn-outline btn-sm" style={{ color: 'white', borderColor: 'rgba(255,255,255,0.5)' }}>
+              Table Status
+            </Link>
+            <button className="btn-outline btn-logout" onClick={() => setIsAuthenticated(false)}>Logout</button>
+          </div>
         </div>
       </div>
 
@@ -615,16 +685,15 @@ const Admin = () => {
           <h3>Table Availability / Locks</h3>
           <div className="table-availability-grid">
             {TABLES.map((table) => {
-              const booked = reservations.some((res) => res.tableId === table.id && res.status !== 'Cancelled');
-              const lock = tableLocks.find((lockItem) => lockItem.table_id === table.id);
-              const now = Date.now();
-              const isLocked = lock && new Date(lock.lock_expires_at).getTime() > now;
+              const booking = getTableBooking(table.id);
+              const lock = getTableLock(table.id);
+              const booked = !!booking;
+              const isLocked = !!lock;
+              const isAdminHold = isLocked && lock.lock_token === 'admin';
               const status = booked
-                ? 'Booked'
+                ? `Booked by ${booking.name}`
                 : isLocked
-                ? lock.locked_by
-                  ? `Locked by ${lock.locked_by}`
-                  : 'Cooling down'
+                ? lock.locked_by || 'Reserved'
                 : 'Available';
               const statusClass = booked ? 'booked' : isLocked ? 'locked' : 'available';
 
@@ -633,9 +702,29 @@ const Admin = () => {
                   <div className="table-availability-name">{table.name}</div>
                   <div className="table-availability-seats">{table.seats} seats</div>
                   <div className="table-availability-status">{status}</div>
-                  {isLocked && lock.locked_by && (
-                    <div className="table-availability-expiry">Until {new Date(lock.lock_expires_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                  {booked && booking && (
+                    <div className="table-availability-booking">
+                      <strong>{booking.id}</strong> • {booking.date} {booking.time}
+                    </div>
                   )}
+                  {isLocked && lock.locked_by && (
+                    <div className="table-availability-expiry">
+                      {lock.lock_token === 'admin' ? 'Admin hold' : 'Held until'}{' '}
+                      {lock.lock_expires_at ? new Date(lock.lock_expires_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'until released'}
+                    </div>
+                  )}
+                  <div className="table-availability-actions">
+                    {!booked && !isLocked && (
+                      <button type="button" className="btn-sm btn-outline" onClick={() => holdTable(table)}>
+                        Hold Table
+                      </button>
+                    )}
+                    {isLocked && !booked && (
+                      <button type="button" className="btn-sm btn-danger" onClick={() => releaseTable(table)}>
+                        Release Hold
+                      </button>
+                    )}
+                  </div>
                 </div>
               );
             })}
