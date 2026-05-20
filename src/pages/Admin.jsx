@@ -129,6 +129,23 @@ const Admin = () => {
     }
   };
 
+  const playNewBookingChime = () => {
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+      gain.gain.setValueAtTime(0.16, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.2);
+    } catch (err) {
+      console.warn("Web Audio API blocked or not supported: ", err);
+    }
+  };
+
   const handleScanVerify = (scanId) => {
     if (!scanId) return;
     setIsScanning(true);
@@ -253,6 +270,23 @@ const Admin = () => {
       }
     };
 
+    const refreshReservations = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('bookings')
+          .select('*')
+          .order('id', { ascending: false });
+
+        if (error || !data) return;
+
+        const mapped = data.map(mapBookingRecord);
+        setReservations(mapped);
+        localStorage.setItem('allBookings', JSON.stringify(mapped));
+      } catch (err) {
+        console.warn('Supabase bookings refresh failed:', err.message);
+      }
+    };
+
     loadReservations();
     loadMenus();
 
@@ -262,6 +296,7 @@ const Admin = () => {
       const newBooking = mapBookingRecord(payload.new);
       setReservations((current) => [newBooking, ...current]);
       setNewBookingAlert(newBooking);
+      playNewBookingChime();
     });
 
     bookingChannel.on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'bookings' }, (payload) => {
@@ -271,7 +306,10 @@ const Admin = () => {
 
     bookingChannel.subscribe();
 
+    const refreshInterval = setInterval(refreshReservations, 1000);
+
     return () => {
+      clearInterval(refreshInterval);
       bookingChannel.unsubscribe();
     };
   }, []);
