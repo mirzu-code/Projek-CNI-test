@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './MyBooking.css';
@@ -9,25 +9,75 @@ const MyBooking = () => {
   const [searchPhone, setSearchPhone] = useState('');
   const [searchError, setSearchError] = useState('');
   const [loadingBooking, setLoadingBooking] = useState(false);
+  const [notification, setNotification] = useState('');
+  const savedBookingRef = useRef(null);
 
   useEffect(() => {
-    const loadBooking = () => {
+    const loadBookingFromStorage = () => {
       const savedBooking = localStorage.getItem('activeBooking');
       if (savedBooking) {
-        setBooking(JSON.parse(savedBooking));
+        const parsed = JSON.parse(savedBooking);
+        setBooking(parsed);
+        savedBookingRef.current = parsed;
       }
     };
-    
-    loadBooking();
-    
-    // Live Polling every 1.5 seconds to synchronize check-in state!
-    const interval = setInterval(loadBooking, 1500);
+
+    const refreshBookingFromServer = async () => {
+      const current = savedBookingRef.current;
+      if (!current || !current.id) return;
+      const recordId = parseInt(current.id.replace(/^RES-/i, ''), 10);
+      if (!recordId) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('bookings')
+          .select('*')
+          .eq('id', recordId)
+          .single();
+
+        if (error || !data) {
+          return;
+        }
+
+        const updatedBooking = {
+          id: data.id ? `RES-${data.id}` : current.id,
+          date: data.booking_date,
+          time: data.booking_time,
+          pax: data.total_guests ? String(data.total_guests) : '',
+          name: data.customer_name,
+          phone: data.customer_phone,
+          status: data.status || 'Pending',
+          preorder: !!data.dish,
+          cuisineCategory: current.cuisineCategory || '',
+          dish: data.dish || '',
+          tableId: data.table_id,
+          tableNumber: data.table_number || (data.table_id ? `Table ${data.table_id}` : ''),
+          tableCapacity: data.table_capacity || null
+        };
+
+        if (current.status !== 'Checked In' && updatedBooking.status === 'Checked In') {
+          setNotification('You have already checked in. Welcome!');
+        }
+
+        if (JSON.stringify(updatedBooking) !== JSON.stringify(current)) {
+          setBooking(updatedBooking);
+          savedBookingRef.current = updatedBooking;
+          localStorage.setItem('activeBooking', JSON.stringify(updatedBooking));
+        }
+      } catch (err) {
+        // ignore polling failures silently
+      }
+    };
+
+    loadBookingFromStorage();
+    const interval = setInterval(refreshBookingFromServer, 1000);
     return () => clearInterval(interval);
   }, []);
 
   const handleSearchBooking = async (e) => {
     e.preventDefault();
     setSearchError('');
+    setNotification('');
 
     const normalizedPhone = searchPhone.trim();
     if (!normalizedPhone) {
@@ -81,6 +131,7 @@ const MyBooking = () => {
 
       localStorage.setItem('activeBooking', JSON.stringify(foundBooking));
       setBooking(foundBooking);
+      savedBookingRef.current = foundBooking;
     } catch (err) {
       setSearchError('Search failed: ' + (err.message || 'Unknown error'));
     } finally {
@@ -131,12 +182,18 @@ const MyBooking = () => {
       </div>
       
       <div className="container mt-4">
+        {(notification || booking.status === 'Checked In') && (
+          <div className="booking-notice">
+            <strong>{notification || 'You have already checked in. Welcome!'}</strong>
+          </div>
+        )}
+
         <div className={`ticket-card ${booking.status === 'Checked In' ? 'is-checked-in' : ''}`}>
           {booking.status === 'Checked In' && (
             <div className="checked-in-seal-overlay animate-zoom-in">
               <div className="seal-inner">
                 <span className="seal-text">VERIFIED</span>
-                <span className="seal-status">ARRIVED</span>
+                <span className="seal-status">CHECKED IN</span>
                 <span className="seal-date">{new Date().toLocaleDateString('en-MY', { day: '2-digit', month: 'short' }).toUpperCase()}</span>
               </div>
             </div>

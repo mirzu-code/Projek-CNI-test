@@ -195,3 +195,15 @@
   color: #1a73e8 !important;
   border: 1px solid #1a73e8 !important;
 }
+
+.booking-notice {
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  background: rgba(28, 102, 60, 0.1);
+  color: #1b5e20;
+  border: 1px solid rgba(28, 102, 60, 0.18);
+  text-align: center;
+  font-weight: 600;
+}
