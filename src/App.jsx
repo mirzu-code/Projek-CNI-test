@@ -39,6 +39,7 @@ function App() {
             <Route path="/menu/western" element={<WesternCuisine />} />
             <Route path="/menu/indian" element={<IndianCuisine />} />
             <Route path="/about" element={<About />} />
+            <Route path="/admin-dashboard" element={<Admin />} />
           </Routes>
         </main>
       </div>

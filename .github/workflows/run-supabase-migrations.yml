@@ -1,0 +1,25 @@
+name: Run Supabase Migrations
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  migrate:
+    name: Run SQL migrations against Supabase
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install supabase CLI
+        run: npm install -g supabase
+
+      - name: Run migrations
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          echo "Running 001_create_tables.sql"
+          supabase sql "$(cat supabase_migrations/001_create_tables.sql)"
+          echo "Running 002_rls_policies.sql"
+          supabase sql "$(cat supabase_migrations/002_rls_policies.sql)"
