@@ -27,3 +27,11 @@ create table if not exists menus (
   is_active boolean default true,
   created_at timestamptz default now()
 );
+
+create table if not exists table_locks (
+  table_id int primary key,
+  locked_by text,
+  lock_token text,
+  lock_expires_at timestamptz,
+  created_at timestamptz default now()
+);

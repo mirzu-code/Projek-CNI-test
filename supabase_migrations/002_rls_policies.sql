@@ -11,5 +11,8 @@ create policy open_all_bookings on bookings for all using (true) with check (tru
 alter table menus enable row level security;
 create policy open_all_menus on menus for all using (true) with check (true);
 
+alter table table_locks enable row level security;
+create policy open_all_table_locks on table_locks for all using (true) with check (true);
+
 alter table admin_user enable row level security;
 create policy open_all_admin_user on admin_user for select using (true) with check (true);

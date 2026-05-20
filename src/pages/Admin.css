@@ -43,6 +43,63 @@
   margin-top: -2rem;
 }
 
+.table-availability-panel {
+  background: var(--bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.table-availability-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.table-availability-card {
+  padding: 1rem;
+  border-radius: 10px;
+  background: white;
+  border: 1px solid var(--border-color);
+}
+
+.table-availability-card.available {
+  border-color: #38a169;
+  background: #f0fff4;
+}
+
+.table-availability-card.booked {
+  border-color: #e53e3e;
+  background: #fff5f5;
+}
+
+.table-availability-card.locked {
+  border-color: #d97706;
+  background: #fffbeb;
+}
+
+.table-availability-name {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.table-availability-seats {
+  color: var(--text-light);
+  margin-bottom: 0.6rem;
+}
+
+.table-availability-status {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.table-availability-expiry {
+  color: var(--text-light);
+  font-size: 0.85rem;
+}
+
 .stat-card {
   background: var(--bg-card);
   padding: 2rem;

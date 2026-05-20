@@ -89,6 +89,18 @@ const Checkout = () => {
       }
 
       const savedBooking = data?.[0];
+
+      if (bookingData.tableId) {
+        try {
+          await supabase
+            .from('table_locks')
+            .delete()
+            .eq('table_id', bookingData.tableId);
+        } catch (lockError) {
+          console.warn('Could not clear table lock:', lockError.message || lockError);
+        }
+      }
+
       const localBooking = {
         ...bookingData,
         id: savedBooking?.id ? `RES-${savedBooking.id}` : `RES-${Math.floor(1000 + Math.random() * 9000)}`,

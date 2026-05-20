@@ -581,6 +581,15 @@
   transform: scale(1.04);
 }
 
+.table-lock-message {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 10px;
+  background: #f7f9ff;
+  border: 1px solid #c3dafe;
+  color: #1f2937;
+}
+
 /* ── Selected Banner ── */
 .selected-table-banner {
   background: linear-gradient(135deg, #1a472a, #2d6a4f);

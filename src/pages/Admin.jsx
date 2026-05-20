@@ -10,6 +10,19 @@ const Admin = () => {
   const [reservations, setReservations] = useState([]);
   const [selectedRes, setSelectedRes] = useState(null); // for managing a specific booking
   const [newBookingAlert, setNewBookingAlert] = useState(null);
+  const [tableLocks, setTableLocks] = useState([]);
+
+  const TABLES = [
+    { id: 1, name: 'Table 1', seats: 2 },
+    { id: 2, name: 'Table 2', seats: 2 },
+    { id: 3, name: 'Table 3', seats: 4 },
+    { id: 4, name: 'Table 4', seats: 4 },
+    { id: 5, name: 'Table 5', seats: 4 },
+    { id: 6, name: 'Table 6', seats: 6 },
+    { id: 7, name: 'Table 7', seats: 6 },
+    { id: 8, name: 'Table 8', seats: 8 },
+    { id: 9, name: 'Table 9', seats: 8 }
+  ];
 
   const [menus, setMenus] = useState([]);
   const [menuForm, setMenuForm] = useState({ id: '', name: '', price: '', cuisine_id: '1', description: '', image: '', is_active: true });
@@ -256,6 +269,22 @@ const Admin = () => {
       }
     };
 
+    const loadTableLocks = async () => {
+      const now = new Date().toISOString();
+      try {
+        const { data, error } = await supabase
+          .from('table_locks')
+          .select('*')
+          .gte('lock_expires_at', now);
+
+        if (!error) {
+          setTableLocks(data || []);
+        }
+      } catch (err) {
+        console.warn('Supabase table locks load failed:', err.message);
+      }
+    };
+
     const refreshReservations = async () => {
       try {
         const { data, error } = await supabase
@@ -273,8 +302,25 @@ const Admin = () => {
       }
     };
 
+    const refreshTableLocks = async () => {
+      const now = new Date().toISOString();
+      try {
+        const { data, error } = await supabase
+          .from('table_locks')
+          .select('*')
+          .gte('lock_expires_at', now);
+
+        if (!error) {
+          setTableLocks(data || []);
+        }
+      } catch (err) {
+        console.warn('Supabase table locks refresh failed:', err.message);
+      }
+    };
+
     loadReservations();
     loadMenus();
+    loadTableLocks();
 
     const bookingChannel = supabase.channel('public:bookings');
 
@@ -292,7 +338,10 @@ const Admin = () => {
 
     bookingChannel.subscribe();
 
-    const refreshInterval = setInterval(refreshReservations, 1000);
+    const refreshInterval = setInterval(() => {
+      refreshReservations();
+      refreshTableLocks();
+    }, 1000);
 
     return () => {
       clearInterval(refreshInterval);
@@ -559,6 +608,37 @@ const Admin = () => {
           <div className="stat-card highlight">
             <h3>Pre-orders (Waste Saved)</h3>
             <div className="stat-value">{totalPreorders}</div>
+          </div>
+        </div>
+
+        <div className="table-availability-panel">
+          <h3>Table Availability / Locks</h3>
+          <div className="table-availability-grid">
+            {TABLES.map((table) => {
+              const booked = reservations.some((res) => res.tableId === table.id && res.status !== 'Cancelled');
+              const lock = tableLocks.find((lockItem) => lockItem.table_id === table.id);
+              const now = Date.now();
+              const isLocked = lock && new Date(lock.lock_expires_at).getTime() > now;
+              const status = booked
+                ? 'Booked'
+                : isLocked
+                ? lock.locked_by
+                  ? `Locked by ${lock.locked_by}`
+                  : 'Cooling down'
+                : 'Available';
+              const statusClass = booked ? 'booked' : isLocked ? 'locked' : 'available';
+
+              return (
+                <div key={table.id} className={`table-availability-card ${statusClass}`}>
+                  <div className="table-availability-name">{table.name}</div>
+                  <div className="table-availability-seats">{table.seats} seats</div>
+                  <div className="table-availability-status">{status}</div>
+                  {isLocked && lock.locked_by && (
+                    <div className="table-availability-expiry">Until {new Date(lock.lock_expires_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
