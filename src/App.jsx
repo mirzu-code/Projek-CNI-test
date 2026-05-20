@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import BookingFlow from './pages/BookingFlow';
 import Admin from './pages/Admin';
+import AdminLogin from './components/AdminLogin';
 import MyBooking from './pages/MyBooking';
 import Menu from './pages/Menu';
 import MalayCuisine from './pages/MalayCuisine';
@@ -30,7 +31,7 @@ function App() {
             <Route path="/book" element={<BookingFlow />} />
             <Route path="/select-table" element={<SelectTable />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin" element={<AdminLogin />} />
             <Route path="/my-booking" element={<MyBooking />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/menu/malay" element={<MalayCuisine />} />
