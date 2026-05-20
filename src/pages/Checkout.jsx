@@ -13,6 +13,7 @@ const Checkout = () => {
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [otpCode, setOtpCode] = useState('');
   const [otpError, setOtpError] = useState('');
+  const [otpSubmitting, setOtpSubmitting] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [processingStatus, setProcessingStatus] = useState('Connecting to secure gateway...');
 
@@ -54,11 +55,14 @@ const Checkout = () => {
 
   const handleOtpVerify = async (e) => {
     e.preventDefault();
+    if (otpSubmitting || isProcessing) return;
+
     if (otpCode !== '123456') {
       setOtpError('Invalid OTP code.');
       return;
     }
 
+    setOtpSubmitting(true);
     setIsProcessing(true);
     setProcessingStatus('Saving to database...');
 
@@ -97,8 +101,11 @@ const Checkout = () => {
       setTimeout(() => { navigate('/my-booking'); }, 2500);
     } catch (err) {
       console.error('Ralat:', err.message || err);
-      setIsProcessing(false);
       setOtpError('Gagal menyimpan: ' + (err.message || 'Unknown error'));
+    }
+    finally {
+      setIsProcessing(false);
+      setOtpSubmitting(false);
     }
   };
 
@@ -187,7 +194,9 @@ const Checkout = () => {
               <label>Payment Reference</label>
               <input type="text" value={`REF-${bookingData.phone}-${bookingData.date}`} readOnly />
             </div>
-            <button type="submit" className="btn-primary full-width mt-3">Pay RM {totalDeposit}.00</button>
+            <button type="submit" className="btn-primary full-width mt-3" disabled={isProcessing}>
+              {isProcessing ? 'Processing...' : `Pay RM ${totalDeposit}.00`}
+            </button>
           </form>
 
           {isProcessing && (
@@ -219,19 +228,21 @@ const Checkout = () => {
                 <div className="otp-body">
                   <p>Sila masukkan 6 digit kod OTP yang dihantar ke telefon anda.</p>
                   <p className="otp-desc">Gunakan kod 123456 untuk ujian.</p>
-                  <form onSubmit={handleOtpVerify}>
-                    <input
-                      className="otp-input"
-                      type="text"
-                      value={otpCode}
-                      onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
-                      maxLength="6"
-                      placeholder="123456"
-                      required
-                    />
-                    {otpError && <div className="error-text">{otpError}</div>}
-                    <button type="submit" className="btn-primary mt-3 full-width">Verify OTP</button>
-                  </form>
+                        <form onSubmit={handleOtpVerify}>
+                          <input
+                            className="otp-input"
+                            type="text"
+                            value={otpCode}
+                            onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                            maxLength="6"
+                            placeholder="123456"
+                            required
+                          />
+                          {otpError && <div className="error-text">{otpError}</div>}
+                          <button type="submit" className="btn-primary mt-3 full-width" disabled={isProcessing || otpSubmitting}>
+                            {otpSubmitting ? 'Processing...' : 'Verify OTP'}
+                          </button>
+                        </form>
                 </div>
               </div>
             </div>

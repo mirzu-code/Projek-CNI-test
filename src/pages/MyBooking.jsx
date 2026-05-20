@@ -10,6 +10,7 @@ const MyBooking = () => {
   const [searchError, setSearchError] = useState('');
   const [loadingBooking, setLoadingBooking] = useState(false);
   const [notification, setNotification] = useState('');
+  const [isCancelling, setIsCancelling] = useState(false);
   const savedBookingRef = useRef(null);
 
   useEffect(() => {
@@ -294,17 +295,49 @@ const MyBooking = () => {
           
           <div className="ticket-footer">
             <p><strong>Note:</strong> Please arrive 10 minutes early. Late arrivals beyond 15 minutes may result in cancellation.</p>
-            <button 
-              className="btn-outline mt-3 full-width" 
-              onClick={() => {
-                if (window.confirm('Are you sure you want to cancel this booking?')) {
+            <button
+              className="btn-outline mt-3 full-width"
+              onClick={async () => {
+                if (!window.confirm('Are you sure you want to cancel this booking?')) return;
+                if (!booking || !booking.id) {
                   localStorage.removeItem('activeBooking');
                   navigate('/');
-                  window.location.reload();
+                  return;
+                }
+
+                const recordId = parseInt(booking.id.replace(/^RES-/i, ''), 10);
+                if (!recordId) {
+                  localStorage.removeItem('activeBooking');
+                  navigate('/');
+                  return;
+                }
+
+                try {
+                  setIsCancelling(true);
+                  const { data, error } = await supabase
+                    .from('bookings')
+                    .update({ status: 'Cancelled' })
+                    .eq('id', recordId)
+                    .select();
+
+                  if (error) throw error;
+
+                  // remove local active booking and notify user
+                  localStorage.removeItem('activeBooking');
+                  setNotification('Tempahan dibatalkan. Kami telah memaklumkan pihak restoran.');
+                  // navigate back to home after short delay so realtime update can propagate
+                  setTimeout(() => {
+                    navigate('/');
+                  }, 800);
+                } catch (err) {
+                  setNotification('Gagal membatalkan tempahan: ' + (err.message || err));
+                } finally {
+                  setIsCancelling(false);
                 }
               }}
+              disabled={isCancelling}
             >
-              Cancel Reservation
+              {isCancelling ? 'Cancelling...' : 'Cancel Reservation'}
             </button>
           </div>
         </div>

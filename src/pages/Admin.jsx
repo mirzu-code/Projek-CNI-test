@@ -785,6 +785,7 @@ const Admin = () => {
           <div className="action-panel animate-fade-in">
             <h3>Manage Booking: {selectedRes.id}</h3>
             <p>Guest: <strong>{selectedRes.name}</strong> ({selectedRes.pax} pax)</p>
+            <p>Table: <strong>{selectedRes.tableNumber || 'Not assigned'}</strong></p>
             <div className="action-buttons">
               <button className="btn-primary btn-sm btn-success" onClick={() => handleUpdateStatus(selectedRes.id, 'Confirmed')}>
                 Confirm / Approve
@@ -813,6 +814,7 @@ const Admin = () => {
                 <th>Booking ID</th>
                 <th>Guest Name</th>
                 <th>Date & Time</th>
+                <th>Table</th>
                 <th>Pax</th>
                 <th>Pre-order (SDG 9)</th>
                 <th>Status</th>
@@ -825,6 +827,7 @@ const Admin = () => {
                   <td><strong>{res.id}</strong></td>
                   <td>{res.name}</td>
                   <td>{res.date} <br/> <span className="time-badge">{res.time}</span></td>
+                  <td>{res.tableNumber || <span className="text-muted">—</span>}</td>
                   <td>{res.pax}</td>
                   <td>
                     {res.preorder && res.dish ? (
