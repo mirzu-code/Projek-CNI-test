@@ -13,6 +13,8 @@ const MyBooking = () => {
   const savedBookingRef = useRef(null);
 
   useEffect(() => {
+    let bookingChannel = null;
+
     const loadBookingFromStorage = () => {
       const savedBooking = localStorage.getItem('activeBooking');
       if (savedBooking) {
@@ -56,7 +58,7 @@ const MyBooking = () => {
         };
 
         if (current.status !== 'Checked In' && updatedBooking.status === 'Checked In') {
-          setNotification('You have already checked in. Welcome!');
+          setNotification('Anda telah melakukan daftar masuk. Selamat datang!');
         }
 
         if (JSON.stringify(updatedBooking) !== JSON.stringify(current)) {
@@ -69,9 +71,58 @@ const MyBooking = () => {
       }
     };
 
+    const setupRealtime = () => {
+      const current = savedBookingRef.current;
+      if (!current || !current.id) return;
+      const recordId = parseInt(current.id.replace(/^RES-/i, ''), 10);
+      if (!recordId) return;
+
+      if (bookingChannel) return;
+      bookingChannel = supabase
+        .channel(`booking-status-${recordId}`)
+        .on(
+          'postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'bookings', filter: `id=eq.${recordId}` },
+          (payload) => {
+            if (!payload?.new) return;
+            const updatedBooking = {
+              id: payload.new.id ? `RES-${payload.new.id}` : current.id,
+              date: payload.new.booking_date,
+              time: payload.new.booking_time,
+              pax: payload.new.total_guests ? String(payload.new.total_guests) : '',
+              name: payload.new.customer_name,
+              phone: payload.new.customer_phone,
+              status: payload.new.status || 'Pending',
+              preorder: !!payload.new.dish,
+              cuisineCategory: current.cuisineCategory || '',
+              dish: payload.new.dish || '',
+              tableId: payload.new.table_id,
+              tableNumber: payload.new.table_number || (payload.new.table_id ? `Table ${payload.new.table_id}` : ''),
+              tableCapacity: payload.new.table_capacity || null
+            };
+
+            if (current.status !== 'Checked In' && updatedBooking.status === 'Checked In') {
+              setNotification('Anda telah melakukan daftar masuk. Selamat datang!');
+            }
+
+            setBooking(updatedBooking);
+            savedBookingRef.current = updatedBooking;
+            localStorage.setItem('activeBooking', JSON.stringify(updatedBooking));
+          }
+        )
+        .subscribe();
+    };
+
     loadBookingFromStorage();
+    setupRealtime();
     const interval = setInterval(refreshBookingFromServer, 1000);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+      if (bookingChannel) {
+        bookingChannel.unsubscribe();
+      }
+    };
   }, []);
 
   const handleSearchBooking = async (e) => {
