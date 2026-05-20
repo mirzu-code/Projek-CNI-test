@@ -566,8 +566,12 @@ const Admin = () => {
   };
 
   const getBookingQrUrl = (res) => {
-    if (!res || res.isLockEntry) return null;
-    const payload = `Booking:${res.id}\nName:${res.name}\nTable:${res.tableNumber || 'Unassigned'}\nDate:${res.date}\nTime:${res.time}`;
+    if (!res) return null;
+
+    const payload = res.isLockEntry
+      ? `Hold:${res.dish || res.name}\nTable:${res.tableNumber || 'Unassigned'}\nStatus:${res.status}`
+      : `Booking:${res.id}\nName:${res.name}\nTable:${res.tableNumber || 'Unassigned'}\nDate:${res.date}\nTime:${res.time}`;
+
     return `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(payload)}`;
   };
 
