@@ -221,6 +221,7 @@ const Admin = () => {
 
   const [selectedTableDetails, setSelectedTableDetails] = useState(null);
   const [activeSection, setActiveSection] = useState('overview');
+  const [lockNote, setLockNote] = useState('Admin hold');
 
   const refreshReservations = async () => {
     try {
@@ -564,6 +565,30 @@ const Admin = () => {
     return reservations.find((res) => res.tableId === tableId && res.status !== 'Cancelled');
   };
 
+  const reservationLocks = tableLocks
+    .filter((lock) => !getTableBooking(lock.table_id))
+    .map((lock) => {
+      const table = TABLES.find((item) => item.id === lock.table_id);
+      return {
+        id: `LOCK-${lock.table_id}`,
+        recordId: lock.id,
+        name: lock.locked_by || 'Table Hold',
+        date: 'Locked',
+        time: '—',
+        tableNumber: table?.name || `Table ${lock.table_id}`,
+        pax: '-',
+        dish: lock.locked_by || 'Admin hold',
+        status: 'Locked',
+        tableId: lock.table_id,
+        isLockEntry: true
+      };
+    });
+
+  const reservationRows = [
+    ...reservations.filter((res) => res.status !== 'Cancelled'),
+    ...reservationLocks
+  ];
+
   const handleShowTableDetails = (table) => {
     setSelectedTableDetails({
       table,
@@ -631,8 +656,8 @@ const Admin = () => {
   };
 
   const holdTable = async (table) => {
-    const reason = window.prompt('Enter a note for this hold (e.g. walk-in / WhatsApp order):', 'Admin hold');
-    if (reason === null) return;
+    const reason = lockNote?.trim() || window.prompt('Enter a note for this hold (e.g. walk-in / WhatsApp order):', 'Admin hold');
+    if (reason === null || reason.trim() === '') return;
 
     try {
       const { data: existing, error: existingError } = await supabase
@@ -783,6 +808,18 @@ const Admin = () => {
 
         <div className="table-availability-panel" style={{ display: activeSection === 'table' ? 'block' : 'none' }}>
           <h3>Table Availability / Locks</h3>
+          <div className="table-lock-input-panel">
+            <label>Admin hold note</label>
+            <div className="split-input-row">
+              <input
+                type="text"
+                value={lockNote}
+                onChange={(e) => setLockNote(e.target.value)}
+                placeholder="Enter lock reason (e.g. VIP, walk-in, reserved for event)"
+              />
+              <span className="help-text">This note will be saved when you hold a table.</span>
+            </div>
+          </div>
           <div className="table-panel-layout">
             <div className="table-availability-grid">
               {TABLES.map((table) => {
@@ -1155,7 +1192,7 @@ const Admin = () => {
           )}
 
           <div className="reservations-table-container">
-          <h3>Upcoming Reservations</h3>
+          <h3>Upcoming Reservations + Held Tables</h3>
           <table className="reservations-table">
             <thead>
               <tr>
@@ -1170,7 +1207,7 @@ const Admin = () => {
               </tr>
             </thead>
             <tbody>
-              {reservations.map(res => (
+              {reservationRows.map(res => (
                 <tr key={res.id} className={selectedRes?.id === res.id ? 'active-row' : ''}>
                   <td><strong>{res.id}</strong></td>
                   <td>{res.name}</td>
@@ -1190,9 +1227,15 @@ const Admin = () => {
                     </span>
                   </td>
                   <td>
-                    <button className="btn-outline btn-sm" onClick={() => setSelectedRes(res)}>
-                      Manage
-                    </button>
+                    {res.isLockEntry ? (
+                      <button className="btn-danger btn-sm" onClick={() => releaseTable({ id: res.tableId })}>
+                        Release Lock
+                      </button>
+                    ) : (
+                      <button className="btn-outline btn-sm" onClick={() => setSelectedRes(res)}>
+                        Manage
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
