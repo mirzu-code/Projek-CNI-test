@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient'; // Pastikan path ni betul
 import { useNavigate } from 'react-router-dom';
+import './Admin.css';
 
 function AdminLogin() {
   const [adminId, setAdminId] = useState('');

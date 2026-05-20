@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { supabase } from '../supabaseClient';
 import './Admin.css';
