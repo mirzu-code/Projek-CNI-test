@@ -565,6 +565,12 @@ const Admin = () => {
     return reservations.find((res) => res.tableId === tableId && res.status !== 'Cancelled');
   };
 
+  const getBookingQrUrl = (res) => {
+    if (!res || res.isLockEntry) return null;
+    const payload = `Booking:${res.id}\nName:${res.name}\nTable:${res.tableNumber || 'Unassigned'}\nDate:${res.date}\nTime:${res.time}`;
+    return `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(payload)}`;
+  };
+
   const reservationLocks = tableLocks
     .filter((lock) => !getTableBooking(lock.table_id))
     .map((lock) => {
@@ -1202,23 +1208,26 @@ const Admin = () => {
                 <th>Table</th>
                 <th>Pax</th>
                 <th>Pre-order (SDG 9)</th>
+                <th>QR</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {reservationRows.map(res => (
+              {reservationRows.map(res => {
+                const qrUrl = getBookingQrUrl(res);
+                return (
                 <tr key={res.id} className={selectedRes?.id === res.id ? 'active-row' : ''}>
                   <td><strong>{res.id}</strong></td>
                   <td>{res.name}</td>
                   <td>{res.date} <br/> <span className="time-badge">{res.time}</span></td>
                   <td>{res.tableNumber || <span className="text-muted">—</span>}</td>
                   <td>{res.pax}</td>
-                  <td>
-                    {res.preorder && res.dish ? (
-                      <span className="preorder-badge">{res.dish.replace('-', ' ')}</span>
+                  <td className="reservation-qr-cell">
+                    {qrUrl ? (
+                      <img src={qrUrl} alt={`QR code for ${res.id}`} />
                     ) : (
-                      <span className="text-muted">None</span>
+                      <span className="lock-badge">Hold</span>
                     )}
                   </td>
                   <td>
@@ -1238,7 +1247,8 @@ const Admin = () => {
                     )}
                   </td>
                 </tr>
-              ))}
+              );
+              })}
             </tbody>
           </table>
         </div>
