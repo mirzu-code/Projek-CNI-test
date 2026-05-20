@@ -23,17 +23,32 @@ function AdminLogin() {
     try {
       // Try exact admin_id match
       let res = await supabase.from('admin_user').select('email').eq('admin_id', id).limit(1);
+      if (res.error) {
+        setLoading(false);
+        setError('DB lookup error: ' + res.error.message);
+        return;
+      }
       let emailFound = res.data && res.data.length ? res.data[0].email : null;
 
       // If not found, try case-insensitive match using ilike
       if (!emailFound) {
-        const res2 = await supabase.from('admin_user').select('email').ilike('admin_id', id);
+        const res2 = await supabase.from('admin_user').select('email').ilike('admin_id', id).limit(1);
+        if (res2.error) {
+          setLoading(false);
+          setError('DB lookup error: ' + res2.error.message);
+          return;
+        }
         if (res2.data && res2.data.length) emailFound = res2.data[0].email;
       }
 
       // If still not found, try `username` column as fallback
       if (!emailFound) {
         const res3 = await supabase.from('admin_user').select('email').eq('username', id).limit(1);
+        if (res3.error) {
+          setLoading(false);
+          setError('DB lookup error: ' + res3.error.message);
+          return;
+        }
         if (res3.data && res3.data.length) emailFound = res3.data[0].email;
       }
 
