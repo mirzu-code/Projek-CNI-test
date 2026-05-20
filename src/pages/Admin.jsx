@@ -1009,8 +1009,9 @@ const Admin = () => {
             </div>
           </div>
         </div>
+      </div>
 
-      <div className="admin-container mt-4" style={{ display: ['menu', 'reservations'].includes(activeSection) ? 'block' : 'none' }}>
+      <div style={{ display: activeSection === 'menu' ? 'block' : 'none' }}>
         <div className="menu-management-panel" style={{ display: activeSection === 'menu' ? 'block' : 'none' }}>
           <div className="menu-management-header">
             <h3>Admin Menu Management</h3>
@@ -1124,8 +1125,9 @@ const Admin = () => {
             </div>
           </div>
         </div>
+      </div>
 
-        <div style={{ display: activeSection === 'reservations' ? 'block' : 'none' }}>
+      <div style={{ display: activeSection === 'reservations' ? 'block' : 'none' }}>
           {/* Action Panel for selected booking */}
           {selectedRes && (
             <div className="action-panel animate-fade-in">
