@@ -15,14 +15,14 @@ function AdminLogin() {
     setError('');
     setEmail('');
 
-    const id = (adminId || '').trim();
-    if (!id) return setError('Sila masukkan username atau Admin ID');
+    const key = (adminId || '').trim();
+    if (!key) return setError('Sila masukkan Admin ID atau email');
     if (!password) return setError('Sila masukkan kata laluan');
 
     setLoading(true);
     try {
       // Try exact admin_id match
-      let res = await supabase.from('admin_user').select('email').eq('admin_id', id).limit(1);
+      let res = await supabase.from('admin_user').select('email').eq('admin_id', key).limit(1);
       if (res.error) {
         setLoading(false);
         setError('DB lookup error: ' + res.error.message);
@@ -30,9 +30,9 @@ function AdminLogin() {
       }
       let emailFound = res.data && res.data.length ? res.data[0].email : null;
 
-      // If not found, try case-insensitive match using ilike
+      // If not found, try exact email match
       if (!emailFound) {
-        const res2 = await supabase.from('admin_user').select('email').ilike('admin_id', id).limit(1);
+        const res2 = await supabase.from('admin_user').select('email').eq('email', key).limit(1);
         if (res2.error) {
           setLoading(false);
           setError('DB lookup error: ' + res2.error.message);
@@ -41,9 +41,9 @@ function AdminLogin() {
         if (res2.data && res2.data.length) emailFound = res2.data[0].email;
       }
 
-      // If still not found, try `username` column as fallback
+      // If still not found, try case-insensitive admin_id match
       if (!emailFound) {
-        const res3 = await supabase.from('admin_user').select('email').eq('username', id).limit(1);
+        const res3 = await supabase.from('admin_user').select('email').ilike('admin_id', key).limit(1);
         if (res3.error) {
           setLoading(false);
           setError('DB lookup error: ' + res3.error.message);
@@ -53,7 +53,7 @@ function AdminLogin() {
       }
 
       if (!emailFound) {
-        setError('Akaun admin tidak dijumpai. Sila semak username/Admin ID.');
+        setError('Akaun admin tidak dijumpai. Sila semak Admin ID atau email.');
         setLoading(false);
         return;
       }
@@ -82,12 +82,12 @@ function AdminLogin() {
         <div className="login-icon">🔒</div>
         <form onSubmit={handleSubmit}>
           <h2>Log Masuk Admin</h2>
-          <p className="text-muted">Masukkan username (atau Admin ID) dan kata laluan anda</p>
+          <p className="text-muted">Masukkan Admin ID atau email serta kata laluan anda</p>
           {error && <div className="error-message">{error}</div>}
 
           <div className="form-group">
             <input
-              placeholder="Username / Admin ID"
+              placeholder="Admin ID atau email"
               value={adminId}
               onChange={(e) => setAdminId(e.target.value)}
               required
