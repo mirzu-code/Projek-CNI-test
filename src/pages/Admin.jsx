@@ -162,35 +162,68 @@ const Admin = () => {
 
   const handleScanVerify = async (scanId) => {
     if (!scanId) return;
+    const normalizedScan = scanId.trim();
     setIsScanning(true);
     setScannerError(false);
     setScannerSuccessRes(null);
     setScannerMessage('SCANNING TICKET CODE IN REAL-TIME...');
 
     setTimeout(async () => {
-      // Use the ref so the closure always has the latest reservations
-      const match = reservationsRef.current.find(res => res.id.toLowerCase() === scanId.trim().toLowerCase());
+      const lowerScan = normalizedScan.toLowerCase();
+      let match = reservationsRef.current.find(res => res.id.toLowerCase() === lowerScan);
+      let lockMatch = null;
+
+      if (!match && /^lock-\d+$/i.test(normalizedScan)) {
+        const lockId = parseInt(normalizedScan.split('-')[1], 10);
+        lockMatch = tableLocks.find(lock => lock.table_id === lockId);
+      }
+
+      if (!match && !lockMatch && /booking:/i.test(normalizedScan)) {
+        const lines = normalizedScan.split(/\r?\n/).map(line => line.trim());
+        const bookingLine = lines.find(line => line.toLowerCase().startsWith('booking:'));
+        if (bookingLine) {
+          const bookingId = bookingLine.split(':')[1]?.trim();
+          if (bookingId) {
+            const normalizedId = bookingId.toLowerCase();
+            const parsedMatch = reservationsRef.current.find(res => res.id.toLowerCase() === normalizedId);
+            if (parsedMatch) {
+              lockMatch = null;
+              match = parsedMatch;
+            }
+          }
+        }
+      }
+
       setIsScanning(false);
-      
+
       if (match) {
         if (match.status === 'Checked In') {
           playScanChime(false);
           setScannerError(true);
           setScannerMessage(`ALREADY CHECKED IN: ${match.id} - ${match.name}`);
         } else {
-          // Success! Check-in!
           playScanChime(true);
           setScannerSuccessRes(match);
           setScannerMessage(`VERIFICATION SUCCESSFUL: Welcome ${match.name}!`);
-
-          // Persist check-in status to Supabase so admin and customer sync
           await handleUpdateStatus(match.id, 'Checked In');
         }
+      } else if (lockMatch) {
+        playScanChime(true);
+        const lockInfo = {
+          id: `LOCK-${lockMatch.table_id}`,
+          name: lockMatch.locked_by || 'Table Hold',
+          tableNumber: TABLES.find(t => t.id === lockMatch.table_id)?.name || `Table ${lockMatch.table_id}`,
+          pax: '-',
+          dish: lockMatch.locked_by || 'Admin hold',
+          status: 'Locked',
+          isLockEntry: true
+        };
+        setScannerSuccessRes(lockInfo);
+        setScannerMessage(`LOCK VERIFIED: ${lockInfo.name} (${lockInfo.tableNumber})`);
       } else {
-        // Not found
         playScanChime(false);
         setScannerError(true);
-        setScannerMessage(`INVALID TICKET CODE: "${scanId.toUpperCase()}" NOT FOUND`);
+        setScannerMessage(`INVALID TICKET CODE: "${normalizedScan.toUpperCase()}" NOT FOUND`);
       }
       setManualScanId('');
     }, 1000);
@@ -568,10 +601,11 @@ const Admin = () => {
   const getBookingQrUrl = (res) => {
     if (!res) return null;
 
-    const payload = res.isLockEntry
-      ? `Hold:${res.dish || res.name}\nTable:${res.tableNumber || 'Unassigned'}\nStatus:${res.status}`
-      : `Booking:${res.id}\nName:${res.name}\nTable:${res.tableNumber || 'Unassigned'}\nDate:${res.date}\nTime:${res.time}`;
+    if (res.isLockEntry) {
+      return `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(res.id)}`;
+    }
 
+    const payload = `Booking:${res.id}\nName:${res.name}\nTable:${res.tableNumber || 'Unassigned'}\nDate:${res.date}\nTime:${res.time}`;
     return `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(payload)}`;
   };
 
