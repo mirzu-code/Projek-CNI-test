@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient'; // Pastikan path ni betul
 import { useNavigate } from 'react-router-dom';
 import './Admin.css';
@@ -9,7 +9,25 @@ function AdminLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [deviceType, setDeviceType] = useState('unknown');
   const navigate = useNavigate();
+
+  const getDeviceType = () => {
+    if (typeof navigator === 'undefined' || typeof window === 'undefined') return 'unknown';
+
+    if (navigator.userAgentData) {
+      return navigator.userAgentData.mobile ? 'mobile' : 'desktop';
+    }
+
+    const ua = navigator.userAgent || '';
+    if (/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)) return 'mobile';
+    if (/iPad|Tablet|PlayBook/i.test(ua) || window.innerWidth <= 980) return 'tablet';
+    return 'desktop';
+  };
+
+  useEffect(() => {
+    setDeviceType(getDeviceType());
+  }, []);
   // Single-step: lookup admin_id/username then sign in with its email
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,6 +94,18 @@ function AdminLogin() {
       setError('Ralat pelayan: ' + (err.message || 'unknown'));
     }
   };
+
+  if (deviceType === 'mobile' || deviceType === 'tablet') {
+    return (
+      <div className="admin-login-wrapper animate-fade-in">
+        <div className="admin-login-card device-warning-card">
+          <div className="login-icon">💻</div>
+          <h2>Akses Admin Terhad</h2>
+          <p>Akses dashboard admin hanya disokong pada peranti laptop atau desktop. Sila buka halaman ini dari komputer untuk pengalaman terbaik.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-login-wrapper animate-fade-in">

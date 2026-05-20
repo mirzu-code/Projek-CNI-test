@@ -528,7 +528,7 @@
   background-color: var(--bg-color);
 }
 
-.admin-login-card {
+..admin-login-card {
   background: var(--bg-card);
   padding: 3rem;
   border-radius: 12px;
@@ -536,6 +536,15 @@
   width: 100%;
   max-width: 400px;
   text-align: center;
+}
+
+.device-warning-card {
+  border: 1px solid rgba(155, 155, 155, 0.25);
+}
+
+.device-warning-card p {
+  color: #4a4a4a;
+  line-height: 1.6;
 }
 
 .login-icon {

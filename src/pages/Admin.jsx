@@ -13,6 +13,26 @@ const Admin = () => {
   const [newBookingAlert, setNewBookingAlert] = useState(null);
   const [tableLocks, setTableLocks] = useState([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
+  const [deviceType, setDeviceType] = useState('unknown');
+
+  const getDeviceType = () => {
+    if (typeof navigator === 'undefined' || typeof window === 'undefined') return 'unknown';
+
+    if (navigator.userAgentData) {
+      return navigator.userAgentData.mobile ? 'mobile' : 'desktop';
+    }
+
+    const ua = navigator.userAgent || '';
+    if (/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)) return 'mobile';
+    if (/iPad|Tablet|PlayBook/i.test(ua) || window.innerWidth <= 980) return 'tablet';
+    return 'desktop';
+  };
+
+  const isDesktopOrLaptop = () => deviceType === 'desktop' || deviceType === 'unknown';
+
+  useEffect(() => {
+    setDeviceType(getDeviceType());
+  }, []);
 
   const isPortraitMobile = () => typeof window !== 'undefined' && window.matchMedia('(max-width: 980px) and (orientation: portrait)').matches;
 
@@ -765,6 +785,18 @@ const Admin = () => {
   const totalBookings = reservations.length;
   const totalPax = reservations.reduce((sum, res) => sum + parseInt(res.pax || 0), 0);
   const totalPreorders = reservations.filter(res => res.preorder).length;
+
+  if (!isDesktopOrLaptop()) {
+    return (
+      <div className="admin-login-wrapper animate-fade-in">
+        <div className="admin-login-card device-warning-card">
+          <div className="login-icon">💻</div>
+          <h2>Admin Access Restricted</h2>
+          <p>Admin dashboard access is optimized for laptop and desktop devices. Please open this page from a computer for the best experience.</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return (
