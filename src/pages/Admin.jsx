@@ -931,6 +931,22 @@ const Admin = () => {
                       <p><strong>Locked by:</strong> {selectedTableDetails.lock.locked_by}</p>
                       <p><strong>Lock type:</strong> {selectedTableDetails.lock.lock_token === 'admin' ? 'Admin hold' : 'Reserved'}</p>
                       <p><strong>Expires:</strong> {selectedTableDetails.lock.lock_expires_at ? new Date(selectedTableDetails.lock.lock_expires_at).toLocaleString() : 'Until released'}</p>
+                      <div className="qr-ticket-card">
+                        <img
+                          src={getBookingQrUrl({
+                            isLockEntry: true,
+                            dish: selectedTableDetails.lock.locked_by,
+                            name: selectedTableDetails.lock.locked_by,
+                            tableNumber: selectedTableDetails.table?.name,
+                            status: 'Locked'
+                          })}
+                          alt="Hold QR Code"
+                        />
+                        <div className="qr-ticket-info">
+                          <p><strong>Hold QR</strong></p>
+                          <p>This QR represents the locked table entry for VIP/admin hold.</p>
+                        </div>
+                      </div>
                     </div>
                   ) : (
                     <div className="table-detail-content">
