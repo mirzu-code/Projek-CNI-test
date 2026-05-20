@@ -117,6 +117,62 @@
   font-size: 0.85rem;
 }
 
+.table-detail-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.table-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.table-detail-content p {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.qr-ticket-card {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px dashed var(--border-color);
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+.qr-ticket-card img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+}
+
+.qr-ticket-info {
+  flex: 1;
+  min-width: 220px;
+}
+
+.qr-ticket-info p {
+  margin: 0.3rem 0;
+}
+
+.table-detail-panel .btn-success {
+  margin-top: 0.5rem;
+}
+
 .stat-card {
   background: var(--bg-card);
   padding: 2rem;

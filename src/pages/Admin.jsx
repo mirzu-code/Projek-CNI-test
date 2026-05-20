@@ -207,6 +207,7 @@ const Admin = () => {
     recordId: record.id,
     id: record.id ? `RES-${record.id}` : `RES-${Math.floor(1000 + Math.random() * 9000)}`,
     name: record.customer_name || '',
+    phone: record.customer_phone || '',
     date: record.booking_date || '',
     time: record.booking_time || '',
     pax: record.total_guests ? String(record.total_guests) : '0',
@@ -217,6 +218,41 @@ const Admin = () => {
     tableNumber: record.table_number || (record.table_id ? `Table ${record.table_id}` : ''),
     tableCapacity: record.table_capacity || null,
   });
+
+  const [selectedTableDetails, setSelectedTableDetails] = useState(null);
+
+  const refreshReservations = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('bookings')
+        .select('*')
+        .order('id', { ascending: false });
+
+      if (error || !data) return;
+
+      const mapped = data.map(mapBookingRecord);
+      setReservations(mapped);
+      localStorage.setItem('allBookings', JSON.stringify(mapped));
+    } catch (err) {
+      console.warn('Supabase bookings refresh failed:', err.message);
+    }
+  };
+
+  const refreshTableLocks = async () => {
+    const now = new Date().toISOString();
+    try {
+      const { data, error } = await supabase
+        .from('table_locks')
+        .select('*')
+        .or(`lock_expires_at.is.null,lock_expires_at.gte.${now}`);
+
+      if (!error) {
+        setTableLocks(data || []);
+      }
+    } catch (err) {
+      console.warn('Supabase table locks refresh failed:', err.message);
+    }
+  };
 
   const loadMenus = async () => {
     try {
@@ -286,38 +322,6 @@ const Admin = () => {
       }
     };
 
-    const refreshReservations = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('bookings')
-          .select('*')
-          .order('id', { ascending: false });
-
-        if (error || !data) return;
-
-        const mapped = data.map(mapBookingRecord);
-        setReservations(mapped);
-        localStorage.setItem('allBookings', JSON.stringify(mapped));
-      } catch (err) {
-        console.warn('Supabase bookings refresh failed:', err.message);
-      }
-    };
-
-    const refreshTableLocks = async () => {
-      const now = new Date().toISOString();
-      try {
-        const { data, error } = await supabase
-          .from('table_locks')
-          .select('*')
-          .or(`lock_expires_at.is.null,lock_expires_at.gte.${now}`);
-
-        if (!error) {
-          setTableLocks(data || []);
-        }
-      } catch (err) {
-        console.warn('Supabase table locks refresh failed:', err.message);
-      }
-    };
 
     loadReservations();
     loadMenus();
@@ -559,6 +563,14 @@ const Admin = () => {
     return reservations.find((res) => res.tableId === tableId && res.status !== 'Cancelled');
   };
 
+  const handleShowTableDetails = (table) => {
+    setSelectedTableDetails({
+      table,
+      booking: getTableBooking(table.id),
+      lock: getTableLock(table.id)
+    });
+  };
+
   const holdTable = async (table) => {
     const reason = window.prompt('Enter a note for this hold (e.g. walk-in / WhatsApp order):', 'Admin hold');
     if (reason === null) return;
@@ -727,11 +739,69 @@ const Admin = () => {
                         Release Hold
                       </button>
                     )}
+                    <button type="button" className="btn-sm btn-outline" onClick={() => handleShowTableDetails(table)}>
+                      View Details
+                    </button>
                   </div>
                 </div>
               );
             })}
           </div>
+
+          {selectedTableDetails && (
+            <div className="table-detail-panel">
+              <div className="table-detail-header">
+                <h3>{selectedTableDetails.table.name} Details</h3>
+                <button className="btn-sm btn-outline" type="button" onClick={() => setSelectedTableDetails(null)}>
+                  Close
+                </button>
+              </div>
+              {selectedTableDetails.booking ? (
+                <div className="table-detail-content">
+                  <p><strong>Booking ID:</strong> {selectedTableDetails.booking.id}</p>
+                  <p><strong>Guest:</strong> {selectedTableDetails.booking.name}</p>
+                  <p><strong>Phone:</strong> {selectedTableDetails.booking.phone || 'Not provided'}</p>
+                  <p><strong>Date & Time:</strong> {selectedTableDetails.booking.date} {selectedTableDetails.booking.time}</p>
+                  <p><strong>Pax:</strong> {selectedTableDetails.booking.pax}</p>
+                  <p><strong>Status:</strong> {selectedTableDetails.booking.status}</p>
+                  <p><strong>Pre-order:</strong> {selectedTableDetails.booking.preorder ? selectedTableDetails.booking.dish.replace('-', ' ') : 'None'}</p>
+                  <div className="qr-ticket-card">
+                    <img
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`Booking:${selectedTableDetails.booking.id}\nName:${selectedTableDetails.booking.name}\nTable:${selectedTableDetails.booking.tableNumber}\nDate:${selectedTableDetails.booking.date}\nTime:${selectedTableDetails.booking.time}`)}`}
+                      alt="Booking QR Code"
+                    />
+                    <div className="qr-ticket-info">
+                      <p><strong>Ticket QR</strong></p>
+                      <p>Send this ticket to the customer via WhatsApp.</p>
+                      {selectedTableDetails.booking.phone ? (
+                        <a
+                          className="btn-sm btn-success"
+                          href={`https://api.whatsapp.com/send?phone=${selectedTableDetails.booking.phone.replace(/\D/g, '')}&text=${encodeURIComponent(`Hello ${selectedTableDetails.booking.name}, your booking ${selectedTableDetails.booking.id} for ${selectedTableDetails.booking.tableNumber} on ${selectedTableDetails.booking.date} at ${selectedTableDetails.booking.time} is confirmed.`)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Send WhatsApp
+                        </a>
+                      ) : (
+                        <p className="text-muted">No phone number available for WhatsApp.</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : selectedTableDetails.lock ? (
+                <div className="table-detail-content">
+                  <p><strong>Locked by:</strong> {selectedTableDetails.lock.locked_by}</p>
+                  <p><strong>Lock type:</strong> {selectedTableDetails.lock.lock_token === 'admin' ? 'Admin hold' : 'Reserved'}</p>
+                  <p><strong>Expires:</strong> {selectedTableDetails.lock.lock_expires_at ? new Date(selectedTableDetails.lock.lock_expires_at).toLocaleString() : 'Until released'}</p>
+                </div>
+              ) : (
+                <div className="table-detail-content">
+                  <p>This table is currently available.</p>
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
 
         {/* Entrance Gate QR Scanner Panel */}
