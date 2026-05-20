@@ -276,7 +276,7 @@ const Admin = () => {
         const { data, error } = await supabase
           .from('table_locks')
           .select('*')
-          .gte('lock_expires_at', now);
+          .or(`lock_expires_at.is.null,lock_expires_at.gte.${now}`);
 
         if (!error) {
           setTableLocks(data || []);
@@ -594,7 +594,9 @@ const Admin = () => {
 
       await refreshTableLocks();
     } catch (err) {
-      console.warn('Failed to hold table:', err.message);
+      const message = err?.message || err || 'Unknown error while holding table';
+      console.warn('Failed to hold table:', message);
+      window.alert('Failed to hold table: ' + message);
     }
   };
 
