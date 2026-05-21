@@ -13,6 +13,16 @@ const Admin = () => {
   const [newBookingAlert, setNewBookingAlert] = useState(null);
   const [tableLocks, setTableLocks] = useState([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
+  // Close drawer on large screens (>=1025px)
+  useEffect(() => {
+    const handler = () => {
+      if (window.innerWidth >= 1025) {
+        setIsSidePanelOpen(true);
+      }
+    };
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   const isPortraitMobile = () => typeof window !== 'undefined' && window.matchMedia('(max-width: 980px) and (orientation: portrait)').matches;
 
@@ -797,7 +807,7 @@ const Admin = () => {
       <div className="admin-header">
         <div className="admin-container admin-header-row">
           <div className="admin-header-title">
-            <button className="admin-menu-toggle" type="button" onClick={() => setIsSidePanelOpen(true)}>
+            <button className="admin-menu-toggle" type="button" onClick={() => setIsSidePanelOpen(prev => !prev)}>
               <span />
               <span />
               <span />
