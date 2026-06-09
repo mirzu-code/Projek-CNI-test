@@ -10,7 +10,7 @@ const JapaneseCuisine = () => {
       description: 'Slow-simmered 18-hour creamy tonkotsu broth, layered with organic black garlic aroma oil, house-made rye noodles, and topped with blowtorched melt-in-your-mouth A5 Wagyu beef slices.',
       tags: ['⭐ Masterpiece', '18-Hour Broth', 'Premium Selection'],
       ingredients: ['A5 Miyazaki Wagyu', 'Black Garlic Mayu Oil', '18-Hour Tonkotsu Essence', 'Organic Hen Egg', 'Bamboo Shoots'],
-      image: 'https://images.unsplash.com/photo-1557872943-16a5ac26437e?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'salmon-don',
@@ -19,7 +19,7 @@ const JapaneseCuisine = () => {
       description: 'Prismatic, thick slices of premium fresh Norwegian salmon sashimis, seasoned with a rich white truffle soy sauce, served over hand-seasoned warm sushi rice with ikura (salmon roe).',
       tags: ['Truffle Infused', 'Cold Delight'],
       ingredients: ['Norwegian Salmon Sashimi', 'White Truffle Essence', 'Ikura (Salmon Caviar)', 'Vinegared Sushi Rice', 'Shiso Leaf'],
-      image: 'https://images.unsplash.com/photo-1534256958597-7fe685cbd745?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'premium-sushi',
@@ -28,7 +28,7 @@ const JapaneseCuisine = () => {
       description: 'A delicate curation of 8 hand-pressed nigiri and 6 signature maki rolls, featuring prime selection of salmon belly, fatty tuna (otoro), sweet shrimp, and dynamic unagi (grilled eel).',
       tags: ['⭐ Chef Special', 'Zen Curation'],
       ingredients: ['Bluefin Tuna belly', 'Salmon Belly', 'Hokkaido Sweet Shrimp', 'Grilled Fresh Water Eel', 'Wasabi Root'],
-      image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'tempura-moriawase',
@@ -37,7 +37,7 @@ const JapaneseCuisine = () => {
       description: 'A classic, feather-light crispy assortment of fresh jumbo tiger prawns, soft sweet potato, lotus root, and eggplant, fried in clean tea seed oil. Served with warm dashi dipping broth.',
       tags: ['Classic Japanese', 'Crispy & Light'],
       ingredients: ['Jumbo Tiger Prawns', 'Sweet Potato', 'Lotus Root', 'Sweet Dashi Broth', 'Grated Daikon Radish'],
-      image: 'https://images.unsplash.com/photo-1615361200141-f45040f367be?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=600&q=80'
     }
   ];
 
