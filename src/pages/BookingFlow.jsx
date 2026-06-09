@@ -18,7 +18,7 @@ export const cuisineDishes = {
   japanese: [
     { value: 'wagyu-ramen', label: 'Wagyu Beef Black Garlic Ramen (RM 75)' },
     { value: 'salmon-don', label: 'Truffle Salmon Sashimi Don (RM 58)' },
-    { value: 'premium-sushi', label: 'Chef Choice Premium Sushi Platter (RM 85)' },
+    { value: 'premium-sushi', label: 'Chef\'s Choice Premium Sushi Platter (RM 85)' },
     { value: 'tempura-moriawase', label: 'Crispy Seafood & Veg Tempura (RM 48)' }
   ],
   western: [
