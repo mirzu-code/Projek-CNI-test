@@ -44,8 +44,8 @@ const MalayCuisine = () => {
     },
     {
       value: 'ayam-rendang',
-      name: 'Ayam Rendang Rembayung',
-      price: dbPrices['Ayam Rendang Rembayung'] || 'RM 38.00', // <-- Ambil harga DB
+      name: 'Ayam Rendang Lembayung',
+      price: dbPrices['Ayam Rendang Lembayung'] || 'RM 38.00', // <-- Ambil harga DB
       description: 'Tender chicken slow-braised for 6 hours in a luxurious complex spice paste (kerisik), toasted coconut, lemongrass, galangal, and fresh kaffir lime leaves.',
       tags: ['Traditional Recipe', 'Gluten Free'],
       ingredients: ['Kampung Chicken', 'Toasted Coconut (Kerisik)', 'Lemongrass', 'Galangal', 'Kaffir Lime Leaves'],
@@ -143,7 +143,7 @@ const MalayCuisine = () => {
           <div className="philosophy-box text-center">
             <h3>Zero Food Waste Initiative (SDG 9)</h3>
             <p>
-              Traditional cooking involves precise, slow preparation. At Rembayung, our digital capacity planning 
+              Traditional cooking involves precise, slow preparation. At Lembayung, our digital capacity planning 
               and table reservation pre-ordering system ensures that we purchase from our organic farmers exactly 
               what is ordered—reducing raw waste to 0%. Thank you for supporting sustainable innovation!
             </p>

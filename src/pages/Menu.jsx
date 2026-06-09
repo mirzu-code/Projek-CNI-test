@@ -7,7 +7,7 @@ const Menu = () => {
       id: 'malay',
       title: 'Authentic Malay Cuisine',
       description: 'Journey through centuries of heritage. Experience rich coconut gravy, aromatic forest herbs, and slow-roasted meats prepared using age-old ancestral techniques.',
-      dishes: ['Daging Salai Masak Lemak', 'Ayam Rendang Rembayung', 'Ikan Bakar Petai'],
+      dishes: ['Daging Salai Masak Lemak', 'Ayam Rendang Lembayung', 'Ikan Bakar Petai'],
       icon: '🇲🇾',
       bannerImage: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80',
       bgColor: '#1a472a',
@@ -59,7 +59,7 @@ const Menu = () => {
     <div className="menu-hub-page animate-fade-in">
       {/* Hero Header Section */}
       <section className="menu-hub-header text-center">
-        <span className="menu-subtitle">Rembayung Culinary Vault</span>
+        <span className="menu-subtitle">Lembayung Culinary Vault</span>
         <h1>A Symphony of Global Gastronomy</h1>
         <p className="menu-header-desc">
           Prepared by culinary artisans using sustainably sourced premium local ingredients. 

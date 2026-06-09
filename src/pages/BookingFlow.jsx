@@ -1,11 +1,11 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './BookingFlow.css';
 
 export const cuisineDishes = {
   malay: [
     { value: 'masak-lemak', label: 'Daging Salai Masak Lemak Cili Api (RM 45)' },
-    { value: 'ayam-rendang', label: 'Ayam Rendang Rembayung (RM 38)' },
+    { value: 'ayam-rendang', label: 'Ayam Rendang Lembayung (RM 38)' },
     { value: 'ikan-bakar', label: 'Ikan Bakar Petai (RM 55)' },
     { value: 'nasi-lemak', label: 'Nasi Lemak Pandan Heritage (RM 32)' }
   ],
@@ -25,7 +25,7 @@ export const cuisineDishes = {
     { value: 'angus-steak', label: 'Black Angus Ribeye Steak (RM 120)' },
     { value: 'seared-salmon', label: 'Pan-Seared Citrus Salmon (RM 68)' },
     { value: 'truffle-pasta', label: 'Truffle Wild Mushroom Fettuccine (RM 45)' },
-    { value: 'rembayung-burger', label: 'Signature Double Wagyu Burger (RM 55)' }
+    { value: 'lembayung-burger', label: 'Signature Double Wagyu Burger (RM 55)' }
   ],
   indian: [
     { value: 'lamb-biryani', label: 'Aromatic Lamb Shank Biryani (RM 78)' },

@@ -31,7 +31,7 @@ const WesternCuisine = () => {
       image: 'https://images.unsplash.com/photo-1645112411341-6c4fd023714a?auto=format&fit=crop&w=600&q=80'
     },
     {
-      value: 'rembayung-burger',
+      value: 'lembayung-burger',
       name: 'Signature Double Wagyu Burger',
       price: 'RM 55.00',
       description: 'Two 120g premium custom-ground Wagyu beef patties, flame-grilled and layered with melted aged sharp Cheddar, smoked truffle mayo, crispy onion rings, and housed inside toasted sweet brioche buns. Served with hand-cut gold fries.',

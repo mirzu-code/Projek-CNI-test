@@ -52,7 +52,7 @@ const Home = () => {
             <div className="sdg-text">
               <h2>Commitment to Sustainable Innovation</h2>
               <p>
-                At Rembayung, we align with <strong>SDG 9: Industry, Innovation, and Infrastructure</strong>. 
+                At Lembayung, we align with <strong>SDG 9: Industry, Innovation, and Infrastructure</strong>. 
                 Our strict digital booking system is an innovative approach to restaurant management. 
                 By utilizing smart capacity planning and offering meal pre-orders, we build resilient infrastructure that prevents overbooking, optimizes our supply chain, and significantly reduces food waste.
               </p>

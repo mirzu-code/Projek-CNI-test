@@ -43,7 +43,7 @@ const About = () => {
             <div className="about-story-text">
               <h2>Preserving Heritage, Embracing Innovation</h2>
               <p>
-                Rembayung was founded in the heart of Kuala Lumpur\'s historic Kampung Baru enclave. 
+                Lembayung was founded in the heart of Kuala Lumpur\'s historic Kampung Baru enclave. 
                 Our architectural blueprint is a visual representation of progress: a futuristic glasshouse surrounded by 
                 traditional wooden Malay stilt houses. This marriage of old and new defines our culinary mission.
               </p>
@@ -53,7 +53,7 @@ const About = () => {
               </p>
             </div>
             <div className="about-story-media">
-              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Rembayung Glasshouse Interior" className="about-img animate-zoom-in" />
+              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Lembayung Glasshouse Interior" className="about-img animate-zoom-in" />
             </div>
           </div>
         </div>

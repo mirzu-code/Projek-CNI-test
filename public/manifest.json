@@ -1,7 +1,7 @@
 {
-  "name": "Rembayung Booking",
-  "short_name": "Rembayung",
-  "description": "Strict reservation-only booking system for Rembayung restaurant.",
+  "name": "Lembayung Booking",
+  "short_name": "Lembayung",
+  "description": "Strict reservation-only booking system for Lembayung restaurant.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
