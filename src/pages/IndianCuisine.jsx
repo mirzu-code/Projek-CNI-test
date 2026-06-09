@@ -10,7 +10,7 @@ const IndianCuisine = () => {
       description: 'Ultra-tender Australian lamb shank, slow-cooked in a sealed clay pot (Dum cooking) with long-grain aged Basmati rice, premium saffron strands, rose water, and a complex bouquet of freshly ground whole spices.',
       tags: ['⭐ Claypot Dum Cooking', 'Saffron Infused', 'Premium Meat'],
       ingredients: ['Australian Lamb Shank', 'Aged Basmati Rice', 'Kashmiri Saffron', 'Clarified Butter (Ghee)', 'Fried Onions'],
-      image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'butter-chicken',
@@ -19,7 +19,7 @@ const IndianCuisine = () => {
       description: 'Boneless chicken thighs marinated in spiced Greek yogurt, roasted inside a 400°C clay tandoor oven, and then smothered in a rich, buttery, velvety cashew-tomato sauce finished with dried fenugreek leaves (kasuri methi).',
       tags: ['Tandoor Masterpiece', 'Mildly Spiced'],
       ingredients: ['Clay Oven Grilled Chicken', 'Cashew Paste', 'Fresh Cream & Butter', 'Tomato Puree', 'Fenugreek Leaves'],
-      image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'paneer-tikka',
@@ -28,7 +28,7 @@ const IndianCuisine = () => {
       description: 'House-made fresh cottage cheese blocks (Paneer) skewered with capsicums and onions, charcoal-grilled in our tandoor, and simmered in a mildly sweet, velvety tomato gravy.',
       tags: ['🌱 Vegetarian', 'Housemade Cheese'],
       ingredients: ['Housemade Cottage Cheese', 'Bell Peppers', 'Spiced Masala Gravy', 'Greek Yogurt Marinade', 'Fresh Coriander'],
-      image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'naan-platter',
@@ -37,7 +37,7 @@ const IndianCuisine = () => {
       description: 'A basket of three premium, fluffy flatbreads hand-kneaded, slapped against the walls of our clay tandoor oven, and stuffed with fresh mozzarella cheese, topped with raw minced garlic and fresh melted ghee.',
       tags: ['Fresh from Tandoor', 'Perfect Accompaniment'],
       ingredients: ['Wheat Flour Dough', 'Fresh Minced Garlic', 'Mozzarella Cheese', 'Ghee Glaze', 'Fresh Mint Chutney Side'],
-      image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80'
     }
   ];
 

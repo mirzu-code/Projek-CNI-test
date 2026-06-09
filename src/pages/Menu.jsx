@@ -9,7 +9,7 @@ const Menu = () => {
       description: 'Journey through centuries of heritage. Experience rich coconut gravy, aromatic forest herbs, and slow-roasted meats prepared using age-old ancestral techniques.',
       dishes: ['Daging Salai Masak Lemak', 'Ayam Rendang Lembayung', 'Ikan Bakar Petai'],
       icon: '🇲🇾',
-      bannerImage: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80',
+      bannerImage: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80',
       bgColor: '#1a472a',
       accentColor: '#d4af37'
     },
@@ -19,7 +19,7 @@ const Menu = () => {
       description: 'A balance of yin and yang. Experience delicate wok hei, premium steamed fish, and sweet-savoury claypots embodying generations of culinary mastery.',
       dishes: ['Ginger Onion Steamed Sea Bass', 'Szechuan Chili Maple Tofu', 'Hainanese Chicken Rice Platter'],
       icon: '🇨🇳',
-      bannerImage: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80',
+      bannerImage: 'https://images.unsplash.com/photo-1569058242567-93de6f36f8eb?auto=format&fit=crop&w=800&q=80',
       bgColor: '#b01e23',
       accentColor: '#ffd700'
     },
@@ -29,7 +29,7 @@ const Menu = () => {
       description: 'Zengarden of visual and culinary peace. Minimalist execution celebrating pristine ingredients, fresh sashimi cuts, and thick slow-simmered broths.',
       dishes: ['Wagyu Beef Black Garlic Ramen', 'Truffle Salmon Sashimi Don', 'Premium Sushi Platter'],
       icon: '🇯🇵',
-      bannerImage: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80',
+      bannerImage: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?auto=format&fit=crop&w=800&q=80',
       bgColor: '#111111',
       accentColor: '#e83e8c'
     },
@@ -39,7 +39,7 @@ const Menu = () => {
       description: 'A culinary bridge of continents. Enjoy high-grade Black Angus steaks, house-crafted pastas, and perfectly seared salmon using progressive French techniques.',
       dishes: ['Black Angus Ribeye Steak', 'Truffle Wild Mushroom Fettuccine', 'Pan-Seared Citrus Salmon'],
       icon: '🥩',
-      bannerImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
+      bannerImage: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80',
       bgColor: '#2b3e50',
       accentColor: '#3498db'
     },
@@ -49,7 +49,7 @@ const Menu = () => {
       description: 'A rich tapestry of spices. Delight in slow-roasted tandoori specialties, hand-kneaded naan platters, and legendary lamb shanks cooked in rich clay ovens.',
       dishes: ['Aromatic Lamb Shank Biryani', 'Tandoori Butter Chicken Masala', 'Garlic Cheese Naan Platter'],
       icon: '🍛',
-      bannerImage: 'https://images.unsplash.com/photo-1585938338392-50a5d22b6073?auto=format&fit=crop&w=800&q=80',
+      bannerImage: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=800&q=80',
       bgColor: '#a35d00',
       accentColor: '#e67e22'
     }

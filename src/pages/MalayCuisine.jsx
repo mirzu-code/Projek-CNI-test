@@ -40,7 +40,7 @@ const MalayCuisine = () => {
       description: 'Slow-smoked premium beef brisket simmered in a fiery, rich gravy of fresh coconut milk, turmeric, bird\'s eye chilies (cili api), and sliced local starfruit.',
       tags: ['🔥 Spicy', '⭐ Chef Special', 'Sustainably Sourced'],
       ingredients: ['Smoked Beef Brisket', 'Fresh Turmeric', 'Bird\'s Eye Chilies', 'Coconut Cream', 'Belimbing Buluh'],
-      image: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'ayam-rendang',
@@ -49,7 +49,7 @@ const MalayCuisine = () => {
       description: 'Tender chicken slow-braised for 6 hours in a luxurious complex spice paste (kerisik), toasted coconut, lemongrass, galangal, and fresh kaffir lime leaves.',
       tags: ['Traditional Recipe', 'Gluten Free'],
       ingredients: ['Kampung Chicken', 'Toasted Coconut (Kerisik)', 'Lemongrass', 'Galangal', 'Kaffir Lime Leaves'],
-      image: 'https://images.unsplash.com/photo-1626804475315-8664b48697b0?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1606491956689-2ea866880049?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'ikan-bakar',
@@ -58,7 +58,7 @@ const MalayCuisine = () => {
       description: 'Fresh red snapper wrapped in banana leaf, charcoal-grilled to perfection with a thick marinade of spicy red chili paste, toasted shrimp paste, and fresh petai beans.',
       tags: ['🔥 Spicy', 'Seafood Delight'],
       ingredients: ['Fresh Red Snapper', 'Stink Beans (Petai)', 'Chili Sambal Paste', 'Tamarind Juice', 'Banana Leaf Wrap'],
-      image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'nasi-lemak',
@@ -67,7 +67,7 @@ const MalayCuisine = () => {
       description: 'Basmati rice steamed with fresh pandan juice and coconut milk. Served with aromatic sweet-spicy anchovy sambal, spiced fried chicken, boiled eggs, and roasted peanuts.',
       tags: ['Signature Dish', 'All-Time Favorite'],
       ingredients: ['Pandan-infused Basmati Rice', 'Heritage Sambal Tumis', 'Crispy Rempah Fried Chicken', 'Roasted Peanuts', 'Hardboiled Egg'],
-      image: 'https://images.unsplash.com/photo-1632514800760-496a7b744d03?auto=format&fit=crop&w=600&q=80'
+      image: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=600&q=80'
     }
   ];
 
