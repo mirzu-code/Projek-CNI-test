@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { supabase } from '../supabaseClient';
@@ -636,7 +636,7 @@ const Admin = () => {
         recordId: lock.id,
         name: lock.locked_by || 'Table Hold',
         date: 'Locked',
-        time: '—',
+        time: 'ΓÇö',
         tableNumber: table?.name || `Table ${lock.table_id}`,
         pax: '-',
         dish: lock.locked_by || 'Admin hold',
@@ -780,7 +780,7 @@ const Admin = () => {
     return (
       <div className="admin-login-wrapper animate-fade-in">
         <div className="admin-login-card">
-          <div className="login-icon">🔒</div>
+          <div className="login-icon">≡ƒöÆ</div>
           <h2>Admin Access</h2>
           <p>Please enter the administrator password</p>
           <form onSubmit={handleLogin}>
@@ -828,7 +828,7 @@ const Admin = () => {
 
       {newBookingAlert && (
         <div className="admin-alert new-booking-alert animate-fade-in">
-          <strong>New booking received:</strong> {newBookingAlert.name} — {newBookingAlert.date} {newBookingAlert.time}
+          <strong>New booking received:</strong> {newBookingAlert.name} ΓÇö {newBookingAlert.date} {newBookingAlert.time}
           <button className="btn-sm btn-outline" onClick={() => setNewBookingAlert(null)} style={{ marginLeft: '1rem' }}>
             Dismiss
           </button>
@@ -913,7 +913,7 @@ const Admin = () => {
                     <div className="table-availability-status">{status}</div>
                     {booked && booking && (
                       <div className="table-availability-booking">
-                        <strong>{booking.id}</strong> • {booking.date} {booking.time}
+                        <strong>{booking.id}</strong> ΓÇó {booking.date} {booking.time}
                       </div>
                     )}
                     {isLocked && lock.locked_by && (
@@ -1036,14 +1036,14 @@ const Admin = () => {
         <div className="scanner-section-container animate-fade-in" style={{ display: activeSection === 'scanner' ? 'block' : 'none' }}>
           <div className="scanner-card">
             <div className="scanner-header-row">
-              <h3>🚪 Traditional Malay Glasshouse Entrance QR Scanner</h3>
+              <h3>≡ƒÜ¬ Traditional Malay Glasshouse Entrance QR Scanner</h3>
               <div className="scanner-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <button 
                   className={`btn-sm ${isCameraActive ? 'btn-danger' : 'btn-success'}`}
                   onClick={() => setIsCameraActive(!isCameraActive)}
                   style={{ whiteSpace: 'nowrap' }}
                 >
-                  {isCameraActive ? '🛑 Stop Camera' : '🎥 Start Live Camera'}
+                  {isCameraActive ? '≡ƒ¢æ Stop Camera' : '≡ƒÄÑ Start Live Camera'}
                 </button>
                 <span className="scanner-tag">SDG 9 DIGITAL CHECK-IN</span>
               </div>
@@ -1066,7 +1066,7 @@ const Admin = () => {
                   <div className="scanner-laser-line"></div>
                   
                   <div className="viewport-info text-center">
-                    <div className="gate-icon">{isScanning ? '🔄' : scannerError ? '❌' : scannerSuccessRes ? '✅' : '📷'}</div>
+                    <div className="gate-icon">{isScanning ? '≡ƒöä' : scannerError ? 'Γ¥î' : scannerSuccessRes ? 'Γ£à' : '≡ƒô╖'}</div>
                     <div className="flashing-scanner-status">
                       {isScanning ? 'VERIFYING CODE...' : scannerError ? 'ACCESS DENIED' : scannerSuccessRes ? 'ACCESS GRANTED' : 'SCANNER ACTIVE'}
                     </div>
@@ -1075,7 +1075,7 @@ const Admin = () => {
                     {scannerSuccessRes && (
                       <div className="viewport-result-card animate-zoom-in">
                         <strong>{scannerSuccessRes.name}</strong>
-                        <span>{scannerSuccessRes.pax} pax • {scannerSuccessRes.dish ? scannerSuccessRes.dish.replace('-', ' ') : 'Table Only'}</span>
+                        <span>{scannerSuccessRes.pax} pax ΓÇó {scannerSuccessRes.dish ? scannerSuccessRes.dish.replace('-', ' ') : 'Table Only'}</span>
                       </div>
                     )}
                   </div>
@@ -1127,7 +1127,7 @@ const Admin = () => {
                 
                 {scannerSuccessRes && (
                   <div className="scanner-success-feedback animate-fade-in mt-3">
-                    🔊 <strong>Check-in Registered:</strong> A welcome chime was played. Guest table for {scannerSuccessRes.name} is ready for seating.
+                    ≡ƒöè <strong>Check-in Registered:</strong> A welcome chime was played. Guest table for {scannerSuccessRes.name} is ready for seating.
                   </div>
                 )}
               </div>
@@ -1208,7 +1208,7 @@ const Admin = () => {
                             <strong>{option.label}</strong>
                             <span className="cuisine-group-count">{cuisineMenus.length} item(s)</span>
                           </div>
-                          <span className="toggle-symbol">{isExpanded ? '−' : '+'}</span>
+                          <span className="toggle-symbol">{isExpanded ? 'ΓêÆ' : '+'}</span>
                         </button>
 
                         {isExpanded && (
@@ -1303,7 +1303,7 @@ const Admin = () => {
                   <td><strong>{res.id}</strong></td>
                   <td>{res.name}</td>
                   <td>{res.date} <br/> <span className="time-badge">{res.time}</span></td>
-                  <td>{res.tableNumber || <span className="text-muted">—</span>}</td>
+                  <td>{res.tableNumber || <span className="text-muted">ΓÇö</span>}</td>
                   <td>{res.pax}</td>
                   <td className="reservation-qr-cell">
                     {qrUrl ? (

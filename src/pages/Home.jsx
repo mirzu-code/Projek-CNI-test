@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './Home.css';
 
@@ -18,7 +18,7 @@ const Home = () => {
       {activeBooking && (
         <div className="active-booking-banner animate-fade-in">
           <div className="container banner-content">
-            <span className="banner-icon">🎟️</span>
+            <span className="banner-icon">≡ƒÄƒ∩╕Å</span>
             <div>
               <strong>You have an active reservation!</strong>
               <span> {activeBooking.date} at {activeBooking.time}</span>
@@ -59,17 +59,17 @@ const Home = () => {
             </div>
             <div className="sdg-features">
               <div className="feature-card">
-                <div className="icon-wrapper">🌍</div>
+                <div className="icon-wrapper">≡ƒîì</div>
                 <h3>Digital Infrastructure</h3>
                 <p>100% paperless reservation and ticketing system for a greener future.</p>
               </div>
               <div className="feature-card">
-                <div className="icon-wrapper">💡</div>
+                <div className="icon-wrapper">≡ƒÆí</div>
                 <h3>Smart Capacity</h3>
                 <p>Advanced slot management ensures a comfortable, uncrowded dining experience.</p>
               </div>
               <div className="feature-card">
-                <div className="icon-wrapper">♻️</div>
+                <div className="icon-wrapper">ΓÖ╗∩╕Å</div>
                 <h3>Waste Reduction</h3>
                 <p>Pre-ordering helps us source precisely what is needed, minimizing culinary waste.</p>
               </div>

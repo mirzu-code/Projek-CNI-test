@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import './Menu.css';
 
 const Menu = () => {
@@ -8,7 +8,7 @@ const Menu = () => {
       title: 'Authentic Malay Cuisine',
       description: 'Journey through centuries of heritage. Experience rich coconut gravy, aromatic forest herbs, and slow-roasted meats prepared using age-old ancestral techniques.',
       dishes: ['Daging Salai Masak Lemak', 'Ayam Rendang Lembayung', 'Ikan Bakar Petai'],
-      icon: '🇲🇾',
+      icon: '≡ƒç▓≡ƒç╛',
       bannerImage: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80',
       bgColor: '#1a472a',
       accentColor: '#d4af37'
@@ -18,7 +18,7 @@ const Menu = () => {
       title: 'Traditional Chinese Cuisine',
       description: 'A balance of yin and yang. Experience delicate wok hei, premium steamed fish, and sweet-savoury claypots embodying generations of culinary mastery.',
       dishes: ['Ginger Onion Steamed Sea Bass', 'Szechuan Chili Maple Tofu', 'Hainanese Chicken Rice Platter'],
-      icon: '🇨🇳',
+      icon: '≡ƒç¿≡ƒç│',
       bannerImage: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80',
       bgColor: '#b01e23',
       accentColor: '#ffd700'
@@ -28,7 +28,7 @@ const Menu = () => {
       title: 'Artisan Japanese Cuisine',
       description: 'Zengarden of visual and culinary peace. Minimalist execution celebrating pristine ingredients, fresh sashimi cuts, and thick slow-simmered broths.',
       dishes: ['Wagyu Beef Black Garlic Ramen', 'Truffle Salmon Sashimi Don', 'Premium Sushi Platter'],
-      icon: '🇯🇵',
+      icon: '≡ƒç»≡ƒç╡',
       bannerImage: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80',
       bgColor: '#111111',
       accentColor: '#e83e8c'
@@ -38,7 +38,7 @@ const Menu = () => {
       title: 'Modern Western Cuisine',
       description: 'A culinary bridge of continents. Enjoy high-grade Black Angus steaks, house-crafted pastas, and perfectly seared salmon using progressive French techniques.',
       dishes: ['Black Angus Ribeye Steak', 'Truffle Wild Mushroom Fettuccine', 'Pan-Seared Citrus Salmon'],
-      icon: '🥩',
+      icon: '≡ƒÑ⌐',
       bannerImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
       bgColor: '#2b3e50',
       accentColor: '#3498db'
@@ -48,7 +48,7 @@ const Menu = () => {
       title: 'Flavorful Indian Cuisine',
       description: 'A rich tapestry of spices. Delight in slow-roasted tandoori specialties, hand-kneaded naan platters, and legendary lamb shanks cooked in rich clay ovens.',
       dishes: ['Aromatic Lamb Shank Biryani', 'Tandoori Butter Chicken Masala', 'Garlic Cheese Naan Platter'],
-      icon: '🍛',
+      icon: '≡ƒì¢',
       bannerImage: 'https://images.unsplash.com/photo-1585938338392-50a5d22b6073?auto=format&fit=crop&w=800&q=80',
       bgColor: '#a35d00',
       accentColor: '#e67e22'
@@ -95,7 +95,7 @@ const Menu = () => {
                 <div className="card-actions-wrapper">
                   <Link to={`/menu/${category.id}`} className="explore-menu-btn">
                     <span>Explore Menu</span>
-                    <span className="arrow-icon">→</span>
+                    <span className="arrow-icon">ΓåÆ</span>
                   </Link>
                 </div>
               </div>

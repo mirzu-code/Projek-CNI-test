@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './BookingFlow.css';
@@ -357,7 +357,7 @@ const SelectTable = () => {
                       onClick={() => handleTableSelect(table)}
                       disabled={isBooked || tooSmall || isLockedByOther}
                     >
-                      <div className="table-icon">🍽</div>
+                      <div className="table-icon">≡ƒì╜</div>
                       <div className="table-name">{table.name}</div>
                       <div className="table-seats">{table.seats} seats</div>
                       <div className="table-status-badge">

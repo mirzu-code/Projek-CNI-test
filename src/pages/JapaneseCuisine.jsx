@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import './JapaneseCuisine.css';
 
 const JapaneseCuisine = () => {
@@ -8,7 +8,7 @@ const JapaneseCuisine = () => {
       name: 'Wagyu Beef Black Garlic Ramen',
       price: 'RM 75.00',
       description: 'Slow-simmered 18-hour creamy tonkotsu broth, layered with organic black garlic aroma oil, house-made rye noodles, and topped with blowtorched melt-in-your-mouth A5 Wagyu beef slices.',
-      tags: ['⭐ Masterpiece', '18-Hour Broth', 'Premium Selection'],
+      tags: ['Γ¡É Masterpiece', '18-Hour Broth', 'Premium Selection'],
       ingredients: ['A5 Miyazaki Wagyu', 'Black Garlic Mayu Oil', '18-Hour Tonkotsu Essence', 'Organic Hen Egg', 'Bamboo Shoots'],
       image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80'
     },
@@ -26,7 +26,7 @@ const JapaneseCuisine = () => {
       name: 'Chef\'s Choice Premium Sushi Platter',
       price: 'RM 85.00',
       description: 'A delicate curation of 8 hand-pressed nigiri and 6 signature maki rolls, featuring prime selection of salmon belly, fatty tuna (otoro), sweet shrimp, and dynamic unagi (grilled eel).',
-      tags: ['⭐ Chef Special', 'Zen Curation'],
+      tags: ['Γ¡É Chef Special', 'Zen Curation'],
       ingredients: ['Bluefin Tuna belly', 'Salmon Belly', 'Hokkaido Sweet Shrimp', 'Grilled Fresh Water Eel', 'Wasabi Root'],
       image: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80'
     },
@@ -44,14 +44,14 @@ const JapaneseCuisine = () => {
   return (
     <div className="cuisine-menu-page japanese-theme animate-fade-in">
       <div className="cuisine-container">
-        <Link to="/menu" className="back-link black-hover">← Back to Gastronomy Hub</Link>
+        <Link to="/menu" className="back-link black-hover">ΓåÉ Back to Gastronomy Hub</Link>
       </div>
 
       {/* Hero Section */}
       <section className="cuisine-hero japanese-hero">
         <div className="cuisine-hero-overlay japanese-overlay"></div>
         <div className="cuisine-hero-content text-center">
-          <span className="cuisine-origin pink-text">🇯🇵 Artisan Japanese Gastronomy</span>
+          <span className="cuisine-origin pink-text">≡ƒç»≡ƒç╡ Artisan Japanese Gastronomy</span>
           <h1>Zen Minimalist Curation</h1>
           <p>Meticulous precision, pristine premium ingredients, and absolute harmony on every plate.</p>
         </div>
@@ -114,7 +114,7 @@ const JapaneseCuisine = () => {
             <p>
               Artisan sushi and ramen require absolute fresh sourcing. In alignment with SDG 9, our digital pre-ordering 
               system ensures that premium cuts like wagyu beef and Norwegian salmon belly are only procured upon active 
-              booking—maintaining raw ingredient waste at absolute zero.
+              bookingΓÇömaintaining raw ingredient waste at absolute zero.
             </p>
             <Link to="/book" className="btn-outline light-border">Book Your Table Now</Link>
           </div>
