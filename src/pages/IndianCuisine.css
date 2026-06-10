@@ -11,7 +11,7 @@
 
 /* Indian Hero Banner */
 .indian-hero {
-  background-image: url('https://images.unsplash.com/photo-1585938338392-50a5d22b6073?auto=format&fit=crop&w=1920&q=80');
+  background-image: url('/assets/admin/hero-indian.jpg');
 }
 
 .indian-overlay {

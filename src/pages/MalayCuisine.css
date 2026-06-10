@@ -28,7 +28,7 @@
   position: relative;
   height: 40vh;
   min-height: 280px;
-  background-image: url('https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=1920&q=80');
+  background-image: url('/assets/admin/hero-malay.jpg');
   background-size: cover;
   background-position: center;
   display: flex;

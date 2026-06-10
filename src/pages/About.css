@@ -7,7 +7,7 @@
   position: relative;
   height: 50vh;
   min-height: 350px;
-  background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1920&q=80');
+  background-image: url('/assets/admin/hero-about.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -257,7 +257,7 @@
 /* Call to Action Footer block */
 .about-cta-footer {
   background: linear-gradient(rgba(26, 71, 42, 0.95), rgba(26, 71, 42, 0.95)),
-              url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80');
+              url('/assets/admin/hero-about.jpg');
   background-size: cover;
   background-position: center;
   background-blend-mode: overlay;

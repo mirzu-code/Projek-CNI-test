@@ -202,7 +202,7 @@
 /* Callout Banner Box */
 .preorder-callout-banner {
   background: linear-gradient(135deg, rgba(26, 71, 42, 0.95) 0%, rgba(45, 90, 63, 0.95) 100%),
-              url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80');
+              url('/assets/admin/hero-about.jpg');
   background-size: cover;
   background-position: center;
   background-blend-mode: overlay;
