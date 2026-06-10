@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Select Table - Static</title>
+    <style>
+      body{font-family:Arial,Helvetica,sans-serif;background:#f7f7f8;color:#222;margin:0;padding:20px}
+      .booking-container{max-width:980px;margin:0 auto}
+      .booking-header h2{margin:0 0 6px}
+      .booking-header p{margin:0 0 18px;color:#555}
+      .floor-plan{background:#fff;border-radius:8px;padding:18px;box-shadow:0 4px 14px rgba(0,0,0,0.06)}
+      .selected-table-banner{margin-bottom:12px;font-weight:600}
+      .table-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+      .table-card{background:#f3f6f8;border:1px solid #e5e7ea;border-radius:8px;padding:12px;text-align:center;cursor:pointer}
+      .table-card.table-selected{border-color:#2c3e50;background:#e9f0f6}
+      .table-card.table-booked{opacity:0.5;cursor:not-allowed}
+      .table-icon{font-size:22px}
+      .table-name{font-weight:700;margin-top:6px}
+      .table-seats{color:#666;font-size:13px}
+      .table-status-badge{margin-top:8px;font-size:13px;padding:6px;border-radius:6px;background:#fff;display:inline-block}
+      .table-footer{margin-top:16px}
+      .btn-primary{background:#2c3e50;color:#fff;border:none;padding:12px 16px;border-radius:6px;cursor:pointer}
+      .btn-primary.full-width{width:100%}
+      .legend-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:middle}
+      .legend-dot.available{background:#58b368}
+      .legend-dot.other-capacity{background:#f39c12}
+      .legend-dot.booked{background:#d9534f}
+      .floor-legend{display:flex;gap:12px;margin:8px 0 12px;color:#444}
+      .error-text{color:#b00020;margin-top:12px}
+    </style>
+  </head>
+  <body>
+    <div class="booking-page">
+      <div class="booking-container">
+        <div class="booking-header">
+          <h2>Choose Your Table</h2>
+          <p>Select the best seating for your group before proceeding to payment.</p>
+        </div>
+
+        <div class="booking-form-wrapper">
+          <div class="floor-plan">
+            <div id="selectedBanner" class="selected-table-banner">Choose a table.</div>
+
+            <div id="lockMessage" class="table-lock-message" style="display:none;margin-bottom:8px"></div>
+
+            <div class="floor-legend">
+              <span><span class="legend-dot available"></span> Available</span>
+              <span><span class="legend-dot other-capacity"></span> Not suitable</span>
+              <span><span class="legend-dot booked"></span> Booked</span>
+            </div>
+
+            <div id="tableGrid" class="table-grid"></div>
+
+            <div id="errorText" class="error-text" style="display:none"></div>
+
+            <div class="table-footer">
+              <button id="continueBtn" class="btn-primary full-width">Continue to Payment</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { supabase } from '/js/init-supabase.js';
+
+      const TABLES = [
+        { id: 1, name: 'Table 1', seats: 2 },
+        { id: 2, name: 'Table 2', seats: 2 },
+        { id: 3, name: 'Table 3', seats: 4 },
+        { id: 4, name: 'Table 4', seats: 4 },
+        { id: 5, name: 'Table 5', seats: 4 },
+        { id: 6, name: 'Table 6', seats: 6 },
+        { id: 7, name: 'Table 7', seats: 6 },
+        { id: 8, name: 'Table 8', seats: 8 },
+        { id: 9, name: 'Table 9', seats: 8 }
+      ];
+
+      const tableGrid = document.getElementById('tableGrid');
+      const selectedBanner = document.getElementById('selectedBanner');
+      const lockMessageEl = document.getElementById('lockMessage');
+      const errorText = document.getElementById('errorText');
+      const continueBtn = document.getElementById('continueBtn');
+
+      const lockDurationMs = 2 * 60 * 1000;
+      let bookingData = null;
+      let bookedTables = [];
+      let tableLocks = [];
+      let selectedTable = null;
+      let lockToken = localStorage.getItem('tableLockToken') || (function(){ const t = Math.random().toString(36).slice(2)+Date.now().toString(36); localStorage.setItem('tableLockToken', t); return t; })();
+
+      function readBooking() {
+        try {
+          const raw = localStorage.getItem('bookingData');
+          if (!raw) return null;
+          return JSON.parse(raw);
+        } catch (e) { return null; }
+      }
+
+      function renderGrid() {
+        tableGrid.innerHTML = '';
+        TABLES.forEach(table => {
+          const isBooked = bookedTables.includes(table.id);
+          const tooSmall = (bookingData && table.seats < (parseInt(bookingData.pax,10)||1));
+          const lock = tableLocks.find(l => l.table_id === table.id && (!l.lock_expires_at || new Date(l.lock_expires_at).getTime() > Date.now()));
+          const isLockedByOther = !!lock && lock.lock_token !== lockToken;
+          const isSelected = selectedTable && selectedTable.id === table.id;
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'table-card' + (isSelected ? ' table-selected' : '') + (isBooked || isLockedByOther ? ' table-booked' : '');
+          btn.disabled = isBooked || tooSmall || isLockedByOther;
+
+          const statusLabel = isBooked ? 'Booked' : isLockedByOther ? 'Locked' : tooSmall ? 'Too small' : isSelected ? 'Selected' : 'Available';
+
+          btn.innerHTML = `\n            <div class="table-icon">🍽</div>\n            <div class="table-name">${table.name}</div>\n            <div class="table-seats">${table.seats} seats</div>\n            <div class="table-status-badge">${statusLabel}</div>\n          `;
+
+          btn.addEventListener('click', async () => {
+            if (isBooked || tooSmall || isLockedByOther) return;
+            // release previous
+            if (selectedTable && selectedTable.id !== table.id) {
+              await releasePreviousLock(selectedTable.id);
+            }
+            const ok = await reserveTableLock(table);
+            if (ok) {
+              selectedTable = table;
+              errorText.style.display = 'none';
+              selectedBanner.textContent = `Selected: ${table.name} for ${table.seats} seats.`;
+              renderGrid();
+            }
+          });
+
+          tableGrid.appendChild(btn);
+        });
+      }
+
+      async function loadState() {
+        bookingData = readBooking();
+        if (!bookingData) {
+          window.location.href = '/BookingFlow.html';
+          return;
+        }
+
+        selectedBanner.textContent = `Choose a table for ${bookingData.pax || 1} person(s).`;
+
+        const now = new Date().toISOString();
+        const [{ data: bookingsData }, { data: locksData }] = await Promise.all([
+          supabase.from('bookings').select('table_id,status').eq('booking_date', bookingData.date).eq('booking_time', bookingData.time).neq('status','Cancelled'),
+          supabase.from('table_locks').select('*').or(`lock_expires_at.is.null,lock_expires_at.gte.${now}`)
+        ]);
+
+        bookedTables = (bookingsData || []).map(r=>r.table_id).filter(Boolean);
+        tableLocks = locksData || [];
+        renderGrid();
+      }
+
+      async function reserveTableLock(table) {
+        const now = new Date();
+        const expiresAt = new Date(now.getTime() + lockDurationMs).toISOString();
+
+        try {
+          const { data: existingLock } = await supabase.from('table_locks').select('*').eq('table_id', table.id).maybeSingle();
+          if (existingLock && existingLock.lock_token && existingLock.lock_token !== lockToken && new Date(existingLock.lock_expires_at).getTime() > now.getTime()) {
+            errorText.style.display = 'block';
+            errorText.textContent = 'Meja ini sedang dikunci oleh pelanggan lain. Sila pilih meja lain.';
+            return false;
+          }
+
+          const payload = { table_id: table.id, locked_by: `${bookingData.name} (${bookingData.phone})`, lock_token: lockToken, lock_expires_at: expiresAt };
+          if (existingLock) {
+            const { error } = await supabase.from('table_locks').update(payload).eq('table_id', table.id);
+            if (error) throw error;
+          } else {
+            const { error } = await supabase.from('table_locks').insert([payload]);
+            if (error) throw error;
+          }
+
+          lockMessageEl.style.display = 'block';
+          lockMessageEl.textContent = `Meja ${table.name} dikunci sehingga ${new Date(expiresAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}.`;
+          // reload locks
+          await refreshLocks();
+          return true;
+        } catch (err) {
+          errorText.style.display = 'block';
+          errorText.textContent = 'Gagal kunci meja: ' + (err.message || 'Unknown');
+          return false;
+        }
+      }
+
+      async function releasePreviousLock(tableId) {
+        try {
+          const { data: existingLock } = await supabase.from('table_locks').select('*').eq('table_id', tableId).maybeSingle();
+          if (!existingLock) return;
+          if (existingLock.lock_token !== lockToken) return;
+          const cooldownUntil = new Date(Date.now() + lockDurationMs).toISOString();
+          await supabase.from('table_locks').update({ lock_token: null, locked_by: null, lock_expires_at: cooldownUntil }).eq('table_id', tableId);
+        } catch (err) { console.warn(err); }
+      }
+
+      async function refreshLocks() {
+        const now = new Date().toISOString();
+        const { data } = await supabase.from('table_locks').select('*').or(`lock_expires_at.is.null,lock_expires_at.gte.${now}`);
+        tableLocks = data || [];
+        renderGrid();
+      }
+
+      // periodic refresh
+      setInterval(() => { if (bookingData) refreshLocks(); }, 5000);
+
+      continueBtn.addEventListener('click', async () => {
+        if (!selectedTable) {
+          errorText.style.display = 'block';
+          errorText.textContent = 'Sila pilih meja terlebih dahulu.';
+          return;
+        }
+        // verify lock
+        const lock = tableLocks.find(l=>l.table_id===selectedTable.id);
+        if (!lock || lock.lock_token !== lockToken || (lock.lock_expires_at && new Date(lock.lock_expires_at).getTime() <= Date.now())) {
+          errorText.style.display = 'block';
+          errorText.textContent = 'Kunci meja telah tamat. Sila pilih semula meja.';
+          return;
+        }
+
+        const refreshExpiry = new Date(Date.now() + lockDurationMs).toISOString();
+        await supabase.from('table_locks').update({ lock_expires_at: refreshExpiry }).eq('table_id', selectedTable.id).eq('lock_token', lockToken);
+
+        bookingData.tableId = selectedTable.id;
+        bookingData.tableNumber = selectedTable.name;
+        bookingData.tableCapacity = selectedTable.seats;
+        localStorage.setItem('bookingData', JSON.stringify(bookingData));
+        window.location.href = '/Checkout.html';
+      });
+
+      // init
+      loadState();
+    </script>
+  </body>
+</html>

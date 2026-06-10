@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Bookings</title>
+  <link rel="stylesheet" href="/src/pages/MyBooking.css">
+  <script src="/supabase-config.js"></script>
+  <script type="module" src="/js/init-supabase.js"></script>
+</head>
+<body>
+  <div style="max-width:900px;margin:20px auto">
+    <h2>My Bookings</h2>
+    <div>
+      <label>Phone: <input id="phoneInput" /></label>
+      <button id="loadBtn">Load</button>
+    </div>
+    <pre id="bookingsList">No data</pre>
+  </div>
+
+  <script type="module">
+    import { supabase } from '/js/init-supabase.js';
+    const phoneInput = document.getElementById('phoneInput');
+    const loadBtn = document.getElementById('loadBtn');
+    const bookingsList = document.getElementById('bookingsList');
+
+    loadBtn.addEventListener('click', async ()=>{
+      const phone = phoneInput.value.trim();
+      if (!phone) return alert('Enter phone');
+      bookingsList.textContent = 'Loading...';
+      const { data, error } = await supabase.from('bookings').select('*').eq('phone', phone).order('created_at', {ascending:false});
+      if (error) bookingsList.textContent = 'Error: '+error.message;
+      else bookingsList.textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>

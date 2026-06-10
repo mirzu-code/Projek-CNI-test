@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Table Status</title>
+  <link rel="stylesheet" href="/src/pages/Admin.css">
+  <script src="/supabase-config.js"></script>
+  <script type="module" src="/js/init-supabase.js"></script>
+</head>
+<body>
+  <h2>Table Status</h2>
+  <div id="tableStatus">Loading...</div>
+  <script type="module">
+    import { supabase } from '/js/init-supabase.js';
+    // Example: fetch bookings - adapt to your schema
+    (async ()=>{
+      const { data, error } = await supabase.from('bookings').select('*').limit(10);
+      document.getElementById('tableStatus').textContent = error ? ('Error: '+error.message) : JSON.stringify(data, null, 2);
+    })();
+  </script>
+</body>
+</html>
