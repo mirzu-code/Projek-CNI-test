@@ -47,7 +47,10 @@ const Admin = () => {
   const [menuForm, setMenuForm] = useState({ id: '', name: '', price: '', cuisine_id: '1', description: '', image: '', is_active: true });
   const [menuError, setMenuError] = useState('');
   const [menuMode, setMenuMode] = useState('add');
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('');
   const [expandedCuisine, setExpandedCuisine] = useState('1');
+  const imageFileInputRef = useRef(null);
 
   const cuisineOptions = [
     { value: '1', label: 'Malay' },
@@ -419,6 +422,9 @@ const Admin = () => {
 
   const handleMenuChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === 'image' && !selectedImageFile) {
+      setImagePreviewUrl(value);
+    }
     setMenuForm((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
@@ -426,12 +432,23 @@ const Admin = () => {
   };
 
   const resetMenuForm = () => {
+    if (imagePreviewUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(imagePreviewUrl);
+    }
     setMenuForm({ id: '', name: '', price: '', cuisine_id: '1', description: '', image: '', is_active: true });
     setMenuMode('add');
     setMenuError('');
+    setSelectedImageFile(null);
+    setImagePreviewUrl('');
+    if (imageFileInputRef.current) {
+      imageFileInputRef.current.value = '';
+    }
   };
 
   const handleEditMenu = (menu) => {
+    if (imagePreviewUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(imagePreviewUrl);
+    }
     setMenuForm({
       id: menu.id,
       name: menu.name || '',
@@ -441,8 +458,30 @@ const Admin = () => {
       image: menu.image || '',
       is_active: menu.is_active !== false
     });
+    setSelectedImageFile(null);
+    setImagePreviewUrl(menu.image || '');
+    if (imageFileInputRef.current) {
+      imageFileInputRef.current.value = '';
+    }
     setMenuMode('edit');
     setMenuError('');
+  };
+
+  const handleImageFileChange = (e) => {
+    const file = e.target.files?.[0] || null;
+    if (!file) {
+      setSelectedImageFile(null);
+      setImagePreviewUrl(menuForm.image || '');
+      return;
+    }
+
+    if (imagePreviewUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(imagePreviewUrl);
+    }
+
+    setSelectedImageFile(file);
+    const previewUrl = URL.createObjectURL(file);
+    setImagePreviewUrl(previewUrl);
   };
 
   const handleMenuSubmit = async (e) => {
@@ -454,12 +493,48 @@ const Admin = () => {
       return;
     }
 
+    let imageUrl = menuForm.image || null;
+
+    if (selectedImageFile) {
+      try {
+        const safeFileName = selectedImageFile.name
+          .replace(/[^a-zA-Z0-9.-_]/g, '_')
+          .toLowerCase();
+        const filePath = `menu-images/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${safeFileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('menu-images')
+          .upload(filePath, selectedImageFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        const { data: publicUrlData, error: publicUrlError } = supabase.storage
+          .from('menu-images')
+          .getPublicUrl(filePath);
+
+        if (publicUrlError) {
+          throw publicUrlError;
+        }
+
+        imageUrl = publicUrlData.publicUrl;
+      } catch (err) {
+        console.warn('Supabase image upload failed:', err.message || err);
+        setMenuError('Gagal memuat naik imej. Sila cuba lagi atau gunakan URL imej.');
+        return;
+      }
+    }
+
     const payload = {
       name: menuForm.name,
       price: parseFloat(menuForm.price) || 0,
       cuisine_id: parseInt(menuForm.cuisine_id, 10),
       description: menuForm.description || null,
-      image: menuForm.image || null,
+      image: imageUrl,
       is_active: menuForm.is_active
     };
 
@@ -1171,6 +1246,22 @@ const Admin = () => {
                   <label>Image URL</label>
                   <input name="image" value={menuForm.image} onChange={handleMenuChange} placeholder="Optional image URL" />
                 </div>
+                <div className="form-group">
+                  <label>Upload image of dish</label>
+                  <input
+                    ref={imageFileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageFileChange}
+                  />
+                  <small className="help-text">Selected file will be uploaded to Supabase storage and used as the menu image.</small>
+                </div>
+                {imagePreviewUrl && (
+                  <div className="menu-image-preview">
+                    <label>Preview</label>
+                    <img src={imagePreviewUrl} alt="Dish preview" />
+                  </div>
+                )}
                 <div className="form-group checkbox-group">
                   <label>
                     <input type="checkbox" name="is_active" checked={menuForm.is_active} onChange={handleMenuChange} />
@@ -1218,6 +1309,13 @@ const Admin = () => {
                             ) : (
                               cuisineMenus.map((menu) => (
                                 <div key={menu.id} className="cuisine-menu-item">
+                                  <div className="menu-item-thumb">
+                                    {menu.image ? (
+                                      <img src={menu.image} alt={menu.name} />
+                                    ) : (
+                                      <div className="menu-item-thumb-placeholder">No image</div>
+                                    )}
+                                  </div>
                                   <div className="menu-item-info">
                                     <div>
                                       <h5>{menu.name}</h5>
