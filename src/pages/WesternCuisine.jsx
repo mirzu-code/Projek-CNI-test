@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import './WesternCuisine.css';
+import { useEffect } from 'react';
 
 const WesternCuisine = () => {
   const dishesInfo = [

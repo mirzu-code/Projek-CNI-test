@@ -1,0 +1,293 @@
+.about-page {
+  width: 100%;
+}
+
+/* About Hero */
+.about-hero {
+  position: relative;
+  height: 50vh;
+  min-height: 350px;
+  background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.about-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 1;
+}
+
+.about-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.about-hero-content h1 {
+  font-size: 3.5rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+/* Story Section */
+.about-story-section {
+  padding: 5rem 0;
+  background-color: var(--bg-card);
+}
+
+.about-story-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .about-story-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+.about-story-text h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.about-story-text p {
+  font-size: 1.05rem;
+  color: var(--text-light);
+  line-height: 1.7;
+  margin-bottom: 1.2rem;
+}
+
+.about-story-media {
+  display: flex;
+  justify-content: center;
+}
+
+.about-img {
+  width: 100%;
+  max-width: 450px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
+}
+
+/* SDG Metrics Section */
+.about-sdg-metrics-section {
+  padding: 5rem 0;
+  background-color: var(--bg-color);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.metrics-header {
+  max-width: 800px;
+  margin: 0 auto 3.5rem auto;
+}
+
+.sdg-badge {
+  display: inline-block;
+  background-color: rgba(212, 175, 55, 0.12);
+  color: var(--primary-color);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+.metrics-header h2 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+}
+
+.metrics-header p {
+  font-size: 1.05rem;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.metrics-progress-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.metric-progress-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.metric-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.metric-percentage {
+  color: var(--primary-color);
+  font-weight: 800;
+}
+
+.progress-bar-track {
+  height: 8px;
+  background-color: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+  border-radius: 4px;
+  animation: loadBar 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes loadBar {
+  from { width: 0%; }
+}
+
+.metric-desc-text {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  line-height: 1.4;
+}
+
+/* Chefs Section */
+.about-chefs-section {
+  padding: 5rem 0;
+  background-color: var(--bg-card);
+}
+
+.section-title {
+  font-size: 2.4rem;
+  margin-bottom: 3.5rem;
+}
+
+.chefs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 3rem;
+}
+
+@media (max-width: 500px) {
+  .chefs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chef-profile-card {
+  display: flex;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.chef-profile-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(26, 71, 42, 0.15);
+}
+
+.chef-image-container {
+  width: 150px;
+  min-width: 150px;
+}
+
+.chef-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chef-info-box {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chef-info-box h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0;
+  font-weight: 700;
+}
+
+.chef-role-badge {
+  display: inline-block;
+  background-color: rgba(212, 175, 55, 0.1);
+  color: #c49a15;
+  padding: 0.15rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.chef-info-box p {
+  font-size: 0.88rem;
+  color: var(--text-light);
+  line-height: 1.5;
+  margin-top: 0.3rem;
+}
+
+/* Call to Action Footer block */
+.about-cta-footer {
+  background: linear-gradient(rgba(26, 71, 42, 0.95), rgba(26, 71, 42, 0.95)),
+              url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
+  padding: 5rem 0;
+  color: white;
+  text-align: center;
+}
+
+.about-cta-footer h2 {
+  font-size: 2.4rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.about-cta-footer p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+}
+
+@media (max-width: 600px) {
+  .about-hero-content h1 {
+    font-size: 2.2rem;
+  }
+  .chef-profile-card {
+    flex-direction: column;
+  }
+  .chef-image-container {
+    width: 100%;
+    height: 200px;
+  }
+}

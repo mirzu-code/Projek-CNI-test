@@ -1,158 +1,137 @@
-.home {
-  width: 100%;
+.home-page {
+  color: #1c2f28;
 }
 
-.active-booking-banner {
-  background-color: #e6f4ea;
-  color: var(--primary-color);
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.banner-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  font-size: 0.9rem;
-}
-
-.banner-icon {
-  font-size: 1.5rem;
-}
-
-.banner-content .btn-outline {
-  padding: 0.3rem 0.8rem;
-  font-size: 0.8rem;
-  background-color: white;
-}
-
-.hero {
+.hero-section {
   position: relative;
   height: 80vh;
   min-height: 600px;
-  background-image: url('/assets/admin/hero-home.jpg');
+  background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1920&q=80');
   background-size: cover;
   background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  color: white;
+  padding: 0 1rem;
 }
 
 .hero-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(6, 25, 16, 0.55);
 }
 
-.hero-content {
+.hero-copy {
   position: relative;
   z-index: 1;
-  max-width: 800px;
-  padding: 0 20px;
+  max-width: 860px;
+  text-align: center;
+  color: #f9f4ef;
+  padding: 3rem 2rem;
 }
 
 .subtitle {
-  font-family: var(--font-body);
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  font-size: 0.9rem;
-  color: var(--accent-color);
-  display: block;
+  color: #d4af37;
+}
+
+.hero-copy h1 {
+  font-size: clamp(2.8rem, 5vw, 4.6rem);
+  line-height: 1.05;
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.04em;
+}
+
+.hero-copy p {
+  max-width: 680px;
+  margin: 0 auto 2rem auto;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: rgba(249, 244, 239, 0.94);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.home-highlights {
+  padding: 5rem 1rem;
+  background: #f7f2eb;
+}
+
+.home-intro {
+  max-width: 760px;
+  margin: 0 auto 3rem auto;
+  text-align: center;
+}
+
+.home-intro h2 {
+  font-size: clamp(2rem, 3vw, 2.8rem);
   margin-bottom: 1rem;
 }
 
-.hero-content h1 {
-  font-size: 4rem;
-  color: white;
-  line-height: 1.2;
-  margin-bottom: 1.5rem;
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  opacity: 0.9;
-}
-
-.sdg-section {
-  padding: 5rem 0;
-  background-color: var(--bg-card);
-}
-
-.container {
-  width: 90%;
-  max-width: 1200px;
+.home-intro p {
+  max-width: 680px;
   margin: 0 auto;
+  font-size: 1rem;
+  color: #4a4a42;
+  line-height: 1.8;
 }
 
-.sdg-content {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-
-.sdg-text {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.sdg-text h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.sdg-text p {
-  font-size: 1.1rem;
-  color: var(--text-light);
-}
-
-.sdg-features {
+.feature-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .feature-card {
+  background: white;
+  border-radius: 18px;
   padding: 2rem;
-  background: var(--bg-color);
-  border-radius: 8px;
-  text-align: center;
-  transition: var(--transition);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(26, 71, 42, 0.1);
+  box-shadow: 0 20px 50px rgba(12, 35, 23, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--accent-color);
-}
-
-.icon-wrapper {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  transform: translateY(-6px);
+  box-shadow: 0 28px 55px rgba(12, 35, 23, 0.12);
 }
 
 .feature-card h3 {
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-  color: var(--primary-color);
+  margin-bottom: 0.8rem;
+}
+
+.feature-card p {
+  color: #5b5b53;
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .hero-copy {
+    padding: 2rem 1.2rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 600px) {
-  .banner-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.5rem;
+  .hero-copy h1 {
+    font-size: 2.6rem;
   }
-  .hero-content h1 {
-    font-size: 2.5rem;
+
+  .hero-copy p {
+    font-size: 0.98rem;
   }
 }

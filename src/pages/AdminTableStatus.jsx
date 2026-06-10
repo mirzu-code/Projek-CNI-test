@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './Admin.css';
@@ -162,7 +162,7 @@ const AdminTableStatus = () => {
                   <div className="table-availability-status">{status}</div>
                   {booked && (
                     <div className="table-availability-booking">
-                      {booking.id ? `Booking ${booking.id}` : 'Booked'} • {booking.booking_date} {booking.booking_time}
+                      {booking.id ? `Booking ${booking.id}` : 'Booked'} ΓÇó {booking.booking_date} {booking.booking_time}
                     </div>
                   )}
                   {locked && (

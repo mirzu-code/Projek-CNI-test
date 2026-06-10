@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import './About.css';
+﻿import { useEffect } from 'react';
 
 const About = () => {
   const metrics = [
@@ -14,13 +13,13 @@ const About = () => {
       name: 'Chef Kamaruddin Ibrahim',
       role: 'Head Chef & Culinary Director',
       bio: 'Over 25 years of fine dining expertise. Dedicated to preserving ancient Malay techniques while integrating modern presentation.',
-      image: '/assets/admin/chef-1.jpg'
+      image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=400&q=80'
     },
     {
       name: 'Chef Mei Ling Chen',
       role: 'Pastry & Chinese Cuisine Artisan',
       bio: 'Trained in Shanghai and Paris. A master at creating harmonious pastries and delicate traditional Chinese steamed specialities.',
-      image: '/assets/admin/chef-2.jpg'
+      image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=400&q=80'
     }
   ];
 
@@ -53,7 +52,7 @@ const About = () => {
               </p>
             </div>
             <div className="about-story-media">
-              <img src="/assets/admin/hero-about.jpg" alt="Lembayung Glasshouse Interior" className="about-img animate-zoom-in" />
+              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Lembayung Glasshouse Interior" className="about-img animate-zoom-in" />
             </div>
           </div>
         </div>

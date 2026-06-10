@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import './JapaneseCuisine.css';
+import { useEffect } from 'react';
 
 const JapaneseCuisine = () => {
   const dishesInfo = [

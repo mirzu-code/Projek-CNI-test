@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import './ChineseCuisine.css';
 
 const ChineseCuisine = () => {
@@ -8,7 +8,7 @@ const ChineseCuisine = () => {
       name: 'Ginger Onion Steamed Sea Bass',
       price: 'RM 65.00',
       description: 'Pristine fresh sea bass steamed to flaky perfection, topped with julienned young ginger, spring onions, fresh coriander, and drizzled with a premium seasoned hot soy sauce.',
-      tags: ['⭐ Signature', 'Healthy Option', 'Fresh Seafood'],
+      tags: ['Γ¡É Signature', 'Healthy Option', 'Fresh Seafood'],
       ingredients: ['Fresh Sea Bass', 'Young Ginger', 'Spring Onion', 'Shao Hsing Culinary Essence', 'House Seasoned Soy'],
       image: 'https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?auto=format&fit=crop&w=600&q=80'
     },
@@ -16,8 +16,8 @@ const ChineseCuisine = () => {
       value: 'szechuan-tofu',
       name: 'Szechuan Chili Maple Tofu',
       price: 'RM 28.00',
-      description: 'Silken tofu cubes sautéed with a fiery house-crafted Szechuan pepper oil, fermented broad beans paste (doubanjiang), garlic, and a hint of organic maple syrup for a sweet-spicy crunch.',
-      tags: ['🔥 Spicy', '🌱 Vegetarian'],
+      description: 'Silken tofu cubes saut├⌐ed with a fiery house-crafted Szechuan pepper oil, fermented broad beans paste (doubanjiang), garlic, and a hint of organic maple syrup for a sweet-spicy crunch.',
+      tags: ['≡ƒöÑ Spicy', '≡ƒî▒ Vegetarian'],
       ingredients: ['Silken Tofu', 'Szechuan Peppercorns', 'Broad Bean Paste', 'Organic Maple Syrup', 'Woodear Mushrooms'],
       image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'
     },
@@ -44,14 +44,14 @@ const ChineseCuisine = () => {
   return (
     <div className="cuisine-menu-page chinese-theme animate-fade-in">
       <div className="cuisine-container">
-        <Link to="/menu" className="back-link red-hover">← Back to Gastronomy Hub</Link>
+        <Link to="/menu" className="back-link red-hover">ΓåÉ Back to Gastronomy Hub</Link>
       </div>
 
       {/* Hero Section */}
       <section className="cuisine-hero chinese-hero">
         <div className="cuisine-hero-overlay chinese-overlay"></div>
         <div className="cuisine-hero-content text-center">
-          <span className="cuisine-origin gold-text">🇨🇳 Traditional Chinese Heritage</span>
+          <span className="cuisine-origin gold-text">≡ƒç¿≡ƒç│ Traditional Chinese Heritage</span>
           <h1>Yin & Yang Culinary Art</h1>
           <p>Delicate wok breath, steamed freshness, and ancestral spice balances refined for modern diners.</p>
         </div>

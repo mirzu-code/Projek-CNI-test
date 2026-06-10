@@ -1,0 +1,158 @@
+.home {
+  width: 100%;
+}
+
+.active-booking-banner {
+  background-color: #e6f4ea;
+  color: var(--primary-color);
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.banner-icon {
+  font-size: 1.5rem;
+}
+
+.banner-content .btn-outline {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
+  background-color: white;
+}
+
+.hero {
+  position: relative;
+  height: 80vh;
+  min-height: 600px;
+  background-image: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 0.9rem;
+  color: var(--accent-color);
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.hero-content h1 {
+  font-size: 4rem;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.sdg-section {
+  padding: 5rem 0;
+  background-color: var(--bg-card);
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sdg-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.sdg-text {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.sdg-text h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.sdg-text p {
+  font-size: 1.1rem;
+  color: var(--text-light);
+}
+
+.sdg-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  padding: 2rem;
+  background: var(--bg-color);
+  border-radius: 8px;
+  text-align: center;
+  transition: var(--transition);
+  border: 1px solid var(--border-color);
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent-color);
+}
+
+.icon-wrapper {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+@media (max-width: 600px) {
+  .banner-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+}

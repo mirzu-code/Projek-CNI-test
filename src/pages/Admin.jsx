@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { supabase } from '../supabaseClient';
@@ -47,7 +47,10 @@ const Admin = () => {
   const [menuForm, setMenuForm] = useState({ id: '', name: '', price: '', cuisine_id: '1', description: '', image: '', is_active: true });
   const [menuError, setMenuError] = useState('');
   const [menuMode, setMenuMode] = useState('add');
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('');
   const [expandedCuisine, setExpandedCuisine] = useState('1');
+  const imageFileInputRef = useRef(null);
 
   const cuisineOptions = [
     { value: '1', label: 'Malay' },
@@ -419,6 +422,9 @@ const Admin = () => {
 
   const handleMenuChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === 'image' && !selectedImageFile) {
+      setImagePreviewUrl(value);
+    }
     setMenuForm((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
@@ -426,12 +432,23 @@ const Admin = () => {
   };
 
   const resetMenuForm = () => {
+    if (imagePreviewUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(imagePreviewUrl);
+    }
     setMenuForm({ id: '', name: '', price: '', cuisine_id: '1', description: '', image: '', is_active: true });
     setMenuMode('add');
     setMenuError('');
+    setSelectedImageFile(null);
+    setImagePreviewUrl('');
+    if (imageFileInputRef.current) {
+      imageFileInputRef.current.value = '';
+    }
   };
 
   const handleEditMenu = (menu) => {
+    if (imagePreviewUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(imagePreviewUrl);
+    }
     setMenuForm({
       id: menu.id,
       name: menu.name || '',
@@ -441,8 +458,30 @@ const Admin = () => {
       image: menu.image || '',
       is_active: menu.is_active !== false
     });
+    setSelectedImageFile(null);
+    setImagePreviewUrl(menu.image || '');
+    if (imageFileInputRef.current) {
+      imageFileInputRef.current.value = '';
+    }
     setMenuMode('edit');
     setMenuError('');
+  };
+
+  const handleImageFileChange = (e) => {
+    const file = e.target.files?.[0] || null;
+    if (!file) {
+      setSelectedImageFile(null);
+      setImagePreviewUrl(menuForm.image || '');
+      return;
+    }
+
+    if (imagePreviewUrl?.startsWith('blob:')) {
+      URL.revokeObjectURL(imagePreviewUrl);
+    }
+
+    setSelectedImageFile(file);
+    const previewUrl = URL.createObjectURL(file);
+    setImagePreviewUrl(previewUrl);
   };
 
   const handleMenuSubmit = async (e) => {
@@ -454,12 +493,48 @@ const Admin = () => {
       return;
     }
 
+    let imageUrl = menuForm.image || null;
+
+    if (selectedImageFile) {
+      try {
+        const safeFileName = selectedImageFile.name
+          .replace(/[^a-zA-Z0-9.-_]/g, '_')
+          .toLowerCase();
+        const filePath = `menu-images/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${safeFileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('menu-images')
+          .upload(filePath, selectedImageFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        const { data: publicUrlData, error: publicUrlError } = supabase.storage
+          .from('menu-images')
+          .getPublicUrl(filePath);
+
+        if (publicUrlError) {
+          throw publicUrlError;
+        }
+
+        imageUrl = publicUrlData.publicUrl;
+      } catch (err) {
+        console.warn('Supabase image upload failed:', err.message || err);
+        setMenuError('Gagal memuat naik imej. Sila cuba lagi atau gunakan URL imej.');
+        return;
+      }
+    }
+
     const payload = {
       name: menuForm.name,
       price: parseFloat(menuForm.price) || 0,
       cuisine_id: parseInt(menuForm.cuisine_id, 10),
       description: menuForm.description || null,
-      image: menuForm.image || null,
+      image: imageUrl,
       is_active: menuForm.is_active
     };
 
@@ -636,7 +711,7 @@ const Admin = () => {
         recordId: lock.id,
         name: lock.locked_by || 'Table Hold',
         date: 'Locked',
-        time: '—',
+        time: 'ΓÇö',
         tableNumber: table?.name || `Table ${lock.table_id}`,
         pax: '-',
         dish: lock.locked_by || 'Admin hold',
@@ -780,7 +855,7 @@ const Admin = () => {
     return (
       <div className="admin-login-wrapper animate-fade-in">
         <div className="admin-login-card">
-          <div className="login-icon">🔒</div>
+          <div className="login-icon">≡ƒöÆ</div>
           <h2>Admin Access</h2>
           <p>Please enter the administrator password</p>
           <form onSubmit={handleLogin}>
@@ -828,7 +903,7 @@ const Admin = () => {
 
       {newBookingAlert && (
         <div className="admin-alert new-booking-alert animate-fade-in">
-          <strong>New booking received:</strong> {newBookingAlert.name} — {newBookingAlert.date} {newBookingAlert.time}
+          <strong>New booking received:</strong> {newBookingAlert.name} ΓÇö {newBookingAlert.date} {newBookingAlert.time}
           <button className="btn-sm btn-outline" onClick={() => setNewBookingAlert(null)} style={{ marginLeft: '1rem' }}>
             Dismiss
           </button>
@@ -913,7 +988,7 @@ const Admin = () => {
                     <div className="table-availability-status">{status}</div>
                     {booked && booking && (
                       <div className="table-availability-booking">
-                        <strong>{booking.id}</strong> • {booking.date} {booking.time}
+                        <strong>{booking.id}</strong> ΓÇó {booking.date} {booking.time}
                       </div>
                     )}
                     {isLocked && lock.locked_by && (
@@ -1036,14 +1111,14 @@ const Admin = () => {
         <div className="scanner-section-container animate-fade-in" style={{ display: activeSection === 'scanner' ? 'block' : 'none' }}>
           <div className="scanner-card">
             <div className="scanner-header-row">
-              <h3>🚪 Traditional Malay Glasshouse Entrance QR Scanner</h3>
+              <h3>≡ƒÜ¬ Traditional Malay Glasshouse Entrance QR Scanner</h3>
               <div className="scanner-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <button 
                   className={`btn-sm ${isCameraActive ? 'btn-danger' : 'btn-success'}`}
                   onClick={() => setIsCameraActive(!isCameraActive)}
                   style={{ whiteSpace: 'nowrap' }}
                 >
-                  {isCameraActive ? '🛑 Stop Camera' : '🎥 Start Live Camera'}
+                  {isCameraActive ? '≡ƒ¢æ Stop Camera' : '≡ƒÄÑ Start Live Camera'}
                 </button>
                 <span className="scanner-tag">SDG 9 DIGITAL CHECK-IN</span>
               </div>
@@ -1066,7 +1141,7 @@ const Admin = () => {
                   <div className="scanner-laser-line"></div>
                   
                   <div className="viewport-info text-center">
-                    <div className="gate-icon">{isScanning ? '🔄' : scannerError ? '❌' : scannerSuccessRes ? '✅' : '📷'}</div>
+                    <div className="gate-icon">{isScanning ? '≡ƒöä' : scannerError ? 'Γ¥î' : scannerSuccessRes ? 'Γ£à' : '≡ƒô╖'}</div>
                     <div className="flashing-scanner-status">
                       {isScanning ? 'VERIFYING CODE...' : scannerError ? 'ACCESS DENIED' : scannerSuccessRes ? 'ACCESS GRANTED' : 'SCANNER ACTIVE'}
                     </div>
@@ -1075,7 +1150,7 @@ const Admin = () => {
                     {scannerSuccessRes && (
                       <div className="viewport-result-card animate-zoom-in">
                         <strong>{scannerSuccessRes.name}</strong>
-                        <span>{scannerSuccessRes.pax} pax • {scannerSuccessRes.dish ? scannerSuccessRes.dish.replace('-', ' ') : 'Table Only'}</span>
+                        <span>{scannerSuccessRes.pax} pax ΓÇó {scannerSuccessRes.dish ? scannerSuccessRes.dish.replace('-', ' ') : 'Table Only'}</span>
                       </div>
                     )}
                   </div>
@@ -1127,7 +1202,7 @@ const Admin = () => {
                 
                 {scannerSuccessRes && (
                   <div className="scanner-success-feedback animate-fade-in mt-3">
-                    🔊 <strong>Check-in Registered:</strong> A welcome chime was played. Guest table for {scannerSuccessRes.name} is ready for seating.
+                    ≡ƒöè <strong>Check-in Registered:</strong> A welcome chime was played. Guest table for {scannerSuccessRes.name} is ready for seating.
                   </div>
                 )}
               </div>
@@ -1171,6 +1246,22 @@ const Admin = () => {
                   <label>Image URL</label>
                   <input name="image" value={menuForm.image} onChange={handleMenuChange} placeholder="Optional image URL" />
                 </div>
+                <div className="form-group">
+                  <label>Upload image of dish</label>
+                  <input
+                    ref={imageFileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageFileChange}
+                  />
+                  <small className="help-text">Selected file will be uploaded to Supabase storage and used as the menu image.</small>
+                </div>
+                {imagePreviewUrl && (
+                  <div className="menu-image-preview">
+                    <label>Preview</label>
+                    <img src={imagePreviewUrl} alt="Dish preview" />
+                  </div>
+                )}
                 <div className="form-group checkbox-group">
                   <label>
                     <input type="checkbox" name="is_active" checked={menuForm.is_active} onChange={handleMenuChange} />
@@ -1208,7 +1299,7 @@ const Admin = () => {
                             <strong>{option.label}</strong>
                             <span className="cuisine-group-count">{cuisineMenus.length} item(s)</span>
                           </div>
-                          <span className="toggle-symbol">{isExpanded ? '−' : '+'}</span>
+                          <span className="toggle-symbol">{isExpanded ? 'ΓêÆ' : '+'}</span>
                         </button>
 
                         {isExpanded && (
@@ -1218,6 +1309,13 @@ const Admin = () => {
                             ) : (
                               cuisineMenus.map((menu) => (
                                 <div key={menu.id} className="cuisine-menu-item">
+                                  <div className="menu-item-thumb">
+                                    {menu.image ? (
+                                      <img src={menu.image} alt={menu.name} />
+                                    ) : (
+                                      <div className="menu-item-thumb-placeholder">No image</div>
+                                    )}
+                                  </div>
                                   <div className="menu-item-info">
                                     <div>
                                       <h5>{menu.name}</h5>
@@ -1303,7 +1401,7 @@ const Admin = () => {
                   <td><strong>{res.id}</strong></td>
                   <td>{res.name}</td>
                   <td>{res.date} <br/> <span className="time-badge">{res.time}</span></td>
-                  <td>{res.tableNumber || <span className="text-muted">—</span>}</td>
+                  <td>{res.tableNumber || <span className="text-muted">ΓÇö</span>}</td>
                   <td>{res.pax}</td>
                   <td className="reservation-qr-cell">
                     {qrUrl ? (

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './MyBooking.css';
@@ -195,7 +195,7 @@ const MyBooking = () => {
     return (
       <div className="my-booking-page animate-fade-in">
         <div className="no-booking">
-          <div className="icon">📭</div>
+          <div className="icon">≡ƒô¡</div>
           <h2>No Active Booking Found</h2>
           <p>Either your booking is not stored locally, or you're using a different device/browser.</p>
           <p>Search by your phone number to load the reservation from the cloud database.</p>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { supabase } from '../supabaseClient'; // Pastikan path ni betul
 import { useNavigate } from 'react-router-dom';
 import './Admin.css';
@@ -80,7 +80,7 @@ function AdminLogin() {
   return (
     <div className="admin-login-wrapper animate-fade-in">
       <div className="admin-login-card">
-        <div className="login-icon">🔒</div>
+        <div className="login-icon">≡ƒöÆ</div>
         <form onSubmit={handleSubmit}>
           <h2>Log Masuk Admin</h2>
           <p className="text-muted">Masukkan Admin ID atau email serta kata laluan anda</p>
