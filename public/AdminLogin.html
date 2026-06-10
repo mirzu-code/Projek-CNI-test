@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="/css/Admin.css">
+  <script src="/supabase-config.js"></script>
+  <script type="module" src="/js/init-supabase.js"></script>
+</head>
+<body>
+  <div class="admin-login">
+    <h2>Admin Login</h2>
+    <form id="adminLoginForm">
+      <label>Username<input name="user" /></label>
+      <label>Password<input type="password" name="pass" /></label>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+  <script>
+    // Minimal placeholder — implement Supabase auth if needed
+    document.getElementById('adminLoginForm').addEventListener('submit', e=>{e.preventDefault();alert('Implement admin auth');});
+  </script>
+</body>
+</html>
