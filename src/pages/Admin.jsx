@@ -761,7 +761,6 @@ const Admin = () => {
     try {
       const payload = {
         table_id: table.id,
-        table_number: table.name,
         table_capacity: table.seats
       };
 

@@ -338,7 +338,7 @@ const BookingFlow = () => {
               <h3>Pilih jenis cuisine</h3>
               <p className="step-subtitle">Pilih cuisine, kemudian lihat menu apa yang ada untuk tempahan dan preorder.</p>
               <p className="step-subtitle" style={{ marginTop: '0.4rem', fontWeight: 600 }}>
-                Mengikut SDG 9: Industri, inovasi dan infrastruktur lestari.
+                Pilih waktu dan hidangan yang sesuai untuk tempahan anda.
               </p>
               <div className="cuisine-select-grid">
                 {cuisineOptions.map((cuisine) => (
@@ -402,16 +402,9 @@ const BookingFlow = () => {
                       Termasuk sekali dengan pilihan sampingan: <strong>{getIncludedSide()}</strong>
                     </div>
                   )}
-                  {calculateWasteSurcharge() > 0 ? (
-                    <div className="selected-dish-summary" style={{ marginTop: '0.75rem', color: '#c53030' }}>
-                      Amaran SDG 9: Pesanan mencecah pembaziran.
-                      Caj RM10 setiap 100g akan dikenakan jika pembaziran berlaku.
-                    </div>
-                  ) : (
-                    <div className="selected-dish-summary" style={{ marginTop: '0.75rem', color: '#2f855a' }}>
-                      Baik: Pesanan anda sejajar dengan keperluan SDG 9.
-                    </div>
-                  )}
+                  <div className="selected-dish-summary" style={{ marginTop: '0.75rem', color: '#2f855a' }}>
+                    Pilihan hidangan anda telah direkodkan. Teruskan untuk memilih meja.
+                  </div>
                   <div className="selected-dish-summary" style={{ marginTop: '0.75rem', fontWeight: 700 }}>
                     Jumlah Harga: <strong>RM {calculateTotal().toFixed(2)}</strong>
                   </div>
@@ -517,12 +510,8 @@ const BookingFlow = () => {
                   <strong>{calculateTotalWeight()}g</strong>
                 </div>
                 <div className="summary-item">
-                  <span>Amaran SDG 9</span>
-                  <strong>
-                    {calculateWasteSurcharge() > 0
-                      ? 'Potensi caj RM10/100g jika pembaziran berlaku'
-                      : 'Pesanan sejajar dengan SDG 9'}
-                  </strong>
+                  <span>Status Tempahan</span>
+                  <strong>Diproses</strong>
                 </div>
                 <div className="summary-item total-fee">
                   <span>Jumlah Harga</span>

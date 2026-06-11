@@ -43,7 +43,7 @@ const Checkout = () => {
         cuisine_id: booking.preselectCuisine === 'malay' ? 1 : booking.preselectCuisine === 'chinese' ? 2 : booking.preselectCuisine === 'japanese' ? 3 : booking.preselectCuisine === 'western' ? 4 : booking.preselectCuisine === 'indian' ? 5 : null,
         dish: booking.preselectDish || null,
         table_id: booking.tableId || null,
-        table_number: booking.tableNumber || null,
+        table_capacity: booking.tableCapacity || null,
         status: 'Confirmed'
       };
 
