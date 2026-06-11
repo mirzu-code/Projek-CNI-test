@@ -49,16 +49,18 @@ const BookingFlow = () => {
     date: '',
     time: '',
     pax: 2,
-    preselectCuisine: location.state?.preselectCuisine || '',
-    preselectDish: location.state?.preselectDish || ''
+    selectedCuisine: location.state?.preselectCuisine || '',
+    selectedDishes: location.state?.preselectDish ? [location.state.preselectDish] : []
   });
 
   useEffect(() => {
     if (location.state?.preselectCuisine || location.state?.preselectDish) {
       setFormData((prev) => ({
         ...prev,
-        preselectCuisine: location.state.preselectCuisine || prev.preselectCuisine,
-        preselectDish: location.state.preselectDish || prev.preselectDish
+        selectedCuisine: location.state.preselectCuisine || prev.selectedCuisine,
+        selectedDishes: location.state.preselectDish
+          ? [location.state.preselectDish]
+          : prev.selectedDishes
       }));
     }
   }, [location.state]);
@@ -69,21 +71,26 @@ const BookingFlow = () => {
   };
 
   const handleCuisineSelect = (id) => {
-    setFormData((prev) => ({ ...prev, preselectCuisine: id }));
+    setFormData((prev) => ({ ...prev, selectedCuisine: id, selectedDishes: [] }));
   };
 
-  const handleDishSelect = (dish) => {
-    setFormData((prev) => ({ ...prev, preselectDish: dish }));
+  const handleDishToggle = (dishValue) => {
+    setFormData((prev) => {
+      const selectedDishes = prev.selectedDishes.includes(dishValue)
+        ? prev.selectedDishes.filter((selected) => selected !== dishValue)
+        : [...prev.selectedDishes, dishValue];
+      return { ...prev, selectedDishes };
+    });
   };
 
   const validateStep = () => {
     if (step === 1) {
-      if (!formData.preselectCuisine) {
+      if (!formData.selectedCuisine) {
         setError('Sila pilih satu jenis masakan sebelum meneruskan.');
         return false;
       }
-      if (!formData.preselectDish) {
-        setError('Sila pilih satu hidangan untuk pra-pesanan.');
+      if (!formData.selectedDishes.length) {
+        setError('Sila pilih sekurang-kurangnya satu hidangan untuk pra-pesanan.');
         return false;
       }
     }
@@ -158,24 +165,25 @@ const BookingFlow = () => {
                 ))}
               </div>
 
-              {formData.preselectCuisine && (
+              {formData.selectedCuisine && (
                 <div>
                   <div className="selected-dish-summary">
-                    Masakan terpilih: <strong>{formData.preselectCuisine}</strong>
+                    Masakan terpilih: <strong>{formData.selectedCuisine}</strong>
                   </div>
                   <div className="cuisine-dish-list">
-                    {cuisineMenuItems[formData.preselectCuisine]?.map((dish) => (
+                    {cuisineMenuItems[formData.selectedCuisine]?.map((dish) => (
                       <button
                         type="button"
                         key={dish.value}
-                        className={`cuisine-dish-item ${formData.preselectDish === dish.value ? 'selected-dish' : ''}`}
-                        onClick={() => handleDishSelect(dish.value)}
+                        className={`cuisine-dish-item ${formData.selectedDishes.includes(dish.value) ? 'selected-dish' : ''}`}
+                        onClick={() => handleDishToggle(dish.value)}
                       >
                         <span>{dish.name}</span>
                         <strong>{dish.price}</strong>
                       </button>
                     ))}
                   </div>
+                  <p className="step-subtitle">Pilih lebih daripada satu hidangan jika mahu variasi makanan pra-pesanan.</p>
                 </div>
               )}
             </div>
@@ -231,11 +239,18 @@ const BookingFlow = () => {
                 </div>
                 <div className="summary-item">
                   <span>Cuisine</span>
-                  <strong>{formData.preselectCuisine || '-'}</strong>
+                  <strong>{formData.selectedCuisine || '-'}</strong>
                 </div>
                 <div className="summary-item">
                   <span>Dish / Pra-Pesanan</span>
-                  <strong>{formData.preselectDish || 'Tiada'}</strong>
+                  <strong>
+                    {formData.selectedDishes.length
+                      ? formData.selectedDishes
+                          .map((dishValue) => cuisineMenuItems[formData.selectedCuisine]?.find((item) => item.value === dishValue)?.name)
+                          .filter(Boolean)
+                          .join(', ')
+                      : 'Tiada'}
+                  </strong>
                 </div>
               </div>
             </div>
