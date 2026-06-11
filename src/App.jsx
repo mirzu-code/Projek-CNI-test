@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import BackgroundMusic from './components/BackgroundMusic';
 import Home from './pages/Home';
 import BookingFlow from './pages/BookingFlow';
 import Admin from './pages/Admin';
@@ -26,6 +27,7 @@ function App() {
       {showSplash && <SplashScreen onFinished={() => setShowSplash(false)} />}
       <div className="app-container">
         <Navbar />
+        <BackgroundMusic />
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />

@@ -10,6 +10,34 @@ const cuisineOptions = [
   { id: 'indian', label: 'Indian Cuisine', description: 'Clay oven roasts, spice-rich curries and aromatic rice dishes.' }
 ];
 
+const cuisineMenuItems = {
+  malay: [
+    { value: 'masak-lemak', name: 'Daging Salai Masak Lemak', price: 'RM 45.00' },
+    { value: 'ayam-rendang', name: 'Ayam Rendang Lembayung', price: 'RM 38.00' },
+    { value: 'ikan-bakar', name: 'Ikan Bakar Petai', price: 'RM 55.00' }
+  ],
+  chinese: [
+    { value: 'steamed-fish', name: 'Ginger Onion Steamed Sea Bass', price: 'RM 65.00' },
+    { value: 'szechuan-tofu', name: 'Szechuan Chili Maple Tofu', price: 'RM 28.00' },
+    { value: 'chicken-rice', name: 'Hainanese Chicken Rice Platter', price: 'RM 35.00' }
+  ],
+  japanese: [
+    { value: 'wagyu-ramen', name: 'Wagyu Beef Black Garlic Ramen', price: 'RM 75.00' },
+    { value: 'salmon-don', name: 'Truffle Salmon Sashimi Don', price: 'RM 58.00' },
+    { value: 'premium-sushi', name: 'Premium Sushi Platter', price: 'RM 85.00' }
+  ],
+  western: [
+    { value: 'angus-steak', name: 'Black Angus Ribeye Steak', price: 'RM 120.00' },
+    { value: 'salmon', name: 'Pan-Seared Citrus Salmon', price: 'RM 68.00' },
+    { value: 'truffle-pasta', name: 'Truffle Wild Mushroom Fettuccine', price: 'RM 45.00' }
+  ],
+  indian: [
+    { value: 'lamb-biryani', name: 'Aromatic Lamb Shank Biryani', price: 'RM 78.00' },
+    { value: 'butter-chicken', name: 'Tandoori Butter Chicken Masala', price: 'RM 42.00' },
+    { value: 'naan-platter', name: 'Garlic Cheese Naan Platter', price: 'RM 25.00' }
+  ]
+};
+
 const BookingFlow = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -52,6 +80,10 @@ const BookingFlow = () => {
     if (step === 1) {
       if (!formData.preselectCuisine) {
         setError('Sila pilih satu jenis masakan sebelum meneruskan.');
+        return false;
+      }
+      if (!formData.preselectDish) {
+        setError('Sila pilih satu hidangan untuk pra-pesanan.');
         return false;
       }
     }
@@ -125,9 +157,25 @@ const BookingFlow = () => {
                   </div>
                 ))}
               </div>
+
               {formData.preselectCuisine && (
-                <div className="selected-dish-summary">
-                  Masakan terpilih: <strong>{formData.preselectCuisine}</strong>
+                <div>
+                  <div className="selected-dish-summary">
+                    Masakan terpilih: <strong>{formData.preselectCuisine}</strong>
+                  </div>
+                  <div className="cuisine-dish-list">
+                    {cuisineMenuItems[formData.preselectCuisine]?.map((dish) => (
+                      <button
+                        type="button"
+                        key={dish.value}
+                        className={`cuisine-dish-item ${formData.preselectDish === dish.value ? 'selected-dish' : ''}`}
+                        onClick={() => handleDishSelect(dish.value)}
+                      >
+                        <span>{dish.name}</span>
+                        <strong>{dish.price}</strong>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
