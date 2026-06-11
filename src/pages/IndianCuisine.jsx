@@ -8,7 +8,7 @@ const IndianCuisine = () => {
       name: 'Aromatic Lamb Shank Biryani',
       price: 'RM 78.00',
       description: 'Ultra-tender Australian lamb shank, slow-cooked in a sealed clay pot (Dum cooking) with long-grain aged Basmati rice, premium saffron strands, rose water, and a complex bouquet of freshly ground whole spices.',
-      tags: ['Γ¡É Claypot Dum Cooking', 'Saffron Infused', 'Premium Meat'],
+      tags: ['Claypot Dum Cooking', 'Saffron Infused', 'Premium Meat'],
       ingredients: ['Australian Lamb Shank', 'Aged Basmati Rice', 'Kashmiri Saffron', 'Clarified Butter (Ghee)', 'Fried Onions'],
       image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80'
     },
@@ -26,7 +26,7 @@ const IndianCuisine = () => {
       name: 'Paneer Tikka Butter Masala',
       price: 'RM 38.00',
       description: 'House-made fresh cottage cheese blocks (Paneer) skewered with capsicums and onions, charcoal-grilled in our tandoor, and simmered in a mildly sweet, velvety tomato gravy.',
-      tags: ['≡ƒî▒ Vegetarian', 'Housemade Cheese'],
+      tags: ['Vegetarian', 'Housemade Cheese'],
       ingredients: ['Housemade Cottage Cheese', 'Bell Peppers', 'Spiced Masala Gravy', 'Greek Yogurt Marinade', 'Fresh Coriander'],
       image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80'
     },
@@ -44,14 +44,14 @@ const IndianCuisine = () => {
   return (
     <div className="cuisine-menu-page indian-theme animate-fade-in">
       <div className="cuisine-container">
-        <Link to="/menu" className="back-link orange-hover">ΓåÉ Back to Gastronomy Hub</Link>
+        <Link to="/menu" className="back-link orange-hover">← Back to Gastronomy Hub</Link>
       </div>
 
       {/* Hero Section */}
       <section className="cuisine-hero indian-hero">
         <div className="cuisine-hero-overlay indian-overlay"></div>
         <div className="cuisine-hero-content text-center">
-          <span className="cuisine-origin saffron-text">≡ƒì¢ Exotic Indian Spice Heritage</span>
+          <span className="cuisine-origin saffron-text">Exotic Indian Spice Heritage</span>
           <h1>Clay Oven & Curry Treasures</h1>
           <p>Complex hand-blended spices, clay tandoor roasts, and rich slow-dum cookings refined for gourmet dining.</p>
         </div>

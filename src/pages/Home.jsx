@@ -13,25 +13,22 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="home">
-      {/* Active Booking Banner */}
+    <div className="home-page animate-fade-in">
       {activeBooking && (
-        <div className="active-booking-banner animate-fade-in">
-          <div className="container banner-content">
-            <span className="banner-icon">≡ƒÄƒ∩╕Å</span>
+        <div className="active-booking-banner">
+          <div className="home-intro" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
             <div>
-              <strong>You have an active reservation!</strong>
-              <span> {activeBooking.date} at {activeBooking.time}</span>
+              <strong>Anda mempunyai tempahan aktif!</strong>
+              <div>{activeBooking.date} pada {activeBooking.time}</div>
             </div>
-            <Link to="/my-booking" className="btn-outline btn-sm">View Ticket</Link>
+            <Link to="/my-booking" className="btn-outline">Lihat Tiket</Link>
           </div>
         </div>
       )}
 
-      {/* Hero Section */}
-      <section className="hero">
+      <section className="hero-section">
         <div className="hero-overlay"></div>
-        <div className="hero-content animate-fade-in">
+        <div className="hero-copy animate-fade-in">
           <span className="subtitle">Kampung Baru, Kuala Lumpur</span>
           <h1>Experience Authentic Malay Culinary Heritage</h1>
           <p>Strictly by reservation only. Join us in our modern glasshouse surrounded by traditional kampung ambiance.</p>
@@ -45,35 +42,28 @@ const Home = () => {
         </div>
       </section>
 
-      {/* SDG 9 Section */}
-      <section className="sdg-section">
-        <div className="container">
-          <div className="sdg-content">
-            <div className="sdg-text">
-              <h2>Commitment to Sustainable Innovation</h2>
-              <p>
-                At Lembayung, we align with <strong>SDG 9: Industry, Innovation, and Infrastructure</strong>. 
-                Our strict digital booking system is an innovative approach to restaurant management. 
-                By utilizing smart capacity planning and offering meal pre-orders, we build resilient infrastructure that prevents overbooking, optimizes our supply chain, and significantly reduces food waste.
-              </p>
-            </div>
-            <div className="sdg-features">
-              <div className="feature-card">
-                <div className="icon-wrapper">≡ƒîì</div>
-                <h3>Digital Infrastructure</h3>
-                <p>100% paperless reservation and ticketing system for a greener future.</p>
-              </div>
-              <div className="feature-card">
-                <div className="icon-wrapper">≡ƒÆí</div>
-                <h3>Smart Capacity</h3>
-                <p>Advanced slot management ensures a comfortable, uncrowded dining experience.</p>
-              </div>
-              <div className="feature-card">
-                <div className="icon-wrapper">ΓÖ╗∩╕Å</div>
-                <h3>Waste Reduction</h3>
-                <p>Pre-ordering helps us source precisely what is needed, minimizing culinary waste.</p>
-              </div>
-            </div>
+      <section className="home-highlights">
+        <div className="home-intro">
+          <h2>Commitment to Sustainable Innovation</h2>
+          <p>
+            At Lembayung, we align with <strong>SDG 9: Industry, Innovation, and Infrastructure</strong>.
+            Our digital booking system is an innovative approach to restaurant management.
+            By using smart capacity planning and meal pre-orders, we prevent overbooking, optimize our supply chain,
+            and reduce food waste.
+          </p>
+        </div>
+        <div className="feature-grid">
+          <div className="feature-card">
+            <h3>Digital Infrastructure</h3>
+            <p>100% paperless reservation and ticketing system for a greener future.</p>
+          </div>
+          <div className="feature-card">
+            <h3>Smart Capacity</h3>
+            <p>Advanced slot management ensures a comfortable, uncrowded dining experience.</p>
+          </div>
+          <div className="feature-card">
+            <h3>Waste Reduction</h3>
+            <p>Pre-ordering helps us source precisely what is needed, minimizing culinary waste.</p>
           </div>
         </div>
       </section>

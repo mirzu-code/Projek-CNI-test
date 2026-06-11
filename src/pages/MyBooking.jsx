@@ -195,7 +195,7 @@ const MyBooking = () => {
     return (
       <div className="my-booking-page animate-fade-in">
         <div className="no-booking">
-          <div className="icon">≡ƒô¡</div>
+          <div className="icon">🎫</div>
           <h2>No Active Booking Found</h2>
           <p>Either your booking is not stored locally, or you're using a different device/browser.</p>
           <p>Search by your phone number to load the reservation from the cloud database.</p>

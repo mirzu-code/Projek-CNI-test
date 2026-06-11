@@ -37,7 +37,7 @@ const MalayCuisine = () => {
       name: 'Daging Salai Masak Lemak Cili Api',
       price: dbPrices['Daging Salai Masak Lemak Cili Api'] || 'RM 45.00', // <-- Ambil harga DB, kalau tak jumpa guna harga asal
       description: 'Slow-smoked premium beef brisket simmered in a fiery, rich gravy of fresh coconut milk, turmeric, bird\'s eye chilies (cili api), and sliced local starfruit.',
-      tags: ['≡ƒöÑ Spicy', 'Γ¡É Chef Special', 'Sustainably Sourced'],
+      tags: ['Spicy', 'Chef Special', 'Sustainably Sourced'],
       ingredients: ['Smoked Beef Brisket', 'Fresh Turmeric', 'Bird\'s Eye Chilies', 'Coconut Cream', 'Belimbing Buluh'],
       image: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=600&q=80'
     },
@@ -55,7 +55,7 @@ const MalayCuisine = () => {
       name: 'Ikan Bakar Petai',
       price: dbPrices['Ikan Bakar Petai'] || 'RM 55.00', // <-- Ambil harga DB
       description: 'Fresh red snapper wrapped in banana leaf, charcoal-grilled to perfection with a thick marinade of spicy red chili paste, toasted shrimp paste, and fresh petai beans.',
-      tags: ['≡ƒöÑ Spicy', 'Seafood Delight'],
+      tags: ['Spicy', 'Seafood Delight'],
       ingredients: ['Fresh Red Snapper', 'Stink Beans (Petai)', 'Chili Sambal Paste', 'Tamarind Juice', 'Banana Leaf Wrap'],
       image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80'
     },
@@ -74,14 +74,14 @@ const MalayCuisine = () => {
     <div className="cuisine-menu-page malay-theme animate-fade-in">
       {/* Back to Menu Hub */}
       <div className="cuisine-container">
-        <Link to="/menu" className="back-link">ΓåÉ Back to Gastronomy Hub</Link>
+        <Link to="/menu" className="back-link">← Back to Gastronomy Hub</Link>
       </div>
 
       {/* Hero Section */}
       <section className="cuisine-hero">
         <div className="cuisine-hero-overlay"></div>
         <div className="cuisine-hero-content text-center">
-          <span className="cuisine-origin">≡ƒç▓≡ƒç╛ Authentic Malaysian Heritage</span>
+          <span className="cuisine-origin">Authentic Malaysian Heritage</span>
           <h1>Malay Culinary Treasures</h1>
           <p>Reinventing ancestral recipes with modern sustainable innovation in our glasshouse.</p>
         </div>
@@ -144,7 +144,7 @@ const MalayCuisine = () => {
             <p>
               Traditional cooking involves precise, slow preparation. At Lembayung, our digital capacity planning 
               and table reservation pre-ordering system ensures that we purchase from our organic farmers exactly 
-              what is orderedΓÇöreducing raw waste to 0%. Thank you for supporting sustainable innovation!
+              what is ordered — reducing raw waste to 0%. Thank you for supporting sustainable innovation!
             </p>
             <Link to="/book" className="btn-outline light-border">Book Your Table Now</Link>
           </div>

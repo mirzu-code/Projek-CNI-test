@@ -95,7 +95,7 @@ const Menu = () => {
                 <div className="card-actions-wrapper">
                   <Link to={`/menu/${category.id}`} className="explore-menu-btn">
                     <span>Explore Menu</span>
-                    <span className="arrow-icon">ΓåÆ</span>
+                    <span className="arrow-icon">→</span>
                   </Link>
                 </div>
               </div>
