@@ -6,11 +6,11 @@ const ChineseCuisine = () => {
     {
       value: 'steamed-fish',
       name: 'Ginger Onion Steamed Sea Bass',
-      price: 'RM 42.00',
+      price: 'RM 38.00',
       description: 'Pristine fresh sea bass steamed to flaky perfection, topped with julienned young ginger, spring onions, fresh coriander, and drizzled with a premium seasoned hot soy sauce.',
       tags: ['Signature', 'Healthy Option', 'Fresh Seafood'],
       ingredients: ['Fresh Sea Bass', 'Young Ginger', 'Spring Onion', 'Shao Hsing Culinary Essence', 'House Seasoned Soy'],
-      image: 'https://images.unsplash.com/photo-1534604973900-c43ab4c2e0ab?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?steamed+sea+bass'
     },
     {
       value: 'szechuan-tofu',
@@ -19,7 +19,7 @@ const ChineseCuisine = () => {
       description: 'Silken tofu cubes saut├⌐ed with a fiery house-crafted Szechuan pepper oil, fermented broad beans paste (doubanjiang), garlic, and a hint of organic maple syrup for a sweet-spicy crunch.',
       tags: ['Spicy', 'Vegetarian'],
       ingredients: ['Silken Tofu', 'Szechuan Peppercorns', 'Broad Bean Paste', 'Organic Maple Syrup', 'Woodear Mushrooms'],
-      image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?mapo+tofu'
     },
     {
       value: 'chicken-rice',
@@ -28,7 +28,7 @@ const ChineseCuisine = () => {
       description: 'Traditional poached corn-fed chicken, served with aromatic ginger rice, crushed ginger dip, dark soy paste, and red chili lime sambal.',
       tags: ['Ancestral Recipe', 'All-Time Favorite'],
       ingredients: ['Corn-Fed Chicken', 'Fragrant Jasmine Rice', 'Fresh Garlic & Ginger', 'Red Chili & Calamansi', 'Pandan Leaves'],
-      image: 'https://images.unsplash.com/photo-1626202378250-983c25e6f8c1?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?hainanese+chicken+rice'
     },
     {
       value: 'cantonese-noodles',
@@ -37,16 +37,16 @@ const ChineseCuisine = () => {
       description: 'Flat rice noodles wok-seared with silky egg gravy, wild mushrooms, pak choy, and premium shrimp.',
       tags: ['Wok Hei Masterclass', 'Comfort Food'],
       ingredients: ['Flat Rice Noodles (Hor Fun)', 'Fresh Chicken Egg', 'Pak Choy', 'Wild Shiitake Mushrooms', 'Fresh King Shrimps'],
-      image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?wat+tan+hor'
     },
     {
       value: 'kung-pao-prawns',
       name: 'Kung Pao Prawns',
-      price: 'RM 34.00',
+      price: 'RM 32.00',
       description: 'Juicy prawns wok-seared with dried chilli, peanuts, and house black bean soy glaze.',
       tags: ['Spicy', 'Peanut Crunch'],
       ingredients: ['Tiger Prawns', 'Sichuan Pepper', 'Dry Chilli', 'Cashews', 'Black Bean Sauce'],
-      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?kung+pao+shrimp'
     },
     {
       value: 'char-siew-bao',
@@ -55,7 +55,7 @@ const ChineseCuisine = () => {
       description: 'Steamed fluffy bao buns filled with sweet sticky char siew pork and a drizzle of hoisin.',
       tags: ['Dim Sum', 'Snack'],
       ingredients: ['Bao Dough', 'Char Siew Pork', 'Hoisin', 'Sesame Oil', 'Spring Onion'],
-      image: 'https://images.unsplash.com/photo-1562967916-eb82221dfb7d?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?bao+bun'
     },
     {
       value: 'lotus-leaf-chicken',
@@ -64,7 +64,7 @@ const ChineseCuisine = () => {
       description: 'Marinated rice and chicken wrapped in lotus leaf, steamed until fragrant for a warming, easy-to-share meal.',
       tags: ['Comfort Food', 'Aromatic'],
       ingredients: ['Lotus Leaf', 'Chicken Thigh', 'Glutinous Rice', 'Chinese Sausage', 'Mushrooms'],
-      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?lotus+leaf+rice'
     },
     {
       value: 'mala-beef-noodles',
@@ -73,16 +73,16 @@ const ChineseCuisine = () => {
       description: 'Tender slices of beef in a mala broth with noodles, bok choy, and pickled vegetables for a bold, satisfying bowl.',
       tags: ['Spicy', 'Noodle Soup'],
       ingredients: ['Beef Slices', 'Mala Spice', 'Wheat Noodles', 'Bok Choy', 'Pickled Vegetables'],
-      image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?spicy+beef+noodles'
     },
     {
       value: 'black-bean-fish',
       name: 'Steamed Fish with Black Bean Sauce',
-      price: 'RM 48.00',
+      price: 'RM 38.00',
       description: 'Fresh white fish steamed with garlic, fermented black beans, ginger, and scallion oil.',
       tags: ['Healthy', 'Classic'],
       ingredients: ['Fresh White Fish', 'Fermented Black Beans', 'Ginger', 'Scallion', 'Soy Dressing'],
-      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?steamed+fish+black+bean'
     }
   ];
 

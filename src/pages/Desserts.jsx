@@ -10,7 +10,7 @@ const Desserts = () => {
       description: 'Traditional baked cassava cake with a caramelized top, served warm and fragrant.',
       tags: ['Traditional', 'Comfort'],
       ingredients: ['Cassava', 'Eggs', 'Coconut Milk', 'Pandan Essence', 'Palm Sugar'],
-      image: 'https://images.unsplash.com/photo-1589307000252-9b8a115e9a10?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x600/?cassava%20cake'
     },
     {
       value: 'ondeh-ondeh',
@@ -19,7 +19,7 @@ const Desserts = () => {
       description: 'Glutinous rice balls filled with melted gula Melaka and rolled in freshly grated coconut.',
       tags: ['Sweet', 'Bite-sized'],
       ingredients: ['Glutinous Rice', 'Gula Melaka', 'Grated Coconut', 'Pandan', 'Palm Sugar'],
-      image: 'https://images.unsplash.com/photo-1570968915860-33df14bfc01e?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x600/?ondeh%20ondeh'
     },
     {
       value: 'seri-muka',
@@ -28,7 +28,7 @@ const Desserts = () => {
       description: 'Layered pandan custard and glutinous rice with a creamy, fragrant finish.',
       tags: ['Pandan', 'Layered'],
       ingredients: ['Pandan Leaves', 'Coconut Milk', 'Glutinous Rice', 'Eggs', 'Rice Flour'],
-      image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x600/?seri%20muka'
     },
     {
       value: 'kuih-lapis',
@@ -37,7 +37,7 @@ const Desserts = () => {
       description: 'Multi-layered steamed cake featuring vibrant colours and silky pandan aroma.',
       tags: ['Festival', 'Textured'],
       ingredients: ['Rice Flour', 'Coconut Milk', 'Pandan Juice', 'Food Coloring', 'Sugar'],
-      image: 'https://images.unsplash.com/photo-1561043433-aaf687c4cf4a?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x600/?kuih%20lapis'
     },
     {
       value: 'mango-sticky-rice',
@@ -46,7 +46,7 @@ const Desserts = () => {
       description: 'Sweet sticky rice topped with ripe mango slices and rich coconut cream.',
       tags: ['Thai Classic', 'Fruity'],
       ingredients: ['Sticky Rice', 'Mango', 'Coconut Cream', 'Sesame', 'Palm Sugar'],
-      image: 'https://images.unsplash.com/photo-1559847844-5315695a83ce?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x600/?mango%20sticky%20rice'
     },
     {
       value: 'hong-kong-egg-tart',
@@ -55,7 +55,7 @@ const Desserts = () => {
       description: 'Flaky pastry tart with silky smooth egg custard, a beloved Hong Kong bakery favourite.',
       tags: ['Bakery Classic', 'Light'],
       ingredients: ['Pastry Shell', 'Egg Custard', 'Milk', 'Sugar', 'Vanilla'],
-      image: 'https://images.unsplash.com/photo-1527515637461-8bed32f4b3c4?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x600/?egg%20tart'
     },
     {
       value: 'tiramisu-cup',
@@ -64,7 +64,7 @@ const Desserts = () => {
       description: 'Creamy coffee-soaked ladyfingers layered with mascarpone cream and dusted with cocoa.',
       tags: ['Italian', 'Creamy'],
       ingredients: ['Ladyfingers', 'Mascarpone', 'Coffee', 'Cocoa Powder', 'Sugar'],
-      image: 'https://images.unsplash.com/photo-1547945780-94ea50df0b12?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x600/?tiramisu'
     },
     {
       value: 'cendol-gelato',
@@ -73,7 +73,7 @@ const Desserts = () => {
       description: 'Frozen pandan cendol ice cream with gula Melaka swirls and shaved coconut.',
       tags: ['Cold', 'Innovative'],
       ingredients: ['Pandan Gelato', 'Gula Melaka', 'Coconut Cream', 'Shaved Coconut', 'Rice Flour Cendol'],
-      image: 'https://images.unsplash.com/photo-1512058564366-c9e3f3d33d2f?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x600/?cendol'
     },
     {
       value: 'kuih-ketayap',
@@ -82,7 +82,7 @@ const Desserts = () => {
       description: 'Soft pandan pancake roll filled with sweet grated coconut and palm sugar.',
       tags: ['Sweet', 'Handroll'],
       ingredients: ['Pandan Batter', 'Grated Coconut', 'Palm Sugar', 'Salt', 'Rice Flour'],
-      image: 'https://images.unsplash.com/photo-1533777324565-a040eb52fac2?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x600/?kuih%20ketayap'
     },
     {
       value: 'tapai-pulut',
@@ -91,7 +91,7 @@ const Desserts = () => {
       description: 'Fermented glutinous rice with sweet-sour depth, a nostalgic kuih finish.',
       tags: ['Fermented', 'Nostalgic'],
       ingredients: ['Glutinous Rice', 'Ragi Yeast', 'Sugar', 'Coconut Milk', 'Salt'],
-      image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x600/?tapai%20pulut'
     }
   ];
 

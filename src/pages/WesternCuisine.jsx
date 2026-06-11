@@ -5,11 +5,11 @@ const WesternCuisine = () => {
     {
       value: 'angus-steak',
       name: 'Black Angus Ribeye Steak',
-      price: 'RM 58.00',
+      price: 'RM 42.00',
       description: '300g pasture-raised Angus ribeye, charcoal-broiled and served with roasted tomatoes, truffle butter, and peppercorn sauce.',
       tags: ['⭐ Prime Cut', 'Bistro Value', 'Carnivore Choice'],
       ingredients: ['Angus Ribeye', 'Black Pepper', 'Truffle Butter', 'Roasted Tomatoes', 'Flaky Salt'],
-      image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?ribeye+steak'
     },
     {
       value: 'seared-salmon',
@@ -18,43 +18,43 @@ const WesternCuisine = () => {
       description: 'Crispy-skin salmon fillet with herb oil, served on buttery baby potatoes, asparagus, and citrus cream.',
       tags: ['Sustainably Harvested', 'Omega 3 Rich'],
       ingredients: ['Salmon Fillet', 'Baby Potatoes', 'Asparagus', 'Lemon-Dill Butter', 'Olive Oil'],
-      image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?seared+salmon'
     },
     {
       value: 'truffle-pasta',
       name: 'Truffle Wild Mushroom Fettuccine',
-      price: 'RM 45.00',
+      price: 'RM 32.00',
       description: 'Al dente house-crafted egg fettuccine tossed in a rich, velvety cream sauce loaded with sautéed wild porcini and chanterelle mushrooms, freshly grated Pecorino Romano, and organic white truffle oil.',
       tags: ['🌱 Vegetarian', 'Handcrafted Pasta'],
       ingredients: ['Housemade Fettuccine', 'Wild Porcini Mushrooms', 'Pecorino Romano Cheese', 'Organic White Truffle Oil', 'Fresh Chives'],
-      image: 'https://images.unsplash.com/photo-1645112411341-6c4fd023714a?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?truffle+pasta'
     },
     {
       value: 'lembayung-burger',
       name: 'Signature Double Wagyu Burger',
-      price: 'RM 55.00',
+      price: 'RM 42.00',
       description: 'Two 120g premium custom-ground Wagyu beef patties, flame-grilled and layered with melted aged sharp Cheddar, smoked truffle mayo, crispy onion rings, and housed inside toasted sweet brioche buns. Served with hand-cut gold fries.',
       tags: ['⭐ Chef Special', 'Gourmet Burger'],
       ingredients: ['Custom Wagyu Patties', 'Aged Cheddar Cheese', 'Brioche Buns', 'Smoked Truffle Mayonnaise', 'Gold Idaho Potatoes'],
-      image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?wagyu+burger'
     },
     {
       value: 'beef-wellington',
       name: 'Classic Beef Wellington',
-      price: 'RM 45.00',
+      price: 'RM 38.00',
       description: 'Tender beef fillet wrapped in mushroom duxelles and golden pastry, served with Madeira jus.',
       tags: ['Fine Dining', 'Signature'],
       ingredients: ['Beef Fillet', 'Puff Pastry', 'Duxelles', 'Madeira Jus', 'Truffle Mash'],
-      image: 'https://images.unsplash.com/photo-1532634726-8b9fb99825a0?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?beef+wellington'
     },
     {
       value: 'lamb-rack',
       name: 'Herb-Crusted Lamb Rack',
-      price: 'RM 48.00',
+      price: 'RM 42.00',
       description: 'Juicy lamb rack with rosemary-parsley crust, served with confit carrots and minted pea purée.',
       tags: ['Premium', 'Roasted'],
       ingredients: ['Lamb Rack', 'Rosemary', 'Minted Peas', 'Confit Carrots', 'Herb Crust'],
-      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?lamb+rack'
     },
     {
       value: 'mushroom-risotto',
@@ -63,7 +63,7 @@ const WesternCuisine = () => {
       description: 'Creamy arborio risotto with sautéed wild mushrooms, Parmesan, and a splash of white wine.',
       tags: ['Vegetarian', 'Comfort'],
       ingredients: ['Arborio Rice', 'Wild Mushrooms', 'Parmesan', 'White Wine', 'Fresh Thyme'],
-      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?mushroom+risotto'
     },
     {
       value: 'chicken-piccata',
@@ -72,7 +72,7 @@ const WesternCuisine = () => {
       description: 'Pan-fried chicken breast in a light lemon caper sauce, served with mashed potato and seasonal greens.',
       tags: ['Light', 'Classic'],
       ingredients: ['Chicken Breast', 'Capers', 'Lemon', 'Butter', 'Mashed Potato'],
-      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?chicken+piccata'
     },
     {
       value: 'mini-pies',
@@ -81,7 +81,7 @@ const WesternCuisine = () => {
       description: 'Individual golden pastry pies filled with slow-braised beef and rich ale gravy.',
       tags: ['Comfort', 'Shareable'],
       ingredients: ['Beef Brisket', 'Mushroom', 'Ale Gravy', 'Flaky Pastry', 'Thyme'],
-      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?steak+pie'
     }
   ];
 

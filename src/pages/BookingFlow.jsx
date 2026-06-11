@@ -23,61 +23,71 @@ const cuisineOptions = [
 
 const cuisineMenuItems = {
   malay: [
-    { value: 'daging-salai-masak-lemak', name: 'Daging Salai Masak Lemak', price: 'RM 32.00' },
-    { value: 'ayam-rendang-lembayung', name: 'Ayam Rendang Lembayung', price: 'RM 28.00' },
-    { value: 'ikan-bakar-petai', name: 'Ikan Bakar Petai', price: 'RM 36.00' },
-    { value: 'sotong-masak-hitam', name: 'Sotong Masak Hitam', price: 'RM 26.00' },
-    { value: 'udang-tempoyak', name: 'Udang Masak Tempoyak', price: 'RM 30.00' },
-    { value: 'nasi-kerabu-kampung', name: 'Nasi Kerabu Kampung', price: 'RM 24.00' },
-    { value: 'tauhu-telor-gulung', name: 'Tauhu Telur Gulung', price: 'RM 18.00' }
+    { value: 'daging-salai-masak-lemak', name: 'Daging Salai Masak Lemak', price: 'RM 29.00', weight: 320 },
+    { value: 'ayam-rendang-lembayung', name: 'Ayam Rendang Lembayung', price: 'RM 26.00', weight: 300 },
+    { value: 'ikan-bakar-petai', name: 'Ikan Bakar Petai', price: 'RM 30.00', weight: 320 },
+    { value: 'sotong-masak-hitam', name: 'Sotong Masak Hitam', price: 'RM 24.00', weight: 300 },
+    { value: 'udang-tempoyak', name: 'Udang Masak Tempoyak', price: 'RM 28.00', weight: 310 },
+    { value: 'nasi-lemak', name: 'Nasi Lemak Lembayung', price: 'RM 22.00', weight: 320 },
+    { value: 'nasi-kerabu-kampung', name: 'Nasi Kerabu Kampung', price: 'RM 25.00', weight: 300 },
+    { value: 'tauhu-telor-gulung', name: 'Tauhu Telur Gulung', price: 'RM 16.00', weight: 220 }
   ],
   chinese: [
-    { value: 'steamed-sea-bass', name: 'Ginger Onion Steamed Sea Bass', price: 'RM 42.00' },
-    { value: 'szechuan-chili-tofu', name: 'Szechuan Chili Maple Tofu', price: 'RM 22.00' },
-    { value: 'hainanese-chicken-rice', name: 'Hainanese Chicken Rice Platter', price: 'RM 26.00' },
-    { value: 'char-siew-noodles', name: 'Char Siew Noodles', price: 'RM 24.00' },
-    { value: 'sesame-crispy-chicken', name: 'Sesame Crispy Chicken', price: 'RM 21.00' },
-    { value: 'lotus-leaf-fried-rice', name: 'Lotus Leaf Fried Rice', price: 'RM 25.00' },
-    { value: 'braised-eggplant-claypot', name: 'Braised Eggplant Claypot', price: 'RM 18.00' },
-    { value: 'kung-pao-prawns', name: 'Kung Pao Prawns', price: 'RM 35.00' }
+    { value: 'steamed-sea-bass', name: 'Ginger Onion Steamed Sea Bass', price: 'RM 42.00', weight: 320 },
+    { value: 'szechuan-chili-tofu', name: 'Szechuan Chili Maple Tofu', price: 'RM 22.00', weight: 220 },
+    { value: 'hainanese-chicken-rice', name: 'Hainanese Chicken Rice Platter', price: 'RM 26.00', weight: 300 },
+    { value: 'char-siew-noodles', name: 'Char Siew Noodles', price: 'RM 24.00', weight: 260 },
+    { value: 'sesame-crispy-chicken', name: 'Sesame Crispy Chicken', price: 'RM 21.00', weight: 240 },
+    { value: 'lotus-leaf-fried-rice', name: 'Lotus Leaf Fried Rice', price: 'RM 25.00', weight: 300 },
+    { value: 'braised-eggplant-claypot', name: 'Braised Eggplant Claypot', price: 'RM 18.00', weight: 220 },
+    { value: 'kung-pao-prawns', name: 'Kung Pao Prawns', price: 'RM 35.00', weight: 300 }
   ],
   japanese: [
-    { value: 'wagyu-black-garlic-ramen', name: 'Wagyu Beef Black Garlic Ramen', price: 'RM 48.00' },
-    { value: 'truffle-salmon-don', name: 'Truffle Salmon Sashimi Don', price: 'RM 36.00' },
-    { value: 'premium-sushi-platter', name: 'Premium Sushi Platter', price: 'RM 38.00' },
-    { value: 'miso-black-cod', name: 'Miso Black Cod', price: 'RM 40.00' },
-    { value: 'tempura-udon', name: 'Tempura Udon', price: 'RM 25.00' },
-    { value: 'yakitori-skewers', name: 'Yakitori Skewer Set', price: 'RM 22.00' },
-    { value: 'chirashi-bowl', name: 'Chirashi Sushi Bowl', price: 'RM 30.00' },
-    { value: 'matcha-anmitsu', name: 'Matcha Anmitsu Dessert Bowl', price: 'RM 18.00' }
+    { value: 'wagyu-black-garlic-ramen', name: 'Wagyu Beef Black Garlic Ramen', price: 'RM 48.00', weight: 380 },
+    { value: 'truffle-salmon-don', name: 'Truffle Salmon Sashimi Don', price: 'RM 36.00', weight: 320 },
+    { value: 'premium-sushi-platter', name: 'Premium Sushi Platter', price: 'RM 38.00', weight: 280 },
+    { value: 'miso-black-cod', name: 'Miso Black Cod', price: 'RM 40.00', weight: 320 },
+    { value: 'tempura-udon', name: 'Tempura Udon', price: 'RM 25.00', weight: 280 },
+    { value: 'yakitori-skewers', name: 'Yakitori Skewer Set', price: 'RM 22.00', weight: 220 },
+    { value: 'chirashi-bowl', name: 'Chirashi Sushi Bowl', price: 'RM 30.00', weight: 320 },
+    { value: 'matcha-anmitsu', name: 'Matcha Anmitsu Dessert Bowl', price: 'RM 18.00', weight: 180 }
   ],
   western: [
-    { value: 'black-angus-ribeye', name: 'Black Angus Ribeye Steak', price: 'RM 58.00' },
-    { value: 'pan-seared-salmon', name: 'Pan-Seared Citrus Salmon', price: 'RM 32.00' },
-    { value: 'truffle-fettuccine', name: 'Truffle Wild Mushroom Fettuccine', price: 'RM 28.00' },
-    { value: 'herb-crusted-lamb-chop', name: 'Herb-Crusted Lamb Chop', price: 'RM 34.00' },
-    { value: 'seafood-risotto', name: 'Seafood Risotto', price: 'RM 26.00' },
-    { value: 'chicken-cordon-bleu', name: 'Chicken Cordon Bleu', price: 'RM 24.00' },
-    { value: 'beef-wellington-bites', name: 'Beef Wellington Bites', price: 'RM 30.00' }
+    { value: 'black-angus-ribeye', name: 'Black Angus Ribeye Steak', price: 'RM 58.00', weight: 420 },
+    { value: 'pan-seared-salmon', name: 'Pan-Seared Citrus Salmon', price: 'RM 32.00', weight: 320 },
+    { value: 'truffle-fettuccine', name: 'Truffle Wild Mushroom Fettuccine', price: 'RM 28.00', weight: 300 },
+    { value: 'herb-crusted-lamb-chop', name: 'Herb-Crusted Lamb Chop', price: 'RM 34.00', weight: 320 },
+    { value: 'seafood-risotto', name: 'Seafood Risotto', price: 'RM 26.00', weight: 300 },
+    { value: 'chicken-cordon-bleu', name: 'Chicken Cordon Bleu', price: 'RM 24.00', weight: 260 },
+    { value: 'beef-wellington-bites', name: 'Beef Wellington Bites', price: 'RM 30.00', weight: 300 }
   ],
   indian: [
-    { value: 'aromatic-lamb-biryani', name: 'Aromatic Lamb Shank Biryani', price: 'RM 42.00' },
-    { value: 'butter-chicken-masala', name: 'Tandoori Butter Chicken Masala', price: 'RM 29.00' },
-    { value: 'paneer-tikka-masala', name: 'Paneer Tikka Masala', price: 'RM 28.00' },
-    { value: 'lamb-rogan-josh', name: 'Lamb Rogan Josh', price: 'RM 34.00' },
-    { value: 'mutton-seekh-kebab', name: 'Mutton Seekh Kebab', price: 'RM 25.00' },
-    { value: 'dal-makhani', name: 'Dal Makhani', price: 'RM 22.00' },
-    { value: 'garlic-cheese-naan', name: 'Garlic Cheese Naan Platter', price: 'RM 18.00' }
+    { value: 'aromatic-lamb-biryani', name: 'Aromatic Lamb Shank Biryani', price: 'RM 42.00', weight: 380 },
+    { value: 'butter-chicken-masala', name: 'Tandoori Butter Chicken Masala', price: 'RM 29.00', weight: 280 },
+    { value: 'paneer-tikka-masala', name: 'Paneer Tikka Masala', price: 'RM 28.00', weight: 260 },
+    { value: 'lamb-rogan-josh', name: 'Lamb Rogan Josh', price: 'RM 34.00', weight: 300 },
+    { value: 'mutton-seekh-kebab', name: 'Mutton Seekh Kebab', price: 'RM 25.00', weight: 240 },
+    { value: 'dal-makhani', name: 'Dal Makhani', price: 'RM 22.00', weight: 220 },
+    { value: 'garlic-cheese-naan', name: 'Garlic Cheese Naan Platter', price: 'RM 18.00', weight: 180 }
   ],
   dessert: [
-    { value: 'kuih-bingka-ubi', name: 'Kuih Bingka Ubi', price: 'RM 12.00' },
-    { value: 'ondeh-ondeh', name: 'Ondeh-Ondeh', price: 'RM 14.00' },
-    { value: 'seri-muka', name: 'Seri Muka', price: 'RM 13.00' },
-    { value: 'kuih-lapis', name: 'Kuih Lapis', price: 'RM 15.00' },
-    { value: 'cendol-gelato', name: 'Cendol Gelato', price: 'RM 16.00' },
-    { value: 'kuih-ketayap', name: 'Kuih Ketayap', price: 'RM 14.00' },
-    { value: 'tapai-pulut', name: 'Tapai Pulut', price: 'RM 13.00' }
+    { value: 'kuih-bingka-ubi', name: 'Kuih Bingka Ubi', price: 'RM 12.00', weight: 140 },
+    { value: 'ondeh-ondeh', name: 'Ondeh-Ondeh', price: 'RM 14.00', weight: 120 },
+    { value: 'seri-muka', name: 'Seri Muka', price: 'RM 13.00', weight: 140 },
+    { value: 'kuih-lapis', name: 'Kuih Lapis', price: 'RM 15.00', weight: 140 },
+    { value: 'cendol-gelato', name: 'Cendol Gelato', price: 'RM 16.00', weight: 160 },
+    { value: 'kuih-ketayap', name: 'Kuih Ketayap', price: 'RM 14.00', weight: 140 },
+    { value: 'tapai-pulut', name: 'Tapai Pulut', price: 'RM 13.00', weight: 130 }
   ]
+};
+
+const riceDishesByCuisine = {
+  malay: ['nasi-kerabu-kampung', 'nasi-lemak'],
+  chinese: ['hainanese-chicken-rice', 'lotus-leaf-fried-rice', 'char-siew-noodles', 'mala-beef-noodles'],
+  japanese: ['truffle-salmon-don', 'chirashi-bowl', 'salmon-mentaiko-bowl', 'yaki-onigiri'],
+  indian: ['aromatic-lamb-biryani', 'garlic-cheese-naan'],
+  western: ['seafood-risotto', 'truffle-fettuccine'],
+  dessert: []
 };
 
 const timeSlots = (() => {
@@ -177,16 +187,24 @@ const BookingFlow = () => {
   const getDishesForCuisine = (cuisineKey) => {
     const cuisineId = cuisineIdMap[cuisineKey];
     const adminDishes = menuItems.filter((item) => Number(item.cuisine_id) === cuisineId && item.is_active !== false);
-    if (adminDishes.length > 0) {
-      return adminDishes.map((item) => ({
-        value: String(item.id),
-        name: item.name || 'Menu tidak bernama',
-        price: typeof item.price === 'number' ? `RM ${item.price.toFixed(2)}` : item.price || 'RM 0.00',
-        description: item.description || '',
-        weight: item.weight ?? 250
-      }));
+    const defaultDishes = cuisineMenuItems[cuisineKey] || [];
+
+    const formattedAdminDishes = adminDishes.map((item) => ({
+      value: String(item.id),
+      name: item.name || 'Menu tidak bernama',
+      price: typeof item.price === 'number' ? `RM ${item.price.toFixed(2)}` : item.price || 'RM 0.00',
+      description: item.description || '',
+      weight: item.weight ?? 250
+    }));
+
+    if (formattedAdminDishes.length > 0) {
+      const merged = new Map();
+      defaultDishes.forEach((dish) => merged.set(dish.name, dish));
+      formattedAdminDishes.forEach((dish) => merged.set(dish.name, dish));
+      return Array.from(merged.values());
     }
-    return cuisineMenuItems[cuisineKey] || [];
+
+    return defaultDishes;
   };
 
   const findDishName = (dishValue) => {
@@ -214,15 +232,27 @@ const BookingFlow = () => {
   };
 
   const getIncludedSide = () => {
-    const sideMap = {
-      malay: 'Nasi Putih',
-      chinese: 'Steamed Jasmine Rice',
-      japanese: 'Gohan Rice',
-      western: 'Garlic Mash Potatoes',
-      indian: 'Basmati Rice & Naan',
-      dessert: 'Assorted Kuih selections'
-    };
-    return sideMap[formData.activeCuisine] || '';
+    const selectedValues = formData.selectedDishes.map(String);
+    const hasRiceOrStapleDish = selectedValues.some((dishValue) =>
+      riceDishesByCuisine[formData.activeCuisine]?.includes(dishValue)
+    );
+
+    switch (formData.activeCuisine) {
+      case 'malay':
+        return hasRiceOrStapleDish ? '' : 'Nasi Putih';
+      case 'chinese':
+        return hasRiceOrStapleDish ? '' : 'Steamed Jasmine Rice';
+      case 'japanese':
+        return hasRiceOrStapleDish ? '' : '';
+      case 'western':
+        return 'Garlic Mash Potatoes';
+      case 'indian':
+        return hasRiceOrStapleDish ? '' : 'Basmati Rice & Naan';
+      case 'dessert':
+        return '';
+      default:
+        return '';
+    }
   };
 
   const getDishWeight = (dish) => dish.weight ?? 250;

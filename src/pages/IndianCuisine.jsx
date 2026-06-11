@@ -6,11 +6,11 @@ const IndianCuisine = () => {
     {
       value: 'lamb-biryani',
       name: 'Aromatic Lamb Shank Biryani',
-      price: 'RM 42.00',
+      price: 'RM 36.00',
       description: 'Ultra-tender lamb shank slow-cooked with basmati rice, saffron, rose water, and fragrant whole spices.',
       tags: ['Claypot Dum Cooking', 'Saffron Infused', 'Premium Meat'],
       ingredients: ['Lamb Shank', 'Basmati Rice', 'Kashmiri Saffron', 'Ghee', 'Fried Onions'],
-      image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?lamb+biryani'
     },
     {
       value: 'butter-chicken',
@@ -19,7 +19,7 @@ const IndianCuisine = () => {
       description: 'Boneless chicken thighs marinated in spiced yogurt, roasted in the tandoor, and simmered in a rich velvety cashew tomato sauce.',
       tags: ['Tandoor Masterpiece', 'Mildly Spiced'],
       ingredients: ['Tandoori Chicken', 'Cashew Paste', 'Cream & Butter', 'Tomato Puree', 'Fenugreek Leaves'],
-      image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?butter+chicken'
     },
     {
       value: 'paneer-tikka',
@@ -28,7 +28,7 @@ const IndianCuisine = () => {
       description: 'Fresh paneer skewers with capsicum and onion, grilled in the tandoor and simmered in a silky tomato gravy.',
       tags: ['Vegetarian', 'Housemade Cheese'],
       ingredients: ['Paneer', 'Bell Peppers', 'Masala Gravy', 'Yogurt Marinade', 'Coriander'],
-      image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?paneer+tikka+masala'
     },
     {
       value: 'naan-platter',
@@ -37,7 +37,7 @@ const IndianCuisine = () => {
       description: 'A basket of three fluffy flatbreads stuffed with mozzarella, topped with garlic and ghee.',
       tags: ['Fresh from Tandoor', 'Perfect Accompaniment'],
       ingredients: ['Wheat Flour Dough', 'Garlic', 'Mozzarella Cheese', 'Ghee', 'Mint Chutney'],
-      image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?garlic+naan'
     },
     {
       value: 'chicken-tikka-masala',
@@ -46,7 +46,7 @@ const IndianCuisine = () => {
       description: 'Tandoori chicken pieces simmered in a creamy tomato-cashew gravy with warm spice notes.',
       tags: ['Popular Choice', 'Creamy'],
       ingredients: ['Tandoori Chicken', 'Tomato Cream Gravy', 'Cashew Paste', 'Fenugreek', 'Coriander'],
-      image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?chicken+tikka+masala'
     },
     {
       value: 'vegetable-biryani',
@@ -55,7 +55,7 @@ const IndianCuisine = () => {
       description: 'Aromatic vegetable biryani cooked with saffron, mixed vegetables, and fragrant whole spices.',
       tags: ['Vegetarian', 'Fragrant'],
       ingredients: ['Basmati Rice', 'Mixed Vegetables', 'Saffron', 'Whole Spices', 'Coriander'],
-      image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?vegetable+biryani'
     },
     {
       value: 'lamb-rogan-josh',
@@ -64,16 +64,16 @@ const IndianCuisine = () => {
       description: 'Melt-in-your-mouth lamb simmered in Kashmiri chilli, yogurt, and whole spices.',
       tags: ['Rich', 'Slow-Cooked'],
       ingredients: ['Lamb Shoulder', 'Kashmiri Chilli', 'Yogurt', 'Whole Spices', 'Fresh Coriander'],
-      image: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?rogan+josh'
     },
     {
       value: 'seekh-kebab',
       name: 'Mutton Seekh Kebab',
-      price: 'RM 42.00',
+      price: 'RM 36.00',
       description: 'Spiced minced mutton skewers grilled over live charcoal and served with mint chutney.',
       tags: ['Charcoal Grill', 'Street Classic'],
       ingredients: ['Minced Mutton', 'Coriander', 'Green Chilli', 'Ginger', 'Mint'],
-      image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?seekh+kebab'
     },
     {
       value: 'dal-makhani',
@@ -82,7 +82,7 @@ const IndianCuisine = () => {
       description: 'Slow-cooked black lentils enriched with cream, butter, and a fragrant spice blend.',
       tags: ['Vegetarian', 'Comfort'],
       ingredients: ['Black Lentils', 'Cream', 'Butter', 'Tomato Puree', 'Fenugreek'],
-      image: 'https://images.unsplash.com/photo-1587502537184-0293a12b8da5?auto=format&fit=crop&w=600&q=80'
+      image: 'https://source.unsplash.com/featured/600x400/?dal+makhani'
     }
   ];
 
