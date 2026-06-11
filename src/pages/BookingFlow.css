@@ -92,6 +92,35 @@
   box-shadow: 0 0 0 3px rgba(26, 71, 42, 0.1);
 }
 
+.time-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.7rem;
+}
+
+.time-slot-button {
+  border: 1px solid var(--border-color);
+  background: white;
+  color: var(--text-main);
+  padding: 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.time-slot-button:hover {
+  border-color: var(--primary-color);
+  background: #f7faf7;
+}
+
+.time-slot-button.selected {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
 .help-text {
   display: block;
   margin-top: 0.3rem;

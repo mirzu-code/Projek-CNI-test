@@ -80,6 +80,18 @@ const cuisineMenuItems = {
   ]
 };
 
+const timeSlots = (() => {
+  const slots = [];
+  const start = 15 * 60;
+  const end = 23 * 60 + 30;
+  for (let minutes = start; minutes <= end; minutes += 30) {
+    const hour = Math.floor(minutes / 60);
+    const minute = minutes % 60;
+    slots.push(`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`);
+  }
+  return slots;
+})();
+
 const BookingFlow = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -114,6 +126,10 @@ const BookingFlow = () => {
 
   const handleCuisineSelect = (id) => {
     setFormData((prev) => ({ ...prev, activeCuisine: id }));
+  };
+
+  const handleTimeSelect = (value) => {
+    setFormData((prev) => ({ ...prev, time: value }));
   };
 
   const [menuItems, setMenuItems] = useState([]);
@@ -267,6 +283,10 @@ const BookingFlow = () => {
     if (step === 2) {
       if (!formData.name || !formData.phone || !formData.date || !formData.time || !formData.pax) {
         setError('Sila lengkapkan semua maklumat tempahan untuk meneruskan.');
+        return false;
+      }
+      if (!timeSlots.includes(formData.time)) {
+        setError('Sila pilih slot masa antara 15:00 hingga 23:30.');
         return false;
       }
     }
@@ -435,7 +455,19 @@ const BookingFlow = () => {
               </div>
               <div className="form-group">
                 <label htmlFor="time">Masa</label>
-                <input id="time" type="time" value={formData.time} onChange={handleChange('time')} />
+                <div className="time-slot-grid">
+                  {timeSlots.map((slot) => (
+                    <button
+                      type="button"
+                      key={slot}
+                      className={`time-slot-button ${formData.time === slot ? 'selected' : ''}`}
+                      onClick={() => handleTimeSelect(slot)}
+                    >
+                      {slot}
+                    </button>
+                  ))}
+                </div>
+                <span className="help-text">Slot tempahan dibuka dari 3:00 petang hingga 11:30 malam.</span>
               </div>
               <div className="form-group">
                 <label htmlFor="pax">Jumlah Tetamu</label>
