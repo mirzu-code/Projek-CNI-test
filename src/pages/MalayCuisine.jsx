@@ -1,7 +1,6 @@
 ﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../supabaseClient'; // Pastikan path ini betul ikut projek anda
-import { cuisineDishes } from './BookingFlow';
+import { supabase } from '../supabaseClient';
 import './MalayCuisine.css';
 
 const MalayCuisine = () => {
