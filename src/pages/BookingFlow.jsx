@@ -94,11 +94,42 @@ const BookingFlow = () => {
   };
 
   const findCuisineLabel = (cuisineId) => {
-    return cuisineOptions.find((option) => option.id === cuisineId)?.label || 'Unknown Cuisine';
+    return cuisineOptions.find((option) => option.id === cuisineId)?.label || 'Pelbagai Cuisine';
   };
+
+  const getDishWeight = (dish) => dish.weight ?? 250;
+
+  const parsePrice = (price) => Number(price.replace(/[^0-9.-]+/g, '')) || 0;
+
+  const calculateTotalWeight = () => {
+    return formData.selectedDishes.reduce((sum, dishValue) => {
+      const dish = Object.values(cuisineMenuItems).flat().find((item) => item.value === dishValue);
+      return sum + (dish ? getDishWeight(dish) : 0);
+    }, 0);
+  };
+
+  const calculateWasteSurcharge = () => {
+    const totalWeight = calculateTotalWeight();
+    const recommendedWeight = Math.max(1, formData.pax) * 200;
+    const wasteWeight = Math.max(0, totalWeight - recommendedWeight);
+    return Math.ceil(wasteWeight / 100) * 10;
+  };
+
+  const calculateTotal = () => {
+    return formData.selectedDishes.reduce((sum, dishValue) => {
+      const dish = Object.values(cuisineMenuItems).flat().find((item) => item.value === dishValue);
+      return sum + (dish ? parsePrice(dish.price) : 0);
+    }, 0);
+  };
+
+  const calculateGrandTotal = () => calculateTotal() + calculateWasteSurcharge();
 
   const validateStep = () => {
     if (step === 1) {
+      if (!formData.activeCuisine) {
+        setError('Sila pilih satu jenis cuisine dahulu.');
+        return false;
+      }
       if (!formData.selectedDishes.length) {
         setError('Sila pilih sekurang-kurangnya satu hidangan untuk pra-pesanan.');
         return false;
@@ -156,8 +187,11 @@ const BookingFlow = () => {
         <div className="booking-form-wrapper">
           {step === 1 && (
             <div className="form-step">
-              <h3>Pilih makanan anda</h3>
-              <p className="step-subtitle">Pilih hidangan daripada pelbagai cuisine untuk preorder.</p>
+              <h3>Pilih jenis cuisine</h3>
+              <p className="step-subtitle">Pilih cuisine, kemudian lihat menu apa yang ada untuk tempahan dan preorder.</p>
+              <p className="step-subtitle" style={{ marginTop: '0.4rem', fontWeight: 600 }}>
+                Mengikut SDG 9: Industri, inovasi dan infrastruktur lestari.
+              </p>
               <div className="cuisine-select-grid">
                 {cuisineOptions.map((cuisine) => (
                   <div
@@ -175,39 +209,60 @@ const BookingFlow = () => {
                 ))}
               </div>
 
-              {formData.selectedDishes.length > 0 && (
-                <div className="selected-dish-summary">
-                  Hidangan terpilih:
-                  <div className="selected-dish-tags" style={{ marginTop: '0.75rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    {formData.selectedDishes.map((dishValue) => (
-                      <span key={dishValue} className="dish-selected-tag">
-                        {findDishName(dishValue)}
-                      </span>
+              {formData.activeCuisine ? (
+                <div style={{ marginTop: '1.8rem' }}>
+                  <div className="selected-dish-summary">
+                    Menu untuk <strong>{findCuisineLabel(formData.activeCuisine)}</strong>
+                  </div>
+                  <div className="cuisine-dish-list">
+                    {cuisineMenuItems[formData.activeCuisine]?.map((dish) => (
+                      <button
+                        type="button"
+                        key={dish.value}
+                        className={`cuisine-dish-item ${formData.selectedDishes.includes(dish.value) ? 'selected-dish' : ''}`}
+                        onClick={() => handleDishToggle(dish.value)}
+                      >
+                        <span>{dish.name}</span>
+                        <strong>{dish.price}</strong>
+                      </button>
                     ))}
                   </div>
-                </div>
-              )}
-
-              <div className="cuisine-card-wrap">
-                {Object.entries(cuisineMenuItems).map(([cuisineId, dishes]) => (
-                  <div key={cuisineId} className="cuisine-dish-group">
-                    <h4 style={{ marginBottom: '0.75rem' }}>{findCuisineLabel(cuisineId)}</h4>
-                    <div className="cuisine-dish-list">
-                      {dishes.map((dish) => (
-                        <button
-                          type="button"
-                          key={dish.value}
-                          className={`cuisine-dish-item ${formData.selectedDishes.includes(dish.value) ? 'selected-dish' : ''}`}
-                          onClick={() => handleDishToggle(dish.value)}
-                        >
-                          <span>{dish.name}</span>
-                          <strong>{dish.price}</strong>
-                        </button>
-                      ))}
-                    </div>
+                  <div className="selected-dish-summary" style={{ marginTop: '1rem' }}>
+                    Jumlah Harga: <strong>RM {calculateTotal().toFixed(2)}</strong>
                   </div>
-                ))}
-              </div>
+                  <div className="selected-dish-summary" style={{ marginTop: '0.75rem' }}>
+                    Anggaran Berat Pesanan: <strong>{calculateTotalWeight()}g</strong>
+                  </div>
+                  <div className="selected-dish-summary" style={{ marginTop: '0.75rem' }}>
+                    Had Berat Disyorkan: <strong>{Math.max(1, formData.pax) * 200}g</strong>
+                  </div>
+                  {calculateWasteSurcharge() > 0 && (
+                    <div className="selected-dish-summary" style={{ marginTop: '0.75rem', color: '#c53030' }}>
+                      Caj Pembaziran SDG 9: <strong>RM {calculateWasteSurcharge().toFixed(2)}</strong>
+                    </div>
+                  )}
+                  <div className="selected-dish-summary" style={{ marginTop: '0.75rem', fontWeight: 700 }}>
+                    Jumlah Keseluruhan: <strong>RM {calculateGrandTotal().toFixed(2)}</strong>
+                  </div>
+                  {formData.selectedDishes.length > 0 && (
+                    <div className="selected-dish-summary" style={{ marginTop: '1rem' }}>
+                      Hidangan terpilih:
+                      <div className="selected-dish-tags" style={{ marginTop: '0.75rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                        {formData.selectedDishes.map((dishValue) => (
+                          <span key={dishValue} className="dish-selected-tag">
+                            {findDishName(dishValue)}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <p className="step-subtitle">Tukar cuisine bila-bila masa untuk lihat menu baru.</p>
+                </div>
+              ) : (
+                <p className="step-subtitle" style={{ marginTop: '1.8rem' }}>
+                  Sila pilih satu jenis cuisine terlebih dahulu untuk melihat menu yang ada.
+                </p>
+              )}
             </div>
           )}
 
@@ -270,6 +325,18 @@ const BookingFlow = () => {
                       ? formData.selectedDishes.map(findDishName).join(', ')
                       : 'Tiada'}
                   </strong>
+                </div>
+                <div className="summary-item">
+                  <span>Berat Pesanan</span>
+                  <strong>{calculateTotalWeight()}g</strong>
+                </div>
+                <div className="summary-item">
+                  <span>Caj SDG 9</span>
+                  <strong>RM {calculateWasteSurcharge().toFixed(2)}</strong>
+                </div>
+                <div className="summary-item total-fee">
+                  <span>Jumlah Keseluruhan</span>
+                  <strong>RM {calculateGrandTotal().toFixed(2)}</strong>
                 </div>
               </div>
             </div>
