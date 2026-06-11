@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const JapaneseCuisine = () => {
   const dishesInfo = [
     {
       value: 'wagyu-ramen',
       name: 'Wagyu Beef Black Garlic Ramen',
-      price: 'RM 75.00',
-      description: 'Slow-simmered 18-hour creamy tonkotsu broth, layered with organic black garlic aroma oil, house-made rye noodles, and topped with blowtorched melt-in-your-mouth A5 Wagyu beef slices.',
+      price: 'RM 48.00',
+      description: 'Creamy tonkotsu broth with black garlic aroma oil, house noodles, and premium melt-in-your-mouth wagyu beef slices.',
       tags: ['⭐ Masterpiece', '18-Hour Broth', 'Premium Selection'],
       ingredients: ['A5 Miyazaki Wagyu', 'Black Garlic Mayu Oil', '18-Hour Tonkotsu Essence', 'Organic Hen Egg', 'Bamboo Shoots'],
       image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80'
@@ -14,8 +14,8 @@ const JapaneseCuisine = () => {
     {
       value: 'salmon-don',
       name: 'Truffle Salmon Sashimi Don',
-      price: 'RM 58.00',
-      description: 'Prismatic, thick slices of premium fresh Norwegian salmon sashimis, seasoned with a rich white truffle soy sauce, served over hand-seasoned warm sushi rice with ikura (salmon roe).',
+      price: 'RM 38.00',
+      description: 'Thick Norwegian salmon sashimi seasoned with truffle soy sauce, served over warm sushi rice with ikura.',
       tags: ['Truffle Infused', 'Cold Delight'],
       ingredients: ['Norwegian Salmon Sashimi', 'White Truffle Essence', 'Ikura (Salmon Caviar)', 'Vinegared Sushi Rice', 'Shiso Leaf'],
       image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=600&q=80'
@@ -23,8 +23,8 @@ const JapaneseCuisine = () => {
     {
       value: 'premium-sushi',
       name: 'Chef\'s Choice Premium Sushi Platter',
-      price: 'RM 85.00',
-      description: 'A delicate curation of 8 hand-pressed nigiri and 6 signature maki rolls, featuring prime selection of salmon belly, fatty tuna (otoro), sweet shrimp, and dynamic unagi (grilled eel).',
+      price: 'RM 45.00',
+      description: 'A delicate curation of 8 hand-pressed nigiri and 6 signature maki rolls, featuring salmon belly, fatty tuna, sweet shrimp, and unagi.',
       tags: ['⭐ Chef Special', 'Zen Curation'],
       ingredients: ['Bluefin Tuna belly', 'Salmon Belly', 'Hokkaido Sweet Shrimp', 'Grilled Fresh Water Eel', 'Wasabi Root'],
       image: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80'
@@ -33,10 +33,55 @@ const JapaneseCuisine = () => {
       value: 'tempura-moriawase',
       name: 'Crispy Seafood & Veg Tempura',
       price: 'RM 48.00',
-      description: 'A classic, feather-light crispy assortment of fresh jumbo tiger prawns, soft sweet potato, lotus root, and eggplant, fried in clean tea seed oil. Served with warm dashi dipping broth.',
+      description: 'A classic crispy assortment of fresh tiger prawns, sweet potato, lotus root, and eggplant served with warm dashi broth.',
       tags: ['Classic Japanese', 'Crispy & Light'],
       ingredients: ['Jumbo Tiger Prawns', 'Sweet Potato', 'Lotus Root', 'Sweet Dashi Broth', 'Grated Daikon Radish'],
       image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      value: 'udon-sukiyaki',
+      name: 'Sukiyaki Udon Hotpot',
+      price: 'RM 39.00',
+      description: 'Comforting sukiyaki broth with udon noodles, thin beef slices, mushroom medley, and silky tofu.',
+      tags: ['Hotpot Comfort', 'Balanced'],
+      ingredients: ['Udon Noodles', 'Thin Beef Slices', 'Shiitake Mushrooms', 'Silken Tofu', 'Spring Onion'],
+      image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      value: 'salmon-mentaiko-bowl',
+      name: 'Salmon Mentaiko Don',
+      price: 'RM 32.00',
+      description: 'Grilled salmon with creamy mentaiko sauce on warm rice, sprinkled with nori and spring onion.',
+      tags: ['Comfort Food', 'Savory'],
+      ingredients: ['Grilled Salmon', 'Mentaiko Sauce', 'Sushi Rice', 'Nori Flakes', 'Spring Onion'],
+      image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      value: 'chirashi-bowl',
+      name: 'Chirashi Sushi Bowl',
+      price: 'RM 52.00',
+      description: 'Assorted sashimi and marinated seafood over warm vinegared sushi rice, garnished with ikura and shiso leaf.',
+      tags: ['Signature', 'Fresh'],
+      ingredients: ['Sushi Rice', 'Salmon', 'Tuna', 'Ikura', 'Shiso Leaf'],
+      image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      value: 'yaki-onigiri',
+      name: 'Grilled Yaki Onigiri',
+      price: 'RM 22.00',
+      description: 'Crispy grilled rice balls brushed with sweet soy glaze and toasted sesame.',
+      tags: ['Comfort', 'Snack'],
+      ingredients: ['Rice Balls', 'Soy Glaze', 'Sesame', 'Nori', 'Butter'],
+      image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      value: 'matcha-anmitsu',
+      name: 'Matcha Anmitsu',
+      price: 'RM 22.00',
+      description: 'A deconstructed traditional dessert bowl with matcha jelly, red bean, mochi, and black sugar syrup.',
+      tags: ['Dessert', 'Refreshing'],
+      ingredients: ['Matcha Jelly', 'Sweet Red Bean', 'Mochi', 'Black Sugar Syrup', 'Fruit Garnish'],
+      image: 'https://images.unsplash.com/photo-1544510808-91dc3fc4a0b7?auto=format&fit=crop&w=600&q=80'
     }
   ];
 

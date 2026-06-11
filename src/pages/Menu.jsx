@@ -7,7 +7,7 @@ const Menu = () => {
       id: 'malay',
       title: 'Authentic Malay Cuisine',
       description: 'Journey through centuries of heritage. Experience rich coconut gravy, aromatic forest herbs, and slow-roasted meats prepared using age-old ancestral techniques.',
-      dishes: ['Daging Salai Masak Lemak', 'Ayam Rendang Lembayung', 'Ikan Bakar Petai'],
+      dishes: ['Daging Salai Masak Lemak', 'Ayam Rendang Lembayung', 'Ikan Bakar Petai', 'Sotong Masak Hitam', 'Udang Tempoyak', 'Nasi Kerabu Kampung', 'Tauhu Telur Gulung'],
       icon: '🇲🇾',
       bannerImage: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80',
       bgColor: '#1a472a',
@@ -17,7 +17,7 @@ const Menu = () => {
       id: 'chinese',
       title: 'Traditional Chinese Cuisine',
       description: 'A balance of yin and yang. Experience delicate wok hei, premium steamed fish, and sweet-savoury claypots embodying generations of culinary mastery.',
-      dishes: ['Ginger Onion Steamed Sea Bass', 'Szechuan Chili Maple Tofu', 'Hainanese Chicken Rice Platter'],
+      dishes: ['Ginger Onion Steamed Sea Bass', 'Szechuan Chili Maple Tofu', 'Hainanese Chicken Rice Platter', 'Char Siew Noodles', 'Sesame Crispy Chicken', 'Lotus Leaf Fried Rice', 'Braised Eggplant Claypot'],
       icon: '🇨🇳',
       bannerImage: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80',
       bgColor: '#b01e23',
@@ -27,7 +27,7 @@ const Menu = () => {
       id: 'japanese',
       title: 'Artisan Japanese Cuisine',
       description: 'Zengarden of visual and culinary peace. Minimalist execution celebrating pristine ingredients, fresh sashimi cuts, and thick slow-simmered broths.',
-      dishes: ['Wagyu Beef Black Garlic Ramen', 'Truffle Salmon Sashimi Don', 'Premium Sushi Platter'],
+      dishes: ['Wagyu Beef Black Garlic Ramen', 'Truffle Salmon Sashimi Don', 'Premium Sushi Platter', 'Miso Black Cod', 'Tempura Udon', 'Yakitori Skewer Set', 'Chirashi Sushi Bowl'],
       icon: '🇯🇵',
       bannerImage: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80',
       bgColor: '#111111',
@@ -37,7 +37,7 @@ const Menu = () => {
       id: 'western',
       title: 'Modern Western Cuisine',
       description: 'A culinary bridge of continents. Enjoy high-grade Black Angus steaks, house-crafted pastas, and perfectly seared salmon using progressive French techniques.',
-      dishes: ['Black Angus Ribeye Steak', 'Truffle Wild Mushroom Fettuccine', 'Pan-Seared Citrus Salmon'],
+      dishes: ['Black Angus Ribeye Steak', 'Truffle Wild Mushroom Fettuccine', 'Pan-Seared Citrus Salmon', 'Herb-Crusted Lamb Chop', 'Seafood Risotto', 'Chicken Cordon Bleu', 'Beef Wellington Bites'],
       icon: '🥩',
       bannerImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
       bgColor: '#2b3e50',
@@ -47,11 +47,21 @@ const Menu = () => {
       id: 'indian',
       title: 'Flavorful Indian Cuisine',
       description: 'A rich tapestry of spices. Delight in slow-roasted tandoori specialties, hand-kneaded naan platters, and legendary lamb shanks cooked in rich clay ovens.',
-      dishes: ['Aromatic Lamb Shank Biryani', 'Tandoori Butter Chicken Masala', 'Garlic Cheese Naan Platter'],
+      dishes: ['Aromatic Lamb Shank Biryani', 'Tandoori Butter Chicken Masala', 'Garlic Cheese Naan Platter', 'Paneer Tikka Masala', 'Lamb Rogan Josh', 'Mutton Seekh Kebab', 'Dal Makhani'],
       icon: '🍛',
       bannerImage: 'https://images.unsplash.com/photo-1585938338392-50a5d22b6073?auto=format&fit=crop&w=800&q=80',
       bgColor: '#a35d00',
       accentColor: '#e67e22'
+    },
+    {
+      id: 'dessert',
+      title: 'Sweet Kuih & Desserts',
+      description: 'Finish your meal with traditional kuih, modern plated desserts, and comforting sweet endings handcrafted for every reservation.',
+      dishes: ['Kuih Bingka Ubi', 'Ondeh-Ondeh', 'Seri Muka', 'Kuih Lapis', 'Cendol Gelato', 'Kuih Ketayap', 'Tapai Pulut'],
+      icon: '🍮',
+      bannerImage: 'https://images.unsplash.com/photo-1551024735-1f5f2d6c2d7d?auto=format&fit=crop&w=800&q=80',
+      bgColor: '#7d4f97',
+      accentColor: '#f9c74f'
     }
   ];
 
@@ -93,7 +103,7 @@ const Menu = () => {
                 </div>
 
                 <div className="card-actions-wrapper">
-                  <Link to={`/menu/${category.id}`} className="explore-menu-btn">
+                  <Link to={`/menu/${category.id === 'dessert' ? 'desserts' : category.id}`} className="explore-menu-btn">
                     <span>Explore Menu</span>
                     <span className="arrow-icon">→</span>
                   </Link>

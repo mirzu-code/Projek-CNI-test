@@ -57,7 +57,8 @@ const Admin = () => {
     { value: '2', label: 'Chinese' },
     { value: '3', label: 'Japanese' },
     { value: '4', label: 'Western' },
-    { value: '5', label: 'Indian' }
+    { value: '5', label: 'Indian' },
+    { value: '6', label: 'Dessert / Kuih' }
   ];
 
   // Entrance Scanner Simulator States

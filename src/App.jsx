@@ -14,6 +14,7 @@ import ChineseCuisine from './pages/ChineseCuisine';
 import JapaneseCuisine from './pages/JapaneseCuisine';
 import WesternCuisine from './pages/WesternCuisine';
 import IndianCuisine from './pages/IndianCuisine';
+import Desserts from './pages/Desserts';
 import About from './pages/About';
 import Checkout from './pages/Checkout';
 import SelectTable from './pages/SelectTable';
@@ -42,6 +43,7 @@ function App() {
             <Route path="/menu/japanese" element={<JapaneseCuisine />} />
             <Route path="/menu/western" element={<WesternCuisine />} />
             <Route path="/menu/indian" element={<IndianCuisine />} />
+            <Route path="/menu/desserts" element={<Desserts />} />
             <Route path="/about" element={<About />} />
             <Route path="/admin-dashboard" element={<Admin />} />
             <Route path="/admin-table-status" element={<AdminTableStatus />} />

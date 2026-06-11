@@ -6,38 +6,83 @@ const IndianCuisine = () => {
     {
       value: 'lamb-biryani',
       name: 'Aromatic Lamb Shank Biryani',
-      price: 'RM 78.00',
-      description: 'Ultra-tender Australian lamb shank, slow-cooked in a sealed clay pot (Dum cooking) with long-grain aged Basmati rice, premium saffron strands, rose water, and a complex bouquet of freshly ground whole spices.',
+      price: 'RM 42.00',
+      description: 'Ultra-tender lamb shank slow-cooked with basmati rice, saffron, rose water, and fragrant whole spices.',
       tags: ['Claypot Dum Cooking', 'Saffron Infused', 'Premium Meat'],
-      ingredients: ['Australian Lamb Shank', 'Aged Basmati Rice', 'Kashmiri Saffron', 'Clarified Butter (Ghee)', 'Fried Onions'],
+      ingredients: ['Lamb Shank', 'Basmati Rice', 'Kashmiri Saffron', 'Ghee', 'Fried Onions'],
       image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'butter-chicken',
       name: 'Tandoori Butter Chicken Masala',
-      price: 'RM 42.00',
-      description: 'Boneless chicken thighs marinated in spiced Greek yogurt, roasted inside a 400┬░C clay tandoor oven, and then smothered in a rich, buttery, velvety cashew-tomato sauce finished with dried fenugreek leaves (kasuri methi).',
+      price: 'RM 32.00',
+      description: 'Boneless chicken thighs marinated in spiced yogurt, roasted in the tandoor, and simmered in a rich velvety cashew tomato sauce.',
       tags: ['Tandoor Masterpiece', 'Mildly Spiced'],
-      ingredients: ['Clay Oven Grilled Chicken', 'Cashew Paste', 'Fresh Cream & Butter', 'Tomato Puree', 'Fenugreek Leaves'],
+      ingredients: ['Tandoori Chicken', 'Cashew Paste', 'Cream & Butter', 'Tomato Puree', 'Fenugreek Leaves'],
       image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'paneer-tikka',
       name: 'Paneer Tikka Butter Masala',
-      price: 'RM 38.00',
-      description: 'House-made fresh cottage cheese blocks (Paneer) skewered with capsicums and onions, charcoal-grilled in our tandoor, and simmered in a mildly sweet, velvety tomato gravy.',
+      price: 'RM 28.00',
+      description: 'Fresh paneer skewers with capsicum and onion, grilled in the tandoor and simmered in a silky tomato gravy.',
       tags: ['Vegetarian', 'Housemade Cheese'],
-      ingredients: ['Housemade Cottage Cheese', 'Bell Peppers', 'Spiced Masala Gravy', 'Greek Yogurt Marinade', 'Fresh Coriander'],
+      ingredients: ['Paneer', 'Bell Peppers', 'Masala Gravy', 'Yogurt Marinade', 'Coriander'],
       image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'naan-platter',
       name: 'Garlic Cheese Naan Platter',
       price: 'RM 25.00',
-      description: 'A basket of three premium, fluffy flatbreads hand-kneaded, slapped against the walls of our clay tandoor oven, and stuffed with fresh mozzarella cheese, topped with raw minced garlic and fresh melted ghee.',
+      description: 'A basket of three fluffy flatbreads stuffed with mozzarella, topped with garlic and ghee.',
       tags: ['Fresh from Tandoor', 'Perfect Accompaniment'],
-      ingredients: ['Wheat Flour Dough', 'Fresh Minced Garlic', 'Mozzarella Cheese', 'Ghee Glaze', 'Fresh Mint Chutney Side'],
+      ingredients: ['Wheat Flour Dough', 'Garlic', 'Mozzarella Cheese', 'Ghee', 'Mint Chutney'],
       image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      value: 'chicken-tikka-masala',
+      name: 'Chicken Tikka Masala',
+      price: 'RM 32.00',
+      description: 'Tandoori chicken pieces simmered in a creamy tomato-cashew gravy with warm spice notes.',
+      tags: ['Popular Choice', 'Creamy'],
+      ingredients: ['Tandoori Chicken', 'Tomato Cream Gravy', 'Cashew Paste', 'Fenugreek', 'Coriander'],
+      image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      value: 'vegetable-biryani',
+      name: 'Vegetable Biryani',
+      price: 'RM 28.00',
+      description: 'Aromatic vegetable biryani cooked with saffron, mixed vegetables, and fragrant whole spices.',
+      tags: ['Vegetarian', 'Fragrant'],
+      ingredients: ['Basmati Rice', 'Mixed Vegetables', 'Saffron', 'Whole Spices', 'Coriander'],
+      image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      value: 'lamb-rogan-josh',
+      name: 'Lamb Rogan Josh',
+      price: 'RM 38.00',
+      description: 'Melt-in-your-mouth lamb simmered in Kashmiri chilli, yogurt, and whole spices.',
+      tags: ['Rich', 'Slow-Cooked'],
+      ingredients: ['Lamb Shoulder', 'Kashmiri Chilli', 'Yogurt', 'Whole Spices', 'Fresh Coriander'],
+      image: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=600&q=80'
+    }
+    {
+      value: 'seekh-kebab',
+      name: 'Mutton Seekh Kebab',
+      price: 'RM 42.00',
+      description: 'Spiced minced mutton skewers grilled over live charcoal and served with mint chutney.',
+      tags: ['Charcoal Grill', 'Street Classic'],
+      ingredients: ['Minced Mutton', 'Coriander', 'Green Chilli', 'Ginger', 'Mint'],
+      image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80'
+    },
+    {
+      value: 'dal-makhani',
+      name: 'Dal Makhani',
+      price: 'RM 28.00',
+      description: 'Slow-cooked black lentils enriched with cream, butter, and a fragrant spice blend.',
+      tags: ['Vegetarian', 'Comfort'],
+      ingredients: ['Black Lentils', 'Cream', 'Butter', 'Tomato Puree', 'Fenugreek'],
+      image: 'https://images.unsplash.com/photo-1587502537184-0293a12b8da5?auto=format&fit=crop&w=600&q=80'
     }
   ];
 
