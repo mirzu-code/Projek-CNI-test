@@ -229,12 +229,6 @@
     font-size: 1.2rem;
   }
 }
-  width: 100%;
-  max-width: 450px;
-  border-radius: 12px;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-color);
-}
 
 /* SDG Metrics Section */
 .about-sdg-metrics-section {
