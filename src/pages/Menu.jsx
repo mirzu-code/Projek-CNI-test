@@ -1,13 +1,64 @@
-﻿import { Link } from 'react-router-dom';
+﻿import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 import './Menu.css';
 
 const Menu = () => {
+  const [menus, setMenus] = useState([]);
+  const [menuLoading, setMenuLoading] = useState(true);
+  const [menuError, setMenuError] = useState('');
+
+  useEffect(() => {
+    const loadMenus = async () => {
+      setMenuLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('menus')
+          .select('*')
+          .eq('is_active', true)
+          .order('cuisine_id', { ascending: true })
+          .order('id', { ascending: true });
+
+        if (error) throw error;
+        setMenus(data || []);
+        setMenuError('');
+      } catch (err) {
+        console.warn('Failed to load menu data:', err.message || err);
+        setMenus([]);
+        setMenuError('Unable to load menu from admin backend. Using default menu preview.');
+      } finally {
+        setMenuLoading(false);
+      }
+    };
+
+    loadMenus();
+  }, []);
+
+  const cuisineIdMap = {
+    malay: 1,
+    chinese: 2,
+    japanese: 3,
+    western: 4,
+    indian: 5,
+    desserts: 6,
+    dessert: 6
+  };
+
+  const menuItemsByCategory = menus.reduce((acc, item) => {
+    const cuisineKey = Object.keys(cuisineIdMap).find(key => cuisineIdMap[key] === Number(item.cuisine_id));
+    if (!cuisineKey) return acc;
+    const category = cuisineKey === 'dessert' ? 'desserts' : cuisineKey;
+    acc[category] = acc[category] || [];
+    acc[category].push(item);
+    return acc;
+  }, {});
+
   const categories = [
     {
       id: 'malay',
       title: 'Authentic Malay Cuisine',
       description: 'Journey through centuries of heritage. Experience rich coconut gravy, aromatic forest herbs, and slow-roasted meats prepared using age-old ancestral techniques.',
-      dishes: ['Daging Salai Masak Lemak', 'Ayam Rendang Lembayung', 'Ikan Bakar Petai', 'Sotong Masak Hitam', 'Udang Tempoyak', 'Nasi Kerabu Kampung', 'Tauhu Telur Gulung'],
+      defaultDishes: ['Daging Salai Masak Lemak', 'Ayam Rendang Lembayung', 'Ikan Bakar Petai', 'Sotong Masak Hitam', 'Udang Tempoyak', 'Nasi Kerabu Kampung', 'Tauhu Telur Gulung'],
       icon: '🇲🇾',
       bannerImage: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80',
       bgColor: '#1a472a',
@@ -17,7 +68,7 @@ const Menu = () => {
       id: 'chinese',
       title: 'Traditional Chinese Cuisine',
       description: 'A balance of yin and yang. Experience delicate wok hei, premium steamed fish, and sweet-savoury claypots embodying generations of culinary mastery.',
-      dishes: ['Ginger Onion Steamed Sea Bass', 'Szechuan Chili Maple Tofu', 'Hainanese Chicken Rice Platter', 'Char Siew Noodles', 'Sesame Crispy Chicken', 'Lotus Leaf Fried Rice', 'Braised Eggplant Claypot'],
+      defaultDishes: ['Ginger Onion Steamed Sea Bass', 'Szechuan Chili Maple Tofu', 'Hainanese Chicken Rice Platter', 'Char Siew Noodles', 'Sesame Crispy Chicken', 'Lotus Leaf Fried Rice', 'Braised Eggplant Claypot'],
       icon: '🇨🇳',
       bannerImage: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80',
       bgColor: '#b01e23',
@@ -27,7 +78,7 @@ const Menu = () => {
       id: 'japanese',
       title: 'Artisan Japanese Cuisine',
       description: 'Zengarden of visual and culinary peace. Minimalist execution celebrating pristine ingredients, fresh sashimi cuts, and thick slow-simmered broths.',
-      dishes: ['Wagyu Beef Black Garlic Ramen', 'Truffle Salmon Sashimi Don', 'Premium Sushi Platter', 'Miso Black Cod', 'Tempura Udon', 'Yakitori Skewer Set', 'Chirashi Sushi Bowl'],
+      defaultDishes: ['Wagyu Beef Black Garlic Ramen', 'Truffle Salmon Sashimi Don', 'Premium Sushi Platter', 'Miso Black Cod', 'Tempura Udon', 'Yakitori Skewer Set', 'Chirashi Sushi Bowl'],
       icon: '🇯🇵',
       bannerImage: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80',
       bgColor: '#111111',
@@ -37,7 +88,7 @@ const Menu = () => {
       id: 'western',
       title: 'Modern Western Cuisine',
       description: 'A culinary bridge of continents. Enjoy high-grade Black Angus steaks, house-crafted pastas, and perfectly seared salmon using progressive French techniques.',
-      dishes: ['Black Angus Ribeye Steak', 'Truffle Wild Mushroom Fettuccine', 'Pan-Seared Citrus Salmon', 'Herb-Crusted Lamb Chop', 'Seafood Risotto', 'Chicken Cordon Bleu', 'Beef Wellington Bites'],
+      defaultDishes: ['Black Angus Ribeye Steak', 'Truffle Wild Mushroom Fettuccine', 'Pan-Seared Citrus Salmon', 'Herb-Crusted Lamb Chop', 'Seafood Risotto', 'Chicken Cordon Bleu', 'Beef Wellington Bites'],
       icon: '🥩',
       bannerImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
       bgColor: '#2b3e50',
@@ -47,23 +98,36 @@ const Menu = () => {
       id: 'indian',
       title: 'Flavorful Indian Cuisine',
       description: 'A rich tapestry of spices. Delight in slow-roasted tandoori specialties, hand-kneaded naan platters, and legendary lamb shanks cooked in rich clay ovens.',
-      dishes: ['Aromatic Lamb Shank Biryani', 'Tandoori Butter Chicken Masala', 'Garlic Cheese Naan Platter', 'Paneer Tikka Masala', 'Lamb Rogan Josh', 'Mutton Seekh Kebab', 'Dal Makhani'],
+      defaultDishes: ['Aromatic Lamb Shank Biryani', 'Tandoori Butter Chicken Masala', 'Garlic Cheese Naan Platter', 'Paneer Tikka Masala', 'Lamb Rogan Josh', 'Mutton Seekh Kebab', 'Dal Makhani'],
       icon: '🍛',
       bannerImage: 'https://images.unsplash.com/photo-1585938338392-50a5d22b6073?auto=format&fit=crop&w=800&q=80',
       bgColor: '#a35d00',
       accentColor: '#e67e22'
     },
     {
-      id: 'dessert',
+      id: 'desserts',
       title: 'Sweet Kuih & Desserts',
       description: 'Finish your meal with traditional kuih, modern plated desserts, and comforting sweet endings handcrafted for every reservation.',
-      dishes: ['Kuih Bingka Ubi', 'Ondeh-Ondeh', 'Seri Muka', 'Kuih Lapis', 'Cendol Gelato', 'Kuih Ketayap', 'Tapai Pulut'],
+      defaultDishes: ['Kuih Bingka Ubi', 'Ondeh-Ondeh', 'Seri Muka', 'Kuih Lapis', 'Cendol Gelato', 'Kuih Ketayap', 'Tapai Pulut'],
       icon: '🍮',
       bannerImage: 'https://images.unsplash.com/photo-1551024735-1f5f2d6c2d7d?auto=format&fit=crop&w=800&q=80',
       bgColor: '#7d4f97',
       accentColor: '#f9c74f'
     }
   ];
+
+  const categoriesWithMenuData = categories.map((category) => {
+    const categoryMenus = menuItemsByCategory[category.id] || [];
+    const dishNames = categoryMenus.length > 0
+      ? categoryMenus.map((item) => item.name || 'Untitled Dish').slice(0, 6)
+      : category.defaultDishes;
+
+    return {
+      ...category,
+      dishCount: categoryMenus.length,
+      dishes: dishNames
+    };
+  });
 
   return (
     <div className="menu-hub-page animate-fade-in">
@@ -80,38 +144,43 @@ const Menu = () => {
 
       {/* Grid of Cuisine Categories */}
       <section className="categories-grid-container">
-        <div className="categories-grid">
-          {categories.map((category) => (
-            <div key={category.id} className="category-hub-card animate-zoom-in" style={{ '--card-accent': category.accentColor }}>
-              <div className="card-image-wrapper">
-                <img src={category.bannerImage} alt={category.title} className="category-bg-image" />
-                <div className="image-overlay" style={{ background: `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, ${category.bgColor}dd 100%)` }}></div>
-                <span className="category-icon-badge">{category.icon}</span>
-              </div>
-              
-              <div className="category-info-wrapper" style={{ backgroundColor: category.bgColor }}>
-                <h3>{category.title}</h3>
-                <p>{category.description}</p>
+        {menuLoading ? (
+          <div className="menu-loading-state">Loading menu data...</div>
+        ) : (
+          <div className="categories-grid">
+            {categoriesWithMenuData.map((category) => (
+              <div key={category.id} className="category-hub-card animate-zoom-in" style={{ '--card-accent': category.accentColor }}>
+                <div className="card-image-wrapper">
+                  <img src={category.bannerImage} alt={category.title} className="category-bg-image" />
+                  <div className="image-overlay" style={{ background: `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, ${category.bgColor}dd 100%)` }}></div>
+                  <span className="category-icon-badge">{category.icon}</span>
+                </div>
                 
-                <div className="signature-preview">
-                  <span className="preview-label">Featured Specialties:</span>
-                  <div className="preview-tags">
-                    {category.dishes.map((dish, i) => (
-                      <span key={i} className="preview-tag">{dish}</span>
-                    ))}
+                <div className="category-info-wrapper" style={{ backgroundColor: category.bgColor }}>
+                  <h3>{category.title}</h3>
+                  <p>{category.description}</p>
+                  
+                  <div className="signature-preview">
+                    <span className="preview-label">Featured Specialties:</span>
+                    <div className="preview-tags">
+                      {category.dishes.map((dish, i) => (
+                        <span key={i} className="preview-tag">{dish}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="card-actions-wrapper">
+                    <Link to={`/menu/${category.id === 'desserts' ? 'desserts' : category.id}`} className="explore-menu-btn">
+                      <span>Explore Menu</span>
+                      <span className="arrow-icon">→</span>
+                    </Link>
                   </div>
                 </div>
-
-                <div className="card-actions-wrapper">
-                  <Link to={`/menu/${category.id === 'dessert' ? 'desserts' : category.id}`} className="explore-menu-btn">
-                    <span>Explore Menu</span>
-                    <span className="arrow-icon">→</span>
-                  </Link>
-                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
+        {menuError && <div className="menu-error-state">{menuError}</div>}
       </section>
 
       {/* Pre-order Callout Banner */}
