@@ -1,103 +1,364 @@
 .checkout-page {
-  padding: 3rem 0;
-  width: 90%;
-  max-width: 1200px;
+  padding: 4rem 1rem;
+  width: 95%;
+  max-width: 1300px;
   margin: 0 auto;
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 75px);
+  background: linear-gradient(180deg, var(--bg-color) 0%, #ffffff 50%, var(--bg-color) 100%);
+}
+
+.checkout-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.checkout-header h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 0.5rem;
+}
+
+.checkout-header::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-color), transparent);
+  margin: 1.5rem auto 0;
 }
 
 .checkout-grid {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
-  gap: 2.5rem;
+  gap: 3rem;
   align-items: start;
 }
 
-@media (max-width: 992px) {
-  .checkout-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-}
-
-/* Common Boxes */
+/* ===== CHECKOUT BOXES ===== */
 .checkout-box,
 .invoice-box {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 2rem;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
+  border-radius: 0;
+  padding: 2.5rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-top: 3px solid var(--accent-color);
 }
 
 .checkout-box:hover,
 .invoice-box:hover {
-  box-shadow: var(--shadow-md);
-  border-color: rgba(26, 71, 42, 0.15);
+  box-shadow: var(--shadow-lg);
 }
 
 .checkout-page h2 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+  position: relative;
+  display: inline-block;
+}
+
+.checkout-page h2::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 2px;
+  background: var(--accent-color);
+  margin-top: 0.8rem;
 }
 
 .checkout-subtitle {
   font-size: 0.9rem;
   color: var(--text-light);
   margin-bottom: 2rem;
+  font-weight: 300;
+  letter-spacing: 0.3px;
 }
 
-/* Tabs Navigation */
+/* ===== TABS ===== */
 .checkout-tabs {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 1.5rem;
 }
 
 .tab-btn {
   flex: 1;
-  background: var(--bg-color);
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
-  padding: 0.8rem 1rem;
-  border-radius: 6px;
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  padding: 0.8rem 1.2rem;
+  border-radius: 0;
   font-weight: 600;
   font-size: 0.9rem;
-  transition: var(--transition);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5rem;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent-color);
+  transition: width 0.3s ease;
 }
 
 .tab-btn:hover {
-  border-color: var(--primary-color);
   color: var(--primary-color);
 }
 
 .tab-btn.active {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
-  color: white;
-  box-shadow: var(--shadow-sm);
+  color: var(--primary-color);
+  font-weight: 700;
 }
 
-@media (max-width: 480px) {
-  .checkout-tabs {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+.tab-btn.active::after {
+  width: 100%;
 }
 
-/* CREDIT CARD GRAPHIC */
+/* ===== CREDIT CARD GRAPHIC ===== */
 .credit-card-wrapper {
   perspective: 1000px;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   display: flex;
   justify-content: center;
 }
 
 .interactive-card {
   position: relative;
+  width: 100%;
+  max-width: 380px;
+  height: 220px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+  border-radius: 12px;
+  padding: 2rem;
+  color: white;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.interactive-card:hover {
+  transform: rotateY(10deg) rotateX(-5deg);
+}
+
+.card-brand {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent-color);
+}
+
+.card-number {
+  font-size: 1.8rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 1.5rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.card-info {
+  flex: 1;
+}
+
+.card-label {
+  font-size: 0.65rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+
+.card-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ===== FORM ELEMENTS ===== */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.6rem;
+  color: var(--text-main);
+  letter-spacing: 0.3px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: var(--bg-color);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+  background: white;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* ===== INVOICE BOX ===== */
+.invoice-box {
+  background: linear-gradient(135deg, rgba(26, 71, 42, 0.02) 0%, rgba(212, 175, 55, 0.02) 100%);
+}
+
+.invoice-title {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.invoice-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.95rem;
+}
+
+.invoice-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.invoice-item span:first-child {
+  color: var(--text-light);
+}
+
+.invoice-item span:last-child {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.invoice-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--accent-color);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.invoice-total span:first-child {
+  color: var(--text-main);
+}
+
+.invoice-total span:last-child {
+  color: var(--accent-color);
+  font-size: 1.5rem;
+}
+
+/* ===== BUTTONS ===== */
+.checkout-btn,
+.confirm-btn {
+  width: 100%;
+  padding: 1.1rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: white;
+  border: none;
+  border-radius: 0;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.checkout-btn:hover,
+.confirm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.checkout-btn:active,
+.confirm-btn:active {
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 992px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .checkout-page {
+    padding: 2rem 1rem;
+  }
+
+  .checkout-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .interactive-card {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-page {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .checkout-box,
+  .invoice-box {
+    padding: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+
+  .checkout-btn {
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+}
   width: 100%;
   max-width: 380px;
   height: 220px;

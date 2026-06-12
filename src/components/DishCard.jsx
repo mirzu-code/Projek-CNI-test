@@ -1,10 +1,25 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 const DishCard = ({ dish }) => {
+  const [imageError, setImageError] = useState(false);
+
+  const getImageUrl = () => {
+    if (imageError || !dish.image) {
+      return 'https://via.placeholder.com/400x300?text=No+Image+Available';
+    }
+    return dish.image;
+  };
+
   return (
     <div className="dish-detail-card western-card">
       <div className="dish-image-wrapper">
-        <img src={dish.image} alt={dish.name} className="dish-serve-image" />
+        <img 
+          src={getImageUrl()} 
+          alt={dish.name} 
+          className="dish-serve-image"
+          onError={() => setImageError(true)}
+        />
       </div>
       <div className="dish-card-body-content">
         <div className="dish-card-header">

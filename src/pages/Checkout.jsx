@@ -58,9 +58,30 @@ const Checkout = () => {
         payload.table_capacity = booking.tableCapacity;
       }
 
-      const { error: insertError } = await supabase.from('bookings').insert([payload]);
+      const { data: bookingData, error: insertError } = await supabase.from('bookings').insert([payload]);
       if (insertError) {
         throw insertError;
+      }
+
+      // Lock the table for 1.5 hours (90 minutes) from the booking time
+      if (booking.tableId) {
+        const bookingDateTime = new Date(`${booking.date}T${booking.time}`);
+        const lockExpiresAt = new Date(bookingDateTime.getTime() + 90 * 60 * 1000).toISOString();
+
+        const lockPayload = {
+          table_id: booking.tableId,
+          locked_by: booking.name,
+          lock_token: `booking-${Date.now()}`,
+          lock_expires_at: lockExpiresAt
+        };
+
+        const { error: lockError } = await supabase
+          .from('table_locks')
+          .upsert([lockPayload], { onConflict: 'table_id' });
+
+        if (lockError) {
+          console.warn('Table lock failed:', lockError);
+        }
       }
 
       localStorage.removeItem('bookingData');
