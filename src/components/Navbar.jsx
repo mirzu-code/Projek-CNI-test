@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './Navbar.css';
+import { FlagMY, FlagCN, FlagJP, IconHome, IconCalendar, IconInfo, IconGear } from './Icons';
 
 const Navbar = () => {
   const location = useLocation();
@@ -25,7 +26,7 @@ const Navbar = () => {
         </Link>
         <div className="nav-links">
           <Link to="/" className={location.pathname === '/' ? 'active' : ''}>
-            <span className="nav-icon">🏠</span>
+            <span className="nav-icon svg-icon"><IconHome /></span>
             <span>Home</span>
           </Link>
           <div className="dropdown">
@@ -34,19 +35,19 @@ const Navbar = () => {
               <span className="dropbtn-text">Menu <span className="arrow">▼</span></span>
             </Link>
             <div className="dropdown-content">
-              <Link to="/menu/malay">🇲🇾 Malay</Link>
-              <Link to="/menu/chinese">🇨🇳 Chinese</Link>
-              <Link to="/menu/japanese">🇯🇵 Japanese</Link>
+              <Link to="/menu/malay"><FlagMY className="flag-icon" />Malay</Link>
+              <Link to="/menu/chinese"><FlagCN className="flag-icon" />Chinese</Link>
+              <Link to="/menu/japanese"><FlagJP className="flag-icon" />Japanese</Link>
               <Link to="/menu/western">🥩 Western</Link>
               <Link to="/menu/indian">🍛 Indian</Link>
             </div>
           </div>
           <Link to="/book" className={location.pathname === '/book' ? 'active' : ''}>
-            <span className="nav-icon">📅</span>
+            <span className="nav-icon svg-icon"><IconCalendar /></span>
             <span>Book</span>
           </Link>
           <Link to="/about" className={location.pathname === '/about' ? 'active' : ''}>
-            <span className="nav-icon">ℹ️</span>
+            <span className="nav-icon svg-icon"><IconInfo /></span>
             <span>About</span>
           </Link>
           {hasBooking && (
@@ -56,7 +57,7 @@ const Navbar = () => {
             </Link>
           )}
           <Link to="/admin" className={location.pathname === '/admin' ? 'active' : ''}>
-            <span className="nav-icon">⚙️</span>
+            <span className="nav-icon svg-icon"><IconGear /></span>
             <span>Admin</span>
           </Link>
         </div>

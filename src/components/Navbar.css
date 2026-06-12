@@ -65,6 +65,33 @@
   display: none;
 }
 
+.svg-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.dropdown-content a {
+  color: var(--text-main) !important;
+  padding: 0.6rem 1.2rem !important;
+  text-decoration: none;
+  display: flex !important;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: left;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: none !important;
+  transition: var(--transition) !important;
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+
+.flag-icon {
+  width: 24px;
+  height: 16px;
+  display: inline-block;
+}
+
 
 /* Dropdown style */
 .dropdown {

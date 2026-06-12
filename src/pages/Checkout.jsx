@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './Checkout.css';
 import './BookingFlow.css';
@@ -9,10 +9,13 @@ const Checkout = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
+    const stateBooking = location.state?.bookingData;
     const saved = localStorage.getItem('bookingData');
-    if (!saved) {
+
+    if (!stateBooking && !saved) {
       setLoading(false);
       setError('Tiada data tempahan. Mengalihkan kembali ke borang tempahan...');
       setTimeout(() => navigate('/book'), 1500);
@@ -20,7 +23,10 @@ const Checkout = () => {
     }
 
     try {
-      setBooking(JSON.parse(saved));
+      const parsed = stateBooking || JSON.parse(saved);
+      setBooking(parsed);
+      // persist to localStorage so refresh doesn't lose data
+      if (stateBooking) localStorage.setItem('bookingData', JSON.stringify(stateBooking));
     } catch (err) {
       setError('Data tempahan tidak sah. Sila cuba lagi.');
     } finally {
@@ -43,9 +49,14 @@ const Checkout = () => {
         cuisine_id: booking.preselectCuisine === 'malay' ? 1 : booking.preselectCuisine === 'chinese' ? 2 : booking.preselectCuisine === 'japanese' ? 3 : booking.preselectCuisine === 'western' ? 4 : booking.preselectCuisine === 'indian' ? 5 : null,
         dish: booking.preselectDish || null,
         table_id: booking.tableId || null,
-        table_capacity: booking.tableCapacity || null,
         status: 'Confirmed'
       };
+
+      // Only include `table_capacity` if a value was selected/available.
+      // This avoids sending a column that might not exist in the remote DB schema.
+      if (booking.tableCapacity != null && booking.tableCapacity !== '') {
+        payload.table_capacity = booking.tableCapacity;
+      }
 
       const { error: insertError } = await supabase.from('bookings').insert([payload]);
       if (insertError) {
