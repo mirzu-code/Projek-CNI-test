@@ -13,7 +13,7 @@ const MalayCuisine = () => {
       description: 'Slow-smoked premium beef brisket simmered in a fiery, rich gravy of fresh coconut milk, turmeric, bird\'s eye chilies (cili api), and sliced local starfruit.',
       tags: ['Spicy', 'Chef Special', 'Sustainably Sourced'],
       ingredients: ['Smoked Beef Brisket', 'Fresh Turmeric', 'Bird\'s Eye Chilies', 'Coconut Cream', 'Belimbing Buluh'],
-      image: 'https://source.unsplash.com/featured/600x600/?beef%20rendang'
+      image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'ayam-rendang',
@@ -22,7 +22,7 @@ const MalayCuisine = () => {
       description: 'Tender chicken slow-braised in a luxurious spice paste with toasted coconut, lemongrass, and galangal.',
       tags: ['Traditional Recipe', 'Gluten Free'],
       ingredients: ['Kampung Chicken', 'Toasted Coconut', 'Lemongrass', 'Galangal', 'Kaffir Lime Leaves'],
-      image: 'https://source.unsplash.com/featured/600x600/?chicken%20rendang'
+      image: 'https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'ikan-bakar',
@@ -31,7 +31,7 @@ const MalayCuisine = () => {
       description: 'Fresh red snapper grilled with spicy sambal and petai in banana leaf.',
       tags: ['Spicy', 'Seafood Delight'],
       ingredients: ['Fresh Red Snapper', 'Stink Beans', 'Chili Sambal', 'Tamarind', 'Banana Leaf'],
-      image: 'https://source.unsplash.com/featured/600x600/?grilled%20fish%20sambal'
+      image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'nasi-lemak',
@@ -40,7 +40,7 @@ const MalayCuisine = () => {
       description: 'Basmati rice steamed with fresh pandan juice and coconut milk. Served with aromatic sweet-spicy anchovy sambal, spiced fried chicken, boiled eggs, and roasted peanuts.',
       tags: ['Signature Dish', 'All-Time Favorite'],
       ingredients: ['Pandan-infused Basmati Rice', 'Heritage Sambal Tumis', 'Crispy Rempah Fried Chicken', 'Roasted Peanuts', 'Hardboiled Egg'],
-      image: 'https://source.unsplash.com/featured/600x600/?nasi%20lemak'
+      image: 'https://images.unsplash.com/photo-1626804475297-41609ea004eb?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'nasi-kerabu-kampung',
@@ -49,7 +49,7 @@ const MalayCuisine = () => {
       description: 'Blue herb rice with tender grilled spiced chicken, crispy anchovies, salted egg, and aromatic sambal tempoyak.',
       tags: ['Traditional', 'Garden Fresh'],
       ingredients: ['Blue Rice', 'Crispy Anchovies', 'Salted Egg', 'Herb Salad', 'Sambal Tempoyak'],
-      image: 'https://source.unsplash.com/featured/600x600/?nasi%20kerabu'
+      image: 'https://images.unsplash.com/photo-1548943487-a2e4f43b4850?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'udang-masak-lemak',
@@ -58,7 +58,7 @@ const MalayCuisine = () => {
       description: 'Succulent prawns cooked in spicy coconut gravy with aromatic herbs and house chillies.',
       tags: ['Spicy', 'Seafood'],
       ingredients: ['Fresh Prawns', 'Coconut Milk', 'Turmeric', 'Lemongrass', 'Chilli Padi'],
-      image: 'https://source.unsplash.com/featured/600x600/?prawn%20curry'
+      image: 'https://images.unsplash.com/photo-1559742811-822873691fc8?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'ayam-percik',
@@ -67,7 +67,7 @@ const MalayCuisine = () => {
       description: 'Grilled chicken basted in a fragrant, spicy coconut sauce, finished with smoky char marks.',
       tags: ['Grilled', 'House Special'],
       ingredients: ['Ayam Kampung', 'Coconut Milk', 'Turmeric', 'Honey', 'Pandan Leaves'],
-      image: 'https://source.unsplash.com/featured/600x600/?ayam%20percik'
+      image: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=600&q=80'
     }
   ];
 

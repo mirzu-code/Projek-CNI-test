@@ -1,4 +1,4 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './About.css';
 
 const About = () => {
@@ -13,14 +13,14 @@ const About = () => {
     {
       name: 'Chef Kamaruddin Ibrahim',
       role: 'Head Chef & Culinary Director',
-      bio: 'Over 25 years of fine dining expertise. Dedicated to preserving ancient Malay techniques while integrating modern presentation.',
-      image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=400&q=80'
+      bio: 'Memegang sijil masakan antarabangsa berprestij dan diiktiraf sepenuhnya sebagai Master Chef. Sangat "power" dan berbakat besar, beliau mampu memasak pelbagai jenis hidangan dari seluruh dunia dengan kepakaran 25 tahun dalam fine dining.',
+      image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=400&q=80'
     },
     {
       name: 'Chef Mei Ling Chen',
-      role: 'Pastry & Chinese Cuisine Artisan',
-      bio: 'Trained in Shanghai and Paris. A master at creating harmonious pastries and delicate traditional Chinese steamed specialities.',
-      image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=400&q=80'
+      role: 'Pastry & Cuisine Artisan',
+      bio: 'Juga seorang Master Chef bertauliah dengan kelayakan antarabangsa. Memang "power" di dapur, beliau menguasai pelbagai jenis masakan dan dilatih secara profesional di Shanghai dan Paris untuk mencipta keseimbangan rasa yang sempurna.',
+      image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=400&q=80'
     }
   ];
 

@@ -11,7 +11,7 @@ const JapaneseCuisine = () => {
       description: 'Creamy tonkotsu broth with black garlic aroma oil, house noodles, and premium melt-in-your-mouth wagyu beef slices.',
       tags: ['⭐ Masterpiece', '18-Hour Broth', 'Premium Selection'],
       ingredients: ['A5 Miyazaki Wagyu', 'Black Garlic Mayu Oil', '18-Hour Tonkotsu Essence', 'Organic Hen Egg', 'Bamboo Shoots'],
-      image: 'https://source.unsplash.com/featured/600x400/?wagyu+ramen'
+      image: 'https://images.unsplash.com/photo-1557872943-16a5ac26437e?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'salmon-don',
@@ -20,7 +20,7 @@ const JapaneseCuisine = () => {
       description: 'Thick Norwegian salmon sashimi seasoned with truffle soy sauce, served over warm sushi rice with ikura.',
       tags: ['Truffle Infused', 'Cold Delight'],
       ingredients: ['Norwegian Salmon Sashimi', 'White Truffle Essence', 'Ikura (Salmon Caviar)', 'Vinegared Sushi Rice', 'Shiso Leaf'],
-      image: 'https://source.unsplash.com/featured/600x400/?salmon+sashimi+don'
+      image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'premium-sushi',
@@ -29,7 +29,7 @@ const JapaneseCuisine = () => {
       description: 'A delicate curation of 8 hand-pressed nigiri and 6 signature maki rolls, featuring salmon belly, fatty tuna, sweet shrimp, and unagi.',
       tags: ['⭐ Chef Special', 'Zen Curation'],
       ingredients: ['Bluefin Tuna belly', 'Salmon Belly', 'Hokkaido Sweet Shrimp', 'Grilled Fresh Water Eel', 'Wasabi Root'],
-      image: 'https://source.unsplash.com/featured/600x400/?sushi+platter'
+      image: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'tempura-moriawase',
@@ -38,7 +38,7 @@ const JapaneseCuisine = () => {
       description: 'A classic crispy assortment of fresh tiger prawns, sweet potato, lotus root, and eggplant served with warm dashi broth.',
       tags: ['Classic Japanese', 'Crispy & Light'],
       ingredients: ['Jumbo Tiger Prawns', 'Sweet Potato', 'Lotus Root', 'Sweet Dashi Broth', 'Grated Daikon Radish'],
-      image: 'https://source.unsplash.com/featured/600x400/?tempura'
+      image: 'https://images.unsplash.com/photo-1615361200141-f45040f367be?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'udon-sukiyaki',
@@ -47,7 +47,7 @@ const JapaneseCuisine = () => {
       description: 'Comforting sukiyaki broth with udon noodles, thin beef slices, mushroom medley, and silky tofu.',
       tags: ['Hotpot Comfort', 'Balanced'],
       ingredients: ['Udon Noodles', 'Thin Beef Slices', 'Shiitake Mushrooms', 'Silken Tofu', 'Spring Onion'],
-      image: 'https://source.unsplash.com/featured/600x400/?sukiyaki+udon'
+      image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'salmon-mentaiko-bowl',
@@ -56,7 +56,7 @@ const JapaneseCuisine = () => {
       description: 'Grilled salmon with creamy mentaiko sauce on warm rice, sprinkled with nori and spring onion.',
       tags: ['Comfort Food', 'Savory'],
       ingredients: ['Grilled Salmon', 'Mentaiko Sauce', 'Sushi Rice', 'Nori Flakes', 'Spring Onion'],
-      image: 'https://source.unsplash.com/featured/600x400/?salmon+mentaiko+don'
+      image: 'https://images.unsplash.com/photo-1633504581786-316c8002b1b9?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'chirashi-bowl',
@@ -65,7 +65,7 @@ const JapaneseCuisine = () => {
       description: 'Assorted sashimi and marinated seafood over warm vinegared sushi rice, garnished with ikura and shiso leaf.',
       tags: ['Signature', 'Fresh'],
       ingredients: ['Sushi Rice', 'Salmon', 'Tuna', 'Ikura', 'Shiso Leaf'],
-      image: 'https://source.unsplash.com/featured/600x400/?chirashi+bowl'
+      image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'yaki-onigiri',
@@ -74,7 +74,7 @@ const JapaneseCuisine = () => {
       description: 'Crispy grilled rice balls brushed with sweet soy glaze and toasted sesame.',
       tags: ['Comfort', 'Snack'],
       ingredients: ['Rice Balls', 'Soy Glaze', 'Sesame', 'Nori', 'Butter'],
-      image: 'https://source.unsplash.com/featured/600x400/?yaki+onigiri'
+      image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=600&q=80'
     },
     {
       value: 'matcha-anmitsu',
@@ -83,7 +83,7 @@ const JapaneseCuisine = () => {
       description: 'A deconstructed traditional dessert bowl with matcha jelly, red bean, mochi, and black sugar syrup.',
       tags: ['Dessert', 'Refreshing'],
       ingredients: ['Matcha Jelly', 'Sweet Red Bean', 'Mochi', 'Black Sugar Syrup', 'Fruit Garnish'],
-      image: 'https://source.unsplash.com/featured/600x400/?matcha+anmitsu'
+      image: 'https://images.unsplash.com/photo-1551024735-1f5f2d6c2d7d?auto=format&fit=crop&w=600&q=80'
     }
   ];
 

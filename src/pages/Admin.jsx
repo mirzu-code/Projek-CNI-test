@@ -380,6 +380,23 @@ const Admin = () => {
     }
   };
 
+  const handleDeleteBooking = async (resId) => {
+    try {
+      const res = reservations.find(r => r.id === resId);
+      if (!res) return;
+      if (window.confirm(`Are you sure you want to delete booking ${res.id}?`)) {
+        const { error } = await supabase
+          .from('bookings')
+          .delete()
+          .eq('id', res.recordId);
+        if (error) throw error;
+        setReservations((prev) => prev.filter((r) => r.recordId !== res.recordId));
+      }
+    } catch (err) {
+      console.warn('Booking deletion failed:', err.message);
+    }
+  };
+
   const handleUpdateOrderStatus = async (resId, newOrderStatus) => {
     try {
       const res = reservations.find(r => r.id === resId);
@@ -680,16 +697,20 @@ const Admin = () => {
                             {r.booking_source}
                           </span>
                         </td>
-                        <td>{r.status}</td>
+                        <td>
+                          <select value={r.status || 'Pending'} onChange={(e) => handleUpdateStatus(r.id, e.target.value)}>
+                            <option value="Pending">Pending</option>
+                            <option value="Checked In">Checked In</option>
+                            <option value="Cancelled">Cancelled</option>
+                          </select>
+                        </td>
                         <td>
                           <div className="row-actions">
-                            {r.status !== 'Checked In' && (
-                              <button onClick={() => handleUpdateStatus(r.id, 'Checked In')} className="btn-small">Check In</button>
-                            )}
                             <button onClick={() => handleToggleBookingSource(r.id)} className="btn-small btn-outline">
                               {r.booking_source === 'WhatsApp' ? 'Mark Online' : 'Mark WhatsApp'}
                             </button>
                             <button onClick={() => setSelectedQrBooking(r)} className="btn-small btn-outline">QR</button>
+                            <button onClick={() => handleDeleteBooking(r.id)} className="btn-small btn-outline" style={{borderColor: 'red', color: 'red'}}>Delete</button>
                           </div>
                         </td>
                       </tr>
