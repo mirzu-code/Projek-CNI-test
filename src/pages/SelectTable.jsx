@@ -298,33 +298,6 @@ const SelectTable = () => {
       setIsProcessing(false);
     }
   };
-    if (!selectedTable) {
-      setErrorMessage('Sila pilih meja terlebih dahulu.');
-      return;
-    }
-
-    const lock = getLockForTable(selectedTable.id);
-    if (!lock || lock.lock_token !== lockToken || new Date(lock.lock_expires_at).getTime() <= Date.now()) {
-      setErrorMessage('Kunci meja telah tamat. Sila pilih semula meja.');
-      return;
-    }
-
-    const refreshExpiry = new Date(Date.now() + lockDurationMs).toISOString();
-    await supabase
-      .from('table_locks')
-      .update({ lock_expires_at: refreshExpiry })
-      .eq('table_id', selectedTable.id)
-      .eq('lock_token', lockToken);
-
-    const nextBooking = {
-      ...bookingData,
-      tableId: selectedTable.id,
-      tableNumber: selectedTable.name,
-      tableCapacity: selectedTable.seats
-    };
-
-    navigate('/checkout', { state: { bookingData: nextBooking } });
-  };
 
   return (
     <div className="booking-page animate-fade-in">
