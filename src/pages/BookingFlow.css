@@ -75,15 +75,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  padding: 0.4rem 1rem;
   background: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
+  border-radius: 20px;
   opacity: 0.6;
   transition: all 0.3s ease;
   font-weight: 600;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
 
 .step-indicator span.active {
@@ -544,6 +544,7 @@
 @media (max-width: 600px) {
   .step-indicator span {
     font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
   }
   .step-indicator .line {
     width: 10px;
