@@ -115,17 +115,33 @@ const About = () => {
 
       {/* Location Section */}
       <section className="about-location-section" style={{ padding: '4rem 0', backgroundColor: 'var(--bg-card)', marginTop: '2rem' }}>
-        <div className="container text-center">
-          <h2 className="section-title">Visit Us</h2>
-          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-light)' }}>
-            <strong>Lembayung Restaurant</strong><br />
-            Kampung Baru, 50300 Kuala Lumpur,<br />
-            Wilayah Persekutuan Kuala Lumpur, Malaysia
-          </p>
-          <div style={{ marginTop: '2rem' }}>
-            <a href="https://maps.google.com/?q=Kampung+Baru+Kuala+Lumpur" target="_blank" rel="noopener noreferrer" className="btn-outline">
-              Get Directions
-            </a>
+        <div className="container">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', alignItems: 'center' }}>
+            <div className="location-text" style={{ textAlign: 'left' }}>
+              <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '1.5rem' }}>Visit Us</h2>
+              <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-light)' }}>
+                <strong>Lembayung Restaurant</strong><br />
+                Kampung Baru, 50300 Kuala Lumpur,<br />
+                Wilayah Persekutuan Kuala Lumpur, Malaysia
+              </p>
+              <div style={{ marginTop: '2rem' }}>
+                <a href="https://maps.google.com/?q=Kampung+Baru+Kuala+Lumpur" target="_blank" rel="noopener noreferrer" className="btn-outline">
+                  Get Directions
+                </a>
+              </div>
+            </div>
+            <div className="location-map" style={{ width: '100%', height: '350px', borderRadius: '12px', overflow: 'hidden', boxShadow: 'var(--shadow-md)', border: '2px solid var(--border-color)' }}>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15935.044158913988!2d101.693175!3d3.1633!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc37d37b19a169%3A0xc6fb0e4eb0883f3e!2sKampung%20Baru%2C%20Kuala%20Lumpur%2C%20Federal%20Territory%20of%20Kuala%20Lumpur!5e0!3m2!1sen!2smy!4v1700000000000!5m2!1sen!2smy"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Kampung Baru Location"
+              ></iframe>
+            </div>
           </div>
         </div>
       </section>
