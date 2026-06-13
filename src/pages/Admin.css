@@ -527,3 +527,146 @@
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Sync Status & Auto-refresh styling */
+.sync-status-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-right: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .sync-status-container {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    margin-right: 0.5rem;
+  }
+}
+
+.sync-status-indicator {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--surface-soft);
+  padding: 6px 14px;
+  border-radius: 30px;
+  border: 1px solid var(--muted-border);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.sync-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #2ec771;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(46, 199, 113, 0.6);
+  transition: all 0.3s ease;
+}
+
+.sync-status-indicator.refreshing .sync-dot {
+  background-color: var(--accent-color);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+  animation: pulse-dot 1s infinite alternate;
+}
+
+@keyframes pulse-dot {
+  from { transform: scale(0.8); opacity: 0.5; }
+  to { transform: scale(1.2); opacity: 1; }
+}
+
+.btn-sync {
+  background: transparent;
+  border: 1px solid var(--muted-border);
+  color: var(--text-main);
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-sync:hover:not(:disabled) {
+  background: rgba(26, 71, 42, 0.05);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-sync:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sync-icon {
+  transition: transform 0.2s;
+  display: block;
+}
+
+.btn-sync:hover:not(:disabled) .sync-icon {
+  transform: rotate(30deg);
+}
+
+.refreshing-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Checked In Digital Stamp styles for Admin QR Preview */
+.checked-in-seal-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  z-index: 100;
+  pointer-events: none;
+}
+
+.seal-inner {
+  width: 120px;
+  height: 120px;
+  border: 4px double #d4af37;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #d4af37;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.2), inset 0 0 8px rgba(212, 175, 55, 0.1);
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+}
+
+.seal-text {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.seal-status {
+  font-size: 1.25rem;
+  letter-spacing: 1px;
+  margin: 0.2rem 0;
+  border-top: 2px solid #d4af37;
+  border-bottom: 2px solid #d4af37;
+  padding: 0.1rem 0.3rem;
+  line-height: 1.1;
+}
+
+.seal-date {
+  font-size: 0.65rem;
+  opacity: 0.9;
+}

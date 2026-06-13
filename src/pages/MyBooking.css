@@ -164,17 +164,10 @@
 .checked-in-seal-overlay {
   position: absolute;
   top: 50%;
-  left: 22%;
+  left: 50%;
   transform: translate(-50%, -50%) rotate(-12deg);
   z-index: 100;
   pointer-events: none;
-}
-
-@media (max-width: 600px) {
-  .checked-in-seal-overlay {
-    top: 28%;
-    left: 50%;
-  }
 }
 
 .seal-inner {

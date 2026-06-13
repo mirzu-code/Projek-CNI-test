@@ -241,16 +241,6 @@ const MyBooking = () => {
         )}
 
         <div className={`ticket-card ${booking.status === 'Checked In' ? 'is-checked-in' : ''}`}>
-          {booking.status === 'Checked In' && (
-            <div className="checked-in-seal-overlay animate-zoom-in">
-              <div className="seal-inner">
-                <span className="seal-text">VERIFIED</span>
-                <span className="seal-status">CHECKED IN</span>
-                <span className="seal-date">{new Date().toLocaleDateString('en-MY', { day: '2-digit', month: 'short' }).toUpperCase()}</span>
-              </div>
-            </div>
-          )}
-          
           <div className="ticket-header">
             <h3>{booking.id}</h3>
             <span className={`status-badge ${booking.status.toLowerCase().replace(' ', '-')}`}>{booking.status}</span>
@@ -258,7 +248,18 @@ const MyBooking = () => {
           
           <div className="ticket-body">
             <div className="qr-placeholder">
-              <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(booking.id)}`} alt="QR Code" />
+              <div style={{ position: 'relative', display: 'inline-block' }}>
+                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(booking.id)}`} alt="QR Code" />
+                {booking.status === 'Checked In' && (
+                  <div className="checked-in-seal-overlay animate-zoom-in">
+                    <div className="seal-inner">
+                      <span className="seal-text">VERIFIED</span>
+                      <span className="seal-status">CHECKED IN</span>
+                      <span className="seal-date">{new Date().toLocaleDateString('en-MY', { day: '2-digit', month: 'short' }).toUpperCase()}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
               <small>Show this QR to the admin for check-in</small>
             </div>
             

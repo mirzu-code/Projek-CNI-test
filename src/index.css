@@ -280,6 +280,15 @@ button {
   animation: glow 3s ease-in-out infinite;
 }
 
+@keyframes stampZoomIn {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(2.5) rotate(15deg); filter: blur(2px); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(-12deg); filter: blur(0); }
+}
+
+.animate-zoom-in {
+  animation: stampZoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .main-content {

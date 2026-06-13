@@ -34,6 +34,9 @@ const Admin = () => {
   const [lockActionMessage, setLockActionMessage] = useState('');
   const scannerRef = useRef(null);
   const reservationsRef = useRef(reservations);
+  const [countdown, setCountdown] = useState(60);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastRefreshed, setLastRefreshed] = useState(new Date());
 
   const TABLES = [
     { id: 1, name: 'Table 1', seats: 2 },
@@ -283,6 +286,8 @@ const Admin = () => {
   };
 
   useEffect(() => {
+    if (!isAuthenticated) return;
+
     const loadReservations = async () => {
       try {
         const { data, error } = await supabase
@@ -327,6 +332,8 @@ const Admin = () => {
     loadReservations();
     loadMenus();
     loadTableLocks();
+    setCountdown(60);
+    setLastRefreshed(new Date());
 
     const bookingChannel = supabase.channel('public:bookings');
 
@@ -344,16 +351,41 @@ const Admin = () => {
 
     bookingChannel.subscribe();
 
-    const refreshInterval = setInterval(() => {
-      refreshReservations();
-      refreshTableLocks();
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          refreshReservations();
+          refreshTableLocks();
+          setLastRefreshed(new Date());
+          return 60;
+        }
+        return prev - 1;
+      });
     }, 1000);
 
     return () => {
-      clearInterval(refreshInterval);
+      clearInterval(timer);
       bookingChannel.unsubscribe();
     };
-  }, []);
+  }, [isAuthenticated]);
+
+  const handleManualRefresh = async () => {
+    if (isRefreshing) return;
+    setIsRefreshing(true);
+    try {
+      await Promise.all([
+        refreshReservations(),
+        refreshTableLocks(),
+        loadMenus()
+      ]);
+    } catch (err) {
+      console.warn('Manual refresh failed:', err);
+    } finally {
+      setIsRefreshing(false);
+      setCountdown(60);
+      setLastRefreshed(new Date());
+    }
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -620,6 +652,24 @@ const Admin = () => {
             <h1>Admin Dashboard</h1>
           </div>
           <div className="admin-header-actions">
+            <div className="sync-status-container">
+              <span className={`sync-status-indicator ${isRefreshing ? 'refreshing' : ''}`}>
+                <span className="sync-dot"></span>
+                {isRefreshing ? 'Refreshing...' : `Auto-refresh in ${countdown}s`}
+              </span>
+              <button 
+                type="button" 
+                className="btn-sync" 
+                onClick={handleManualRefresh}
+                disabled={isRefreshing}
+                title="Refresh booking data now"
+              >
+                <svg className={`sync-icon ${isRefreshing ? 'refreshing-icon' : ''}`} viewBox="0 0 24 24" width="16" height="16">
+                  <path fill="currentColor" d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                </svg>
+                <span>Refresh Now</span>
+              </button>
+            </div>
             <button className="btn-outline" onClick={handleLogout}>Logout</button>
           </div>
         </div>
@@ -722,7 +772,18 @@ const Admin = () => {
                   <div className="qr-panel">
                     <h3>Order Ticket: {selectedQrBooking.id}</h3>
                     <div className="qr-card">
-                      <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(selectedQrBooking.id)}`} alt="Booking QR Code" />
+                      <div className="qr-image-container" style={{ position: 'relative', display: 'inline-block', alignSelf: 'center' }}>
+                        <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(selectedQrBooking.id)}`} alt="Booking QR Code" />
+                        {selectedQrBooking.status === 'Checked In' && (
+                          <div className="checked-in-seal-overlay animate-zoom-in">
+                            <div className="seal-inner">
+                              <span className="seal-text">VERIFIED</span>
+                              <span className="seal-status">CHECKED IN</span>
+                              <span className="seal-date">{new Date(selectedQrBooking.date).toLocaleDateString('en-MY', { day: '2-digit', month: 'short' }).toUpperCase()}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                       <div className="qr-info">
                         <p><strong>{selectedQrBooking.name}</strong></p>
                         <p>{selectedQrBooking.date} {selectedQrBooking.time}</p>
