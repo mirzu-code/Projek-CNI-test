@@ -15,7 +15,7 @@ const SplashScreen = ({ onFinished }) => {
     <div className="splash-screen">
       <div className="splash-content">
         <div className="logo-circle-container">
-          <img src="/Lembayung Image.jpeg" alt="Lembayung Logo" className="logo-image-circle" />
+          <img src="/lembayung_sketch_round.svg" alt="Lembayung Logo" className="logo-image-circle" />
         </div>
       </div>
     </div>
