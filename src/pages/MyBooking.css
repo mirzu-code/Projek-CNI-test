@@ -232,3 +232,72 @@
   text-align: center;
   font-weight: 600;
 }
+
+/* ===== Receipt Section ===== */
+.receipt-section {
+  padding: 1.5rem 2rem;
+  border-top: 2px dashed var(--border-color);
+  background: #fafaf7;
+}
+
+.receipt-title {
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.receipt-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.receipt-row.receipt-dessert {
+  padding-left: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.receipt-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 0.5rem 0;
+}
+
+.receipt-divider.thick {
+  height: 2px;
+  background: var(--accent-color);
+  margin: 0.75rem 0;
+}
+
+.receipt-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.receipt-row.receipt-total {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--primary-color);
+}
+
+.receipt-note {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-top: 1rem;
+  font-style: italic;
+}

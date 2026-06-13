@@ -17,6 +17,7 @@ import Desserts from './pages/Desserts';
 import About from './pages/About';
 import Checkout from './pages/Checkout';
 import SelectTable from './pages/SelectTable';
+import DessertAddon from './pages/DessertAddon';
 import SplashScreen from './components/SplashScreen';
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/book" element={<BookingFlow />} />
             <Route path="/select-table" element={<SelectTable />} />
+            <Route path="/add-on-dessert" element={<DessertAddon />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/my-booking" element={<MyBooking />} />

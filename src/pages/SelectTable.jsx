@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './BookingFlow.css';
@@ -293,7 +293,7 @@ const SelectTable = () => {
         tableCapacity: selectedTable.seats
       };
 
-      navigate('/checkout', { state: { bookingData: nextBooking } });
+      navigate('/add-on-dessert', { state: { bookingData: nextBooking } });
     } finally {
       setIsProcessing(false);
     }

@@ -49,6 +49,12 @@ const Checkout = () => {
     // Simulate payment processing
     setTimeout(async () => {
       try {
+        let dishString = booking.preselectDish || '';
+        if (booking.addonDesserts && booking.addonDesserts.length > 0) {
+          const dessertNames = booking.addonDesserts.map(d => d.name).join(', ');
+          dishString = dishString ? `${dishString} | Desserts: ${dessertNames}` : `Desserts: ${dessertNames}`;
+        }
+
         const payload = {
           customer_name: booking.name,
           customer_phone: booking.phone,
@@ -56,7 +62,7 @@ const Checkout = () => {
           booking_time: booking.time,
           total_guests: booking.pax,
           cuisine_id: booking.preselectCuisine === 'malay' ? 1 : booking.preselectCuisine === 'chinese' ? 2 : booking.preselectCuisine === 'japanese' ? 3 : booking.preselectCuisine === 'western' ? 4 : booking.preselectCuisine === 'indian' ? 5 : null,
-          dish: booking.preselectDish || null,
+          dish: dishString || null,
           table_id: booking.tableId || null,
           status: 'Confirmed'
         };
@@ -123,6 +129,8 @@ const Checkout = () => {
   }
 
   const reservationDeposit = 50.00;
+  const dessertTotal = booking.dessertTotal || 0;
+  const finalTotal = reservationDeposit + dessertTotal;
 
   return (
     <div className="booking-page animate-fade-in">
@@ -132,7 +140,9 @@ const Checkout = () => {
           <div className="step-indicator">
             <span className="active">1. Details</span>
             <span className="line"></span>
-            <span className="active">2. Payment</span>
+            <span className="active">2. Add-ons</span>
+            <span className="line"></span>
+            <span className="active">3. Payment</span>
           </div>
         </div>
 
@@ -164,10 +174,34 @@ const Checkout = () => {
                 <span>Table</span>
                 <strong>{booking.tableNumber || 'Not selected'}</strong>
               </div>
+              
+              {booking.addonDesserts && booking.addonDesserts.length > 0 && (
+                <>
+                  <hr style={{ margin: '1rem 0', borderColor: 'var(--border-color)' }} />
+                  <div style={{ marginBottom: '0.5rem', fontWeight: '600', color: 'var(--primary-color)' }}>Dessert Add-ons:</div>
+                  {booking.addonDesserts.map(d => (
+                    <div key={d.id} className="summary-item" style={{ paddingLeft: '1rem', fontSize: '0.9rem' }}>
+                      <span>{d.name}</span>
+                      <strong>RM {d.price.toFixed(2)}</strong>
+                    </div>
+                  ))}
+                </>
+              )}
+
               <hr style={{ margin: '1rem 0', borderColor: 'var(--border-color)' }} />
-              <div className="summary-item total-row">
+              <div className="summary-item">
                 <span>Reservation Deposit</span>
-                <strong style={{ fontSize: '1.2rem', color: 'var(--primary-color)' }}>RM {reservationDeposit.toFixed(2)}</strong>
+                <strong>RM {reservationDeposit.toFixed(2)}</strong>
+              </div>
+              {dessertTotal > 0 && (
+                <div className="summary-item">
+                  <span>Dessert Total</span>
+                  <strong>RM {dessertTotal.toFixed(2)}</strong>
+                </div>
+              )}
+              <div className="summary-item total-row" style={{ marginTop: '0.5rem', paddingTop: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                <span>Total Amount</span>
+                <strong style={{ fontSize: '1.2rem', color: 'var(--primary-color)' }}>RM {finalTotal.toFixed(2)}</strong>
               </div>
             </div>
           </div>
@@ -246,11 +280,11 @@ const Checkout = () => {
               {error && <p className="error-text mt-2">{error}</p>}
 
               <div className="payment-actions mt-4" style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-                <button type="button" className="btn-outline" onClick={() => navigate('/select-table')} disabled={isProcessingPayment} style={{ flex: 1 }}>
+                <button type="button" className="btn-outline" onClick={() => navigate('/add-on-dessert', { state: { bookingData: booking } })} disabled={isProcessingPayment} style={{ flex: 1 }}>
                   Back
                 </button>
                 <button type="submit" className="btn-primary" disabled={isProcessingPayment} style={{ flex: 2 }}>
-                  {isProcessingPayment ? 'Processing...' : `Pay RM ${reservationDeposit.toFixed(2)}`}
+                  {isProcessingPayment ? 'Processing...' : `Pay RM ${finalTotal.toFixed(2)}`}
                 </button>
               </div>
             </form>

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './MyBooking.css';
@@ -258,8 +258,8 @@ const MyBooking = () => {
           
           <div className="ticket-body">
             <div className="qr-placeholder">
-              <img src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${booking.id}`} alt="QR Code" />
-              <small>Scan at Entrance</small>
+              <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(booking.id)}`} alt="QR Code" />
+              <small>Show this QR to the admin for check-in</small>
             </div>
             
             <div className="ticket-details">
@@ -283,14 +283,51 @@ const MyBooking = () => {
                 <span className="label">Phone</span>
                 <span className="value">{booking.phone}</span>
               </div>
+              {booking.tableNumber && (
+                <div className="detail-row">
+                  <span className="label">Table</span>
+                  <span className="value">{booking.tableNumber}</span>
+                </div>
+              )}
               
               {booking.preorder && (
                 <div className="detail-row highlight mt-2">
-                  <span className="label">SDG 9 Pre-order</span>
-                  <span className="value">{booking.dish.replace('-', ' ')}</span>
+                  <span className="label">Pre-order</span>
+                  <span className="value">{booking.dish ? booking.dish.replace('-', ' ') : ''}</span>
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Receipt Section */}
+          <div className="receipt-section">
+            <h4 className="receipt-title">Payment Receipt</h4>
+            <div className="receipt-items">
+              <div className="receipt-row">
+                <span>Reservation Deposit</span>
+                <span>RM 50.00</span>
+              </div>
+
+              {booking.addonDesserts && booking.addonDesserts.length > 0 && (
+                <>
+                  <div className="receipt-divider"></div>
+                  <div className="receipt-label">Dessert Add-ons</div>
+                  {booking.addonDesserts.map((d, idx) => (
+                    <div key={idx} className="receipt-row receipt-dessert">
+                      <span>{d.name}</span>
+                      <span>RM {d.price.toFixed(2)}</span>
+                    </div>
+                  ))}
+                </>
+              )}
+
+              <div className="receipt-divider thick"></div>
+              <div className="receipt-row receipt-total">
+                <span>Total Paid</span>
+                <span>RM {(50 + (booking.dessertTotal || 0)).toFixed(2)}</span>
+              </div>
+            </div>
+            <p className="receipt-note">This is a digital receipt. A copy has been saved to your booking.</p>
           </div>
           
           <div className="ticket-footer">
