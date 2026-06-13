@@ -29,12 +29,11 @@
 /* ===== HERO SECTION ===== */
 .hero-section {
   position: relative;
-  height: 100vh;
-  min-height: 700px;
+  min-height: calc(100vh - 75px);
   background: linear-gradient(
     135deg,
-    rgba(26, 71, 42, 0.7) 0%,
-    rgba(15, 40, 24, 0.8) 100%
+    rgba(25, 19, 12, 0.75) 0%,
+    rgba(15, 10, 6, 0.9) 100%
   ),
   url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=2000&q=80');
   background-size: cover;
@@ -61,11 +60,16 @@
 .hero-copy {
   position: relative;
   z-index: 1;
-  max-width: 900px;
+  max-width: 860px;
   text-align: center;
-  color: #f5f3f0;
-  padding: 4rem 2rem;
+  color: #f3efe7;
+  padding: 3.5rem 2.25rem;
   animation: fadeIn 1s ease-out;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(12, 8, 5, 0.35);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.26);
+  backdrop-filter: blur(18px);
 }
 
 .subtitle {
@@ -80,23 +84,23 @@
 
 .hero-copy h1 {
   font-size: clamp(3rem, 6vw, 4.5rem);
-  line-height: 1.1;
+  line-height: 1.05;
   margin-bottom: 1.5rem;
-  letter-spacing: -0.02em;
-  color: #ffffff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #fffdfa;
+  text-shadow: 0 8px 28px rgba(0, 0, 0, 0.36);
+  font-weight: 800;
 }
 
 .hero-copy p {
   max-width: 700px;
   margin: 0 auto 2.5rem auto;
-  font-size: 1.2rem;
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  font-size: 1.12rem;
+  line-height: 1.85;
+  color: rgba(245, 241, 234, 0.96);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.28);
   font-weight: 300;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
 }
 
 .hero-actions {
@@ -109,10 +113,10 @@
 
 .hero-actions .btn-primary,
 .hero-actions .btn-secondary {
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   padding: 1.1rem 2.5rem;
-  letter-spacing: 0.1em;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.12em;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
 }
 
 /* ===== HIGHLIGHTS SECTION ===== */

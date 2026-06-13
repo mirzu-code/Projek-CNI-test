@@ -1,7 +1,7 @@
 .navbar {
-  background: linear-gradient(180deg, var(--bg-card) 0%, rgba(255, 255, 255, 0.98) 100%);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border-bottom: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 18px 45px rgba(14, 10, 6, 0.12);
+  border-bottom: 1px solid rgba(160, 150, 130, 0.18);
   position: fixed;
   top: 0;
   width: 100%;
@@ -9,7 +9,7 @@
   height: 75px;
   display: flex;
   align-items: center;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(18px);
 }
 
 .nav-container {
@@ -24,13 +24,13 @@
 
 .nav-logo {
   font-family: var(--font-heading);
-  font-size: 1.8rem;
+  font-size: 1.95rem;
   font-weight: 700;
-  color: var(--primary-color);
-  letter-spacing: 0.1em;
+  color: #25402f;
+  letter-spacing: 0.16em;
   white-space: nowrap;
   flex-shrink: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  text-shadow: 0 4px 12px rgba(45, 58, 44, 0.13);
 }
 
 .nav-logo::before {
@@ -50,11 +50,11 @@
 }
 
 .nav-links a {
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 600;
-  color: var(--text-main);
+  color: #2f3731;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   position: relative;
   padding: 0.5rem 0;
   min-width: 90px;
