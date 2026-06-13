@@ -190,8 +190,41 @@ const Admin = () => {
     setScannerMessage('SCANNING TICKET CODE IN REAL-TIME...');
 
     setTimeout(async () => {
-      const lowerScan = normalizedScan.toLowerCase();
-      let match = reservationsRef.current.find(res => res.id.toLowerCase() === lowerScan);
+      const lowerScan = normalizedScan.toLowerCase().replace(/\s+/g, '');
+      const getCleanId = (idStr) => idStr.toLowerCase().replace(/\s+/g, '').replace('res-', '');
+      const targetCleanId = lowerScan.replace('res-', '');
+
+      // 1. Try to find match in local state
+      let match = reservationsRef.current.find(res => {
+        const cleanResId = getCleanId(res.id);
+        const recordIdStr = String(res.recordId);
+        return cleanResId === targetCleanId || recordIdStr === targetCleanId;
+      });
+
+      // 2. Fallback: Query database directly in case local state hasn't polled/refreshed yet
+      if (!match) {
+        try {
+          const recordIdNum = parseInt(targetCleanId, 10);
+          if (!isNaN(recordIdNum)) {
+            const { data, error } = await supabase
+              .from('bookings')
+              .select('*')
+              .eq('id', recordIdNum)
+              .maybeSingle();
+
+            if (data && !error) {
+              match = mapBookingRecord(data);
+              // Update local state so it appears in the list
+              setReservations((prev) => {
+                if (prev.some(r => r.recordId === match.recordId)) return prev;
+                return [match, ...prev];
+              });
+            }
+          }
+        } catch (dbErr) {
+          console.warn('Fallback DB query failed during scan:', dbErr);
+        }
+      }
 
       if (match) {
         setScannerSuccessRes(match);

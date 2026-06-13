@@ -84,7 +84,11 @@ const Checkout = () => {
           payload.table_capacity = booking.tableCapacity;
         }
 
-        const { data: bookingData, error: insertError } = await supabase.from('bookings').insert([payload]);
+        const { data: bookingData, error: insertError } = await supabase
+          .from('bookings')
+          .insert([payload])
+          .select();
+        
         if (insertError) throw insertError;
 
         if (booking.tableId) {
@@ -105,9 +109,13 @@ const Checkout = () => {
           if (lockError) console.warn('Table lock failed:', lockError);
         }
 
+        const insertedRecord = bookingData && bookingData[0];
+        const dbId = insertedRecord ? `RES-${insertedRecord.id}` : `RES-${Date.now()}`;
+
         localStorage.removeItem('bookingData');
         localStorage.setItem('activeBooking', JSON.stringify({
           ...booking,
+          id: dbId,
           tableId: booking.tableId,
           tableNumber: booking.tableNumber,
           dish: dishString,
