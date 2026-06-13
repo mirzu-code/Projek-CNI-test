@@ -617,6 +617,10 @@ const Admin = () => {
                 <li><button onClick={() => handleNavClick('menus')}>Menus</button></li>
               </ul>
             </nav>
+            <div className="sdg-badge">
+              <strong>SDG 9</strong>
+              <p>Sustainable Infrastructure & Innovation</p>
+            </div>
           </aside>
 
           <main className="admin-main">
