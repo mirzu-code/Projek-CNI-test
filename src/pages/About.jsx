@@ -4,7 +4,7 @@ import './About.css';
 const About = () => {
   const metrics = [
     { label: 'Food Waste Reduction', value: 94, desc: 'Digital pre-ordering enables precise ingredients sourcing, avoiding waste.' },
-    { label: 'Sourcing Sourcing Efficiency', value: 98, desc: 'Direct-from-farm partnerships within Kuala Lumpur and Selangor rural areas.' },
+    { label: 'Direct Sourcing Efficiency', value: 98, desc: 'Direct-from-farm partnerships within Kuala Lumpur and Selangor rural areas.' },
     { label: 'Digital Capacity Optimization', value: 100, desc: '100% paperless scheduling, prevents overcrowding and kitchen overload.' },
     { label: 'Clean Energy & Water Recirculation', value: 82, desc: 'Rainwater harvesting and low-impact LED glasshouse microclimate ventilation.' }
   ];
@@ -43,13 +43,16 @@ const About = () => {
             <div className="about-story-text">
               <h2>Preserving Heritage, Embracing Innovation</h2>
               <p>
-                Lembayung was founded in the heart of Kuala Lumpur\'s historic Kampung Baru enclave. 
-                Our architectural blueprint is a visual representation of progress: a futuristic glasshouse surrounded by 
+                Lembayung was founded in the heart of Kuala Lumpur\'s historic Kampung Baru enclave.
+                Our architectural blueprint is a visual representation of progress: a futuristic glasshouse surrounded by
                 traditional wooden Malay stilt houses. This marriage of old and new defines our culinary mission.
               </p>
               <p>
-                We serve culinary treasures from across Malaysia and Asia—from rich Malay *Masak Lemak* and delicate Chinese *Steamed Bass* 
+                We serve culinary treasures from across Malaysia and Asia—from rich Malay *Masak Lemak* and delicate Chinese *Steamed Bass*
                 to precise Japanese *Wagyu Ramen*. Each dish represents structural history, cooked with cutting-edge tools and sustainable precision.
+              </p>
+              <p>
+                We take our craft very seriously, but the only thing more serious than our recipes is our ability to laugh when the sambal gets extra spicy.
               </p>
             </div>
             <div className="about-story-media">
@@ -102,6 +105,7 @@ const About = () => {
                   <h3>{c.name}</h3>
                   <span className="chef-role-badge">{c.role}</span>
                   <p>{c.bio}</p>
+                  <p className="chef-fun-line">{c.role.includes('Pastry') ? 'She can make your dessert smile before you do.' : 'He believes every fire should be treated like a fine work of art.'}</p>
                 </div>
               </div>
             ))}

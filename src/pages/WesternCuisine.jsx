@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
+import { useCuisineMenuItems } from '../hooks/useCuisineMenuItems';
 
 const WesternCuisine = () => {
-  const dishesInfo = [
+  const { items: cuisineItems } = useCuisineMenuItems(4);
+  const dishesInfo = cuisineItems.length > 0 ? cuisineItems : [
     {
       value: 'angus-steak',
       name: 'Black Angus Ribeye Steak',

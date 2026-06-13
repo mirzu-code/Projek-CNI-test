@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
+import { useCuisineMenuItems } from '../hooks/useCuisineMenuItems';
 
 const JapaneseCuisine = () => {
-  const dishesInfo = [
+  const { items: cuisineItems } = useCuisineMenuItems(3);
+  const dishesInfo = cuisineItems.length > 0 ? cuisineItems : [
     {
       value: 'wagyu-ramen',
       name: 'Wagyu Beef Black Garlic Ramen',

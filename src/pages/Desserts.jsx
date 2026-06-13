@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
+import { useCuisineMenuItems } from '../hooks/useCuisineMenuItems';
 import './Desserts.css';
 
 const Desserts = () => {
-  const dishesInfo = [
+  const { items: cuisineItems } = useCuisineMenuItems(6);
+  const dishesInfo = cuisineItems.length > 0 ? cuisineItems : [
     {
       value: 'kuih-bingka-ubi',
       name: 'Kuih Bingka Ubi',

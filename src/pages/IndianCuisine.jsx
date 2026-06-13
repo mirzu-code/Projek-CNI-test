@@ -1,8 +1,10 @@
 ﻿import { Link } from 'react-router-dom';
+import { useCuisineMenuItems } from '../hooks/useCuisineMenuItems';
 import './IndianCuisine.css';
 
 const IndianCuisine = () => {
-  const dishesInfo = [
+  const { items: cuisineItems } = useCuisineMenuItems(5);
+  const dishesInfo = cuisineItems.length > 0 ? cuisineItems : [
     {
       value: 'lamb-biryani',
       name: 'Aromatic Lamb Shank Biryani',
