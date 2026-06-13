@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './BookingFlow.css';
@@ -337,11 +337,23 @@ const BookingFlow = () => {
   const submitBooking = () => {
     if (!validateStep()) return;
 
+    const resolvedDishes = formData.selectedDishes.map((dishValue) => {
+      const dish = getDishRecord(dishValue);
+      return {
+        value: dishValue,
+        name: dish ? dish.name : dishValue,
+        price: dish ? parsePrice(dish.price) : 0
+      };
+    });
+
     const bookingData = {
       ...formData,
       pax: Number(formData.pax),
       tableId: null,
-      tableNumber: null
+      tableNumber: null,
+      selectedDishDetails: resolvedDishes,
+      sideDish: getIncludedSide(),
+      dishTotal: calculateTotal()
     };
 
     localStorage.setItem('bookingData', JSON.stringify(bookingData));

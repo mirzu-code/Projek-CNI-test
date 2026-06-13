@@ -49,7 +49,20 @@ const Checkout = () => {
     // Simulate payment processing
     setTimeout(async () => {
       try {
-        let dishString = booking.preselectDish || '';
+        let dishesSelected = [];
+        if (booking.selectedDishDetails && booking.selectedDishDetails.length > 0) {
+          dishesSelected = booking.selectedDishDetails.map(d => d.name);
+        } else if (booking.preselectDish) {
+          dishesSelected = [booking.preselectDish];
+        }
+
+        let dishString = dishesSelected.join(', ');
+        
+        let sideDishString = booking.sideDish || '';
+        if (sideDishString) {
+          dishString = dishString ? `${dishString} (Side: ${sideDishString})` : `Side: ${sideDishString}`;
+        }
+
         if (booking.addonDesserts && booking.addonDesserts.length > 0) {
           const dessertNames = booking.addonDesserts.map(d => d.name).join(', ');
           dishString = dishString ? `${dishString} | Desserts: ${dessertNames}` : `Desserts: ${dessertNames}`;
@@ -97,6 +110,7 @@ const Checkout = () => {
           ...booking,
           tableId: booking.tableId,
           tableNumber: booking.tableNumber,
+          dish: dishString,
           status: 'Confirmed'
         }));
         navigate('/my-booking');
@@ -128,7 +142,7 @@ const Checkout = () => {
     );
   }
 
-  const reservationDeposit = 50.00;
+  const reservationDeposit = 10.00;
   const dessertTotal = booking.dessertTotal || 0;
   const finalTotal = reservationDeposit + dessertTotal;
 
@@ -166,10 +180,27 @@ const Checkout = () => {
                 <span>Guests</span>
                 <strong>{booking.pax}</strong>
               </div>
-              <div className="summary-item">
-                <span>Pre-order</span>
-                <strong>{booking.preselectDish || 'None'}</strong>
-              </div>
+              {booking.selectedDishDetails && booking.selectedDishDetails.length > 0 ? (
+                <div className="summary-item" style={{ flexDirection: 'column', alignItems: 'flex-start', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '0.9rem', color: 'var(--text-light)', marginBottom: '0.4rem' }}>Pre-ordered Dishes:</span>
+                  {booking.selectedDishDetails.map((d, i) => (
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontSize: '0.95rem', paddingLeft: '0.5rem', margin: '0.15rem 0' }}>
+                      <span>• {d.name}</span>
+                      <strong>RM {d.price.toFixed(2)}</strong>
+                    </div>
+                  ))}
+                  {booking.sideDish && (
+                    <div style={{ fontSize: '0.85rem', color: 'var(--primary-light)', paddingLeft: '0.5rem', marginTop: '0.25rem' }}>
+                      Includes side: <strong>{booking.sideDish}</strong>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="summary-item">
+                  <span>Pre-order</span>
+                  <strong>{booking.preselectDish || 'None'}</strong>
+                </div>
+              )}
               <div className="summary-item">
                 <span>Table</span>
                 <strong>{booking.tableNumber || 'Not selected'}</strong>
@@ -199,9 +230,21 @@ const Checkout = () => {
                   <strong>RM {dessertTotal.toFixed(2)}</strong>
                 </div>
               )}
-              <div className="summary-item total-row" style={{ marginTop: '0.5rem', paddingTop: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                <span>Total Amount</span>
-                <strong style={{ fontSize: '1.2rem', color: 'var(--primary-color)' }}>RM {finalTotal.toFixed(2)}</strong>
+              {booking.dishTotal > 0 && (
+                <div className="summary-item">
+                  <span>Pre-ordered Dishes</span>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-light)', fontStyle: 'italic' }}>(Pay at Restaurant)</span>
+                  <strong>RM {booking.dishTotal.toFixed(2)}</strong>
+                </div>
+              )}
+              <hr style={{ margin: '0.5rem 0', borderColor: 'var(--border-color)', borderStyle: 'dashed' }} />
+              <div className="summary-item total-row" style={{ marginTop: '0.5rem' }}>
+                <span>Total Paid Now</span>
+                <strong style={{ fontSize: '1.15rem', color: 'var(--primary-color)' }}>RM {finalTotal.toFixed(2)}</strong>
+              </div>
+              <div className="summary-item total-row" style={{ marginTop: '0.25rem', paddingTop: '0.25rem', borderTop: '1px solid var(--border-color)' }}>
+                <span>Total Order Value</span>
+                <strong style={{ fontSize: '1.2rem', color: 'var(--accent-dark)' }}>RM {(finalTotal + (booking.dishTotal || 0)).toFixed(2)}</strong>
               </div>
             </div>
           </div>

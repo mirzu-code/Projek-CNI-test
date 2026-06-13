@@ -34,7 +34,7 @@ const Admin = () => {
   const [lockActionMessage, setLockActionMessage] = useState('');
   const scannerRef = useRef(null);
   const reservationsRef = useRef(reservations);
-  const [countdown, setCountdown] = useState(60);
+  const [countdown, setCountdown] = useState(5);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastRefreshed, setLastRefreshed] = useState(new Date());
 
@@ -332,7 +332,7 @@ const Admin = () => {
     loadReservations();
     loadMenus();
     loadTableLocks();
-    setCountdown(60);
+    setCountdown(5);
     setLastRefreshed(new Date());
 
     const bookingChannel = supabase.channel('public:bookings');
@@ -357,7 +357,7 @@ const Admin = () => {
           refreshReservations();
           refreshTableLocks();
           setLastRefreshed(new Date());
-          return 60;
+          return 5;
         }
         return prev - 1;
       });
@@ -382,7 +382,7 @@ const Admin = () => {
       console.warn('Manual refresh failed:', err);
     } finally {
       setIsRefreshing(false);
-      setCountdown(60);
+      setCountdown(5);
       setLastRefreshed(new Date());
     }
   };

@@ -12,6 +12,19 @@ const MyBooking = () => {
   const [notification, setNotification] = useState('');
   const [isCancelling, setIsCancelling] = useState(false);
   const savedBookingRef = useRef(null);
+  const [menuItems, setMenuItems] = useState([]);
+
+  useEffect(() => {
+    const loadMenus = async () => {
+      try {
+        const { data } = await supabase.from('menus').select('*');
+        if (data) setMenuItems(data);
+      } catch (err) {
+        console.warn('Failed to load menus in MyBooking:', err);
+      }
+    };
+    loadMenus();
+  }, []);
 
   useEffect(() => {
     let bookingChannel = null;
@@ -191,6 +204,78 @@ const MyBooking = () => {
     }
   };
 
+  const getParsedOrder = () => {
+    if (!booking) return { preorders: [], sideDish: '', desserts: [], preorderTotal: 0, dessertTotal: 0 };
+
+    if (booking.selectedDishDetails && booking.selectedDishDetails.length > 0) {
+      const dessertTotal = booking.addonDesserts ? booking.addonDesserts.reduce((sum, d) => sum + d.price, 0) : 0;
+      return {
+        preorders: booking.selectedDishDetails,
+        sideDish: booking.sideDish || '',
+        desserts: booking.addonDesserts || [],
+        preorderTotal: booking.selectedDishDetails.reduce((sum, d) => sum + d.price, 0),
+        dessertTotal: dessertTotal
+      };
+    }
+
+    const dishStr = booking.dish || '';
+    let preordersPart = dishStr;
+    let dessertsPart = '';
+    let sideDish = '';
+
+    if (dishStr.includes(' | Desserts: ')) {
+      const parts = dishStr.split(' | Desserts: ');
+      preordersPart = parts[0];
+      dessertsPart = parts[1];
+    } else if (dishStr.startsWith('Desserts: ')) {
+      preordersPart = '';
+      dessertsPart = dishStr.replace('Desserts: ', '');
+    }
+
+    if (preordersPart.includes(' (Side: ')) {
+      const parts = preordersPart.split(' (Side: ');
+      preordersPart = parts[0];
+      sideDish = parts[1].replace(')', '');
+    } else if (preordersPart.startsWith('Side: ')) {
+      sideDish = preordersPart.replace('Side: ', '');
+      preordersPart = '';
+    }
+
+    const preorderNames = preordersPart ? preordersPart.split(', ') : [];
+    const preorderItems = preorderNames.map(name => {
+      const match = menuItems.find(item => item.name.toLowerCase() === name.toLowerCase());
+      return {
+        name,
+        price: match ? match.price : 0
+      };
+    });
+
+    const dessertNames = dessertsPart ? dessertsPart.split(', ') : [];
+    const dessertItems = dessertNames.map(name => {
+      const match = menuItems.find(item => item.name.toLowerCase() === name.toLowerCase());
+      const fallbackPrices = {
+        'Pandan Gula Melaka Cheesecake': 18.00,
+        'Matcha Lava Cake': 22.00,
+        'Classic Italian Tiramisu': 24.00
+      };
+      return {
+        name,
+        price: match ? match.price : (fallbackPrices[name] || 0)
+      };
+    });
+
+    const preorderTotal = preorderItems.reduce((sum, item) => sum + item.price, 0);
+    const dessertTotal = dessertItems.reduce((sum, item) => sum + item.price, 0);
+
+    return {
+      preorders: preorderItems,
+      sideDish,
+      desserts: dessertItems,
+      preorderTotal,
+      dessertTotal
+    };
+  };
+
   if (!booking) {
     return (
       <div className="my-booking-page animate-fade-in">
@@ -223,6 +308,8 @@ const MyBooking = () => {
       </div>
     );
   }
+
+  const orderDetails = getParsedOrder();
 
   return (
     <div className="my-booking-page animate-fade-in">
@@ -304,31 +391,62 @@ const MyBooking = () => {
           <div className="receipt-section">
             <h4 className="receipt-title">Payment Receipt</h4>
             <div className="receipt-items">
+              {/* Pre-ordered Dishes */}
+              {orderDetails.preorders && orderDetails.preorders.length > 0 && (
+                <>
+                  <div className="receipt-label">Pre-ordered Dishes (Pay at Restaurant)</div>
+                  {orderDetails.preorders.map((d, idx) => (
+                    <div key={idx} className="receipt-row receipt-preorder" style={{ paddingLeft: '1rem', fontSize: '0.9rem', color: 'var(--text-light)' }}>
+                      <span>{d.name}</span>
+                      <span>RM {d.price > 0 ? d.price.toFixed(2) : '0.00'}</span>
+                    </div>
+                  ))}
+                  {orderDetails.sideDish && (
+                    <div className="receipt-row receipt-side-dish" style={{ paddingLeft: '1rem', fontSize: '0.85rem', color: 'var(--primary-light)', fontStyle: 'italic' }}>
+                      <span>• Complimentary Side: {orderDetails.sideDish}</span>
+                      <span>Free</span>
+                    </div>
+                  )}
+                  <div className="receipt-row" style={{ paddingLeft: '1rem', fontSize: '0.9rem', fontWeight: '600' }}>
+                    <span>Pre-order Subtotal</span>
+                    <span>RM {orderDetails.preorderTotal.toFixed(2)}</span>
+                  </div>
+                  <div className="receipt-divider"></div>
+                </>
+              )}
+
+              {/* Paid Now Section */}
+              <div className="receipt-label">Reservation & Add-ons (Paid Now)</div>
               <div className="receipt-row">
                 <span>Reservation Deposit</span>
-                <span>RM 50.00</span>
+                <span>RM 10.00</span>
               </div>
 
-              {booking.addonDesserts && booking.addonDesserts.length > 0 && (
+              {orderDetails.desserts && orderDetails.desserts.length > 0 && (
                 <>
-                  <div className="receipt-divider"></div>
-                  <div className="receipt-label">Dessert Add-ons</div>
-                  {booking.addonDesserts.map((d, idx) => (
-                    <div key={idx} className="receipt-row receipt-dessert">
+                  {orderDetails.desserts.map((d, idx) => (
+                    <div key={idx} className="receipt-row receipt-dessert" style={{ paddingLeft: '1rem', fontSize: '0.9rem', color: 'var(--text-light)' }}>
                       <span>{d.name}</span>
-                      <span>RM {d.price.toFixed(2)}</span>
+                      <span>RM {d.price > 0 ? d.price.toFixed(2) : '0.00'}</span>
                     </div>
                   ))}
                 </>
               )}
 
+              <div className="receipt-row" style={{ fontWeight: '600', borderTop: '1px dashed var(--border-color)', paddingTop: '0.25rem', marginTop: '0.25rem' }}>
+                <span>Total Paid Now</span>
+                <span>RM {(10 + orderDetails.dessertTotal).toFixed(2)}</span>
+              </div>
+
               <div className="receipt-divider thick"></div>
+              
+              {/* Total Order Value */}
               <div className="receipt-row receipt-total">
-                <span>Total Paid</span>
-                <span>RM {(50 + (booking.dessertTotal || 0)).toFixed(2)}</span>
+                <span>Total Order Value</span>
+                <span>RM {(10 + orderDetails.dessertTotal + orderDetails.preorderTotal).toFixed(2)}</span>
               </div>
             </div>
-            <p className="receipt-note">This is a digital receipt. A copy has been saved to your booking.</p>
+            <p className="receipt-note">Pre-ordered dishes and complimentary side dishes will be served and billed at the restaurant.</p>
           </div>
           
           <div className="ticket-footer">
