@@ -88,7 +88,10 @@ const MyBooking = () => {
           dish: data.dish || '',
           tableId: data.table_id,
           tableNumber: data.table_number || (data.table_id ? `Table ${data.table_id}` : ''),
-          tableCapacity: data.table_capacity || null
+          tableCapacity: data.table_capacity || null,
+          selectedDishDetails: current.selectedDishDetails || [],
+          addonDesserts: current.addonDesserts || [],
+          sideDish: current.sideDish || ''
         };
 
         if (current.status !== 'Checked In' && updatedBooking.status === 'Checked In') {
@@ -132,7 +135,10 @@ const MyBooking = () => {
               dish: payload.new.dish || '',
               tableId: payload.new.table_id,
               tableNumber: payload.new.table_number || (payload.new.table_id ? `Table ${payload.new.table_id}` : ''),
-              tableCapacity: payload.new.table_capacity || null
+              tableCapacity: payload.new.table_capacity || null,
+              selectedDishDetails: current.selectedDishDetails || [],
+              addonDesserts: current.addonDesserts || [],
+              sideDish: current.sideDish || ''
             };
 
             if (current.status !== 'Checked In' && updatedBooking.status === 'Checked In') {
