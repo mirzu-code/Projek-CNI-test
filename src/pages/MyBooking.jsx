@@ -269,7 +269,11 @@ const MyBooking = () => {
 
     const preorderNames = preordersPart ? preordersPart.split(', ') : [];
     const preorderItems = preorderNames.map(name => {
-      const match = menuItems.find(item => item.name.toLowerCase() === name.toLowerCase());
+      const match = menuItems.find(item => {
+        const dbName = item.name.toLowerCase();
+        const searchName = name.toLowerCase();
+        return dbName === searchName || dbName.includes(searchName) || searchName.includes(dbName);
+      });
       return {
         name,
         price: match ? match.price : 0
@@ -278,7 +282,11 @@ const MyBooking = () => {
 
     const dessertNames = dessertsPart ? dessertsPart.split(', ') : [];
     const dessertItems = dessertNames.map(name => {
-      const match = menuItems.find(item => item.name.toLowerCase() === name.toLowerCase());
+      const match = menuItems.find(item => {
+        const dbName = item.name.toLowerCase();
+        const searchName = name.toLowerCase();
+        return dbName === searchName || dbName.includes(searchName) || searchName.includes(dbName);
+      });
       const fallbackPrices = {
         'Pandan Gula Melaka Cheesecake': 18.00,
         'Matcha Lava Cake': 22.00,
