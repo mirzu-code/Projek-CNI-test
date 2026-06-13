@@ -597,6 +597,21 @@ const Admin = () => {
                 </div>
                 {isCameraActive && <div id="qr-reader" style={{ width: '100%', maxWidth: '500px' }}></div>}
                 <div className="scanner-message">{scannerMessage}</div>
+                <div className="manual-scan-panel">
+                  <label htmlFor="manual-scan-input">Manual QR / Booking ID</label>
+                  <div className="manual-scan-controls">
+                    <input
+                      id="manual-scan-input"
+                      type="text"
+                      value={manualScanId}
+                      onChange={(e) => setManualScanId(e.target.value)}
+                      placeholder="Enter ticket QR code or reservation ID"
+                    />
+                    <button type="button" className="btn-primary" onClick={() => handleScanVerify(manualScanId)}>
+                      Verify Manually
+                    </button>
+                  </div>
+                </div>
                 {scannerSuccessRes && (
                   <div className={`scanner-result ${scannerError ? 'error' : 'success'}`}>
                     <strong>{scannerSuccessRes.name}</strong>
@@ -629,16 +644,71 @@ const Admin = () => {
 
             {activeSection === 'menus' && (
               <section className="admin-menus">
-                <h2>Menus</h2>
-                <div className="menus-grid">
-                  {menus.map(m => (
-                    <div key={m.id} className="menu-card">
-                      <img src={m.image || 'https://via.placeholder.com/150?text=No+Image'} alt={m.name} style={{ width: '100%', height: '120px', objectFit: 'cover' }} />
-                      <h3>{m.name}</h3>
-                      <p>Price: RM{m.price}</p>
-                      <button onClick={() => handleEditMenu(m)}>Edit</button>
+                <div className="admin-menu-management">
+                  <div className="menu-form-panel">
+                    <h2>{menuMode === 'edit' ? 'Edit Menu Item' : 'Add Menu Item'}</h2>
+                    <form onSubmit={handleMenuSubmit} className="menu-form">
+                      <div className="form-row">
+                        <label>Name</label>
+                        <input name="name" value={menuForm.name} onChange={handleMenuChange} placeholder="Dish name" />
+                      </div>
+                      <div className="form-row">
+                        <label>Price</label>
+                        <input name="price" value={menuForm.price} onChange={handleMenuChange} placeholder="e.g. 29.90" />
+                      </div>
+                      <div className="form-row">
+                        <label>Cuisine</label>
+                        <select name="cuisine_id" value={menuForm.cuisine_id} onChange={handleMenuChange}>
+                          <option value="1">Malay</option>
+                          <option value="2">Chinese</option>
+                          <option value="3">Japanese</option>
+                          <option value="4">Western</option>
+                          <option value="5">Indian</option>
+                          <option value="6">Desserts</option>
+                        </select>
+                      </div>
+                      <div className="form-row">
+                        <label>Description</label>
+                        <textarea name="description" value={menuForm.description} onChange={handleMenuChange} rows="3" placeholder="Menu description" />
+                      </div>
+                      <div className="form-row">
+                        <label>Image URL / Upload</label>
+                        <input name="image" value={menuForm.image} onChange={handleMenuChange} placeholder="Image URL or upload below" />
+                      </div>
+                      <div className="form-row">
+                        <label>Upload Image File</label>
+                        <input ref={imageFileInputRef} type="file" accept="image/*" onChange={handleImageFileChange} />
+                      </div>
+                      {imagePreviewUrl && (
+                        <div className="image-preview-panel">
+                          <img src={imagePreviewUrl} alt="Preview" />
+                        </div>
+                      )}
+                      <div className="form-row form-actions">
+                        <button type="submit" className="btn-primary">{menuMode === 'edit' ? 'Update Menu' : 'Add Menu'}</button>
+                        {menuMode === 'edit' && (
+                          <button type="button" className="btn-outline" onClick={resetMenuForm}>Cancel Edit</button>
+                        )}
+                      </div>
+                      {menuError && <div className="form-error">{menuError}</div>}
+                    </form>
+                  </div>
+
+                  <div className="menu-list-panel">
+                    <h2>Current Menu Items</h2>
+                    <div className="menus-grid">
+                      {menus.length === 0 && <p>No menu items found.</p>}
+                      {menus.map(m => (
+                        <div key={m.id} className="menu-card">
+                          <img src={m.image || 'https://via.placeholder.com/150?text=No+Image'} alt={m.name} style={{ width: '100%', height: '120px', objectFit: 'cover' }} />
+                          <h3>{m.name}</h3>
+                          <p>Price: RM{m.price}</p>
+                          <p>Status: {m.is_active ? 'Active' : 'Inactive'}</p>
+                          <button onClick={() => handleEditMenu(m)}>Edit</button>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
               </section>
             )}
