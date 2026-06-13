@@ -17,6 +17,7 @@ const Admin = () => {
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
   const [activeSection, setActiveSection] = useState('overview');
   const [menus, setMenus] = useState([]);
+  const [selectedCuisineId, setSelectedCuisineId] = useState('1');
   const [menuForm, setMenuForm] = useState({ id: '', name: '', price: '', cuisine_id: '1', description: '', image: '', is_active: true });
   const [menuError, setMenuError] = useState('');
   const [menuMode, setMenuMode] = useState('add');
@@ -457,6 +458,14 @@ const Admin = () => {
     }));
   };
 
+  const handleCuisineSelectionChange = (e) => {
+    const nextCuisineId = e.target.value;
+    setSelectedCuisineId(nextCuisineId);
+    if (menuMode === 'add') {
+      setMenuForm((prev) => ({ ...prev, cuisine_id: nextCuisineId }));
+    }
+  };
+
   const resetMenuForm = () => {
     if (imagePreviewUrl?.startsWith('blob:')) {
       URL.revokeObjectURL(imagePreviewUrl);
@@ -475,15 +484,17 @@ const Admin = () => {
     if (imagePreviewUrl?.startsWith('blob:')) {
       URL.revokeObjectURL(imagePreviewUrl);
     }
+    const cuisineIdString = menu.cuisine_id != null ? String(menu.cuisine_id) : '1';
     setMenuForm({
       id: menu.id,
       name: menu.name || '',
       price: menu.price != null ? String(menu.price) : '',
-      cuisine_id: menu.cuisine_id != null ? String(menu.cuisine_id) : '1',
+      cuisine_id: cuisineIdString,
       description: menu.description || '',
       image: menu.image || '',
       is_active: menu.is_active !== false
     });
+    setSelectedCuisineId(cuisineIdString);
     setSelectedImageFile(null);
     setImagePreviewUrl(menu.image || '');
     if (imageFileInputRef.current) {
@@ -813,8 +824,19 @@ const Admin = () => {
             {activeSection === 'menus' && (
               <section className="admin-menus">
                 <div className="admin-menu-management">
-                  <div className="menu-form-panel">
+                              <div className="menu-form-panel">
                     <h2>{menuMode === 'edit' ? 'Edit Menu Item' : 'Add Menu Item'}</h2>
+                    <div className="form-row">
+                      <label>Manage Cuisine</label>
+                      <select value={selectedCuisineId} onChange={handleCuisineSelectionChange}>
+                        <option value="1">Malay</option>
+                        <option value="2">Chinese</option>
+                        <option value="3">Japanese</option>
+                        <option value="4">Western</option>
+                        <option value="5">Indian</option>
+                        <option value="6">Desserts</option>
+                      </select>
+                    </div>
                     <form onSubmit={handleMenuSubmit} className="menu-form">
                       <div className="form-row">
                         <label>Name</label>
@@ -864,9 +886,10 @@ const Admin = () => {
 
                   <div className="menu-list-panel">
                     <h2>Current Menu Items</h2>
+                    <p className="filter-note">Showing cuisine: <strong>{selectedCuisineId === '1' ? 'Malay' : selectedCuisineId === '2' ? 'Chinese' : selectedCuisineId === '3' ? 'Japanese' : selectedCuisineId === '4' ? 'Western' : selectedCuisineId === '5' ? 'Indian' : 'Desserts'}</strong></p>
                     <div className="menus-grid">
-                      {menus.length === 0 && <p>No menu items found.</p>}
-                      {menus.map(m => (
+                      {menus.filter((item) => String(item.cuisine_id) === selectedCuisineId).length === 0 && <p>No menu items found for this cuisine.</p>}
+                      {menus.filter((item) => String(item.cuisine_id) === selectedCuisineId).map(m => (
                         <div key={m.id} className="menu-card">
                           <img src={m.image || 'https://via.placeholder.com/150?text=No+Image'} alt={m.name} style={{ width: '100%', height: '120px', objectFit: 'cover' }} />
                           <h3>{m.name}</h3>
