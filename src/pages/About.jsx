@@ -14,13 +14,13 @@ const About = () => {
       name: 'Chef Kamaruddin Ibrahim',
       role: 'Head Chef & Culinary Director',
       bio: 'Holding prestigious international culinary certificates and fully recognized as a Master Chef. Exceptionally skilled and powerful in the kitchen, he is a true master of all cuisines. From traditional Asian classics to modern Western gastronomy, he flawlessly executes every culinary style with his 25 years of fine dining expertise.',
-      image: 'https://images.unsplash.com/photo-1583394200676-e82df4cc62a9?auto=format&fit=crop&w=400&q=80'
+      image: '/man pastry cheff.jpg'
     },
     {
       name: 'Chef Mei Ling Chen',
       role: 'Master Pastry Chef',
       bio: 'A certified Master Chef with international qualifications specializing entirely in delicate pastries and desserts. Bringing absolute power and finesse to the bakery, she utilizes her professional training from Paris to create the perfect balance of sweet flavors and stunning dessert artistry.',
-      image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=400&q=80'
+      image: '/woman pastry cheff.jpg'
     }
   ];
 
@@ -69,7 +69,7 @@ const About = () => {
             <span className="sdg-badge">SDG 9 Alignment</span>
             <h2>Resilient Industry & Sustainable Infrastructure</h2>
             <p>
-              How digital innovation drives our sustainable kitchen management. 
+              How digital innovation drives our sustainable kitchen management.
               By requiring reservations and pre-orders, we operate a highly efficient, resilient ecosystem.
             </p>
           </div>
