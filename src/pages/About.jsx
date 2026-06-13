@@ -13,13 +13,13 @@ const About = () => {
     {
       name: 'Chef Kamaruddin Ibrahim',
       role: 'Head Chef & Culinary Director',
-      bio: 'Memegang sijil masakan antarabangsa berprestij dan diiktiraf sepenuhnya sebagai Master Chef. Sangat "power" dan berbakat besar, beliau mampu memasak pelbagai jenis hidangan dari seluruh dunia dengan kepakaran 25 tahun dalam fine dining.',
+      bio: 'Holding prestigious international culinary certificates and fully recognized as a Master Chef. Exceptionally skilled and powerful in the kitchen, he can cook a wide variety of dishes from all over the world with his 25 years of fine dining expertise.',
       image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=400&q=80'
     },
     {
       name: 'Chef Mei Ling Chen',
       role: 'Pastry & Cuisine Artisan',
-      bio: 'Juga seorang Master Chef bertauliah dengan kelayakan antarabangsa. Memang "power" di dapur, beliau menguasai pelbagai jenis masakan dan dilatih secara profesional di Shanghai dan Paris untuk mencipta keseimbangan rasa yang sempurna.',
+      bio: 'Also a certified Master Chef with international qualifications. Bringing absolute power and finesse to the kitchen, she masters various cuisines with professional training from Shanghai and Paris to create the perfect balance of flavors.',
       image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=400&q=80'
     }
   ];
@@ -109,6 +109,23 @@ const About = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Location Section */}
+      <section className="about-location-section" style={{ padding: '4rem 0', backgroundColor: 'var(--bg-card)', marginTop: '2rem' }}>
+        <div className="container text-center">
+          <h2 className="section-title">Visit Us</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: 'var(--text-light)' }}>
+            <strong>Lembayung Restaurant</strong><br />
+            Kampung Baru, 50300 Kuala Lumpur,<br />
+            Wilayah Persekutuan Kuala Lumpur, Malaysia
+          </p>
+          <div style={{ marginTop: '2rem' }}>
+            <a href="https://maps.google.com/?q=Kampung+Baru+Kuala+Lumpur" target="_blank" rel="noopener noreferrer" className="btn-outline">
+              Get Directions
+            </a>
           </div>
         </div>
       </section>

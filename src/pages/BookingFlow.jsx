@@ -166,7 +166,7 @@ const BookingFlow = () => {
       } catch (err) {
         console.warn('Supabase menu load failed:', err.message);
         setMenuItems([]);
-        setMenuError('Gagal memuatkan menu admin. Menyebabkan menu lalai digunakan.');
+        setMenuError('Failed to load admin menu. Falling back to default menu.');
       } finally {
         setMenuLoading(false);
       }
@@ -191,7 +191,7 @@ const BookingFlow = () => {
 
     const formattedAdminDishes = adminDishes.map((item) => ({
       value: String(item.id),
-      name: item.name || 'Menu tidak bernama',
+      name: item.name || 'Unnamed Menu',
       price: typeof item.price === 'number' ? `RM ${item.price.toFixed(2)}` : item.price || 'RM 0.00',
       description: item.description || '',
       weight: item.weight ?? 250
@@ -223,7 +223,7 @@ const BookingFlow = () => {
   };
 
   const findCuisineLabel = (cuisineId) => {
-    return cuisineOptions.find((option) => option.id === cuisineId)?.label || 'Pelbagai Cuisine';
+    return cuisineOptions.find((option) => option.id === cuisineId)?.label || 'Various Cuisines';
   };
 
   const getCuisineMenuLink = (cuisineKey) => {
@@ -239,7 +239,7 @@ const BookingFlow = () => {
 
     switch (formData.activeCuisine) {
       case 'malay':
-        return hasRiceOrStapleDish ? '' : 'Nasi Putih';
+        return hasRiceOrStapleDish ? '' : 'Steamed White Rice';
       case 'chinese':
         return hasRiceOrStapleDish ? '' : 'Steamed Jasmine Rice';
       case 'japanese':
@@ -301,22 +301,22 @@ const BookingFlow = () => {
   const validateStep = () => {
     if (step === 1) {
       if (!formData.activeCuisine) {
-        setError('Sila pilih satu jenis cuisine dahulu.');
+        setError('Please select a cuisine type first.');
         return false;
       }
       if (!formData.selectedDishes.length) {
-        setError('Sila pilih sekurang-kurangnya satu hidangan untuk pra-pesanan.');
+        setError('Please select at least one dish to pre-order.');
         return false;
       }
     }
 
     if (step === 2) {
       if (!formData.name || !formData.phone || !formData.date || !formData.time || !formData.pax) {
-        setError('Sila lengkapkan semua maklumat tempahan untuk meneruskan.');
+        setError('Please complete all booking details to continue.');
         return false;
       }
       if (!timeSlots.includes(formData.time)) {
-        setError('Sila pilih slot masa antara 15:00 hingga 23:30.');
+        setError('Please select a time slot between 15:00 and 23:30.');
         return false;
       }
     }
@@ -365,10 +365,10 @@ const BookingFlow = () => {
         <div className="booking-form-wrapper">
           {step === 1 && (
             <div className="form-step">
-              <h3>Pilih jenis cuisine</h3>
-              <p className="step-subtitle">Pilih cuisine, kemudian lihat menu apa yang ada untuk tempahan dan preorder.</p>
+              <h3>Choose your cuisine</h3>
+              <p className="step-subtitle">Select a cuisine to view the available menu for your reservation and pre-order.</p>
               <p className="step-subtitle" style={{ marginTop: '0.4rem', fontWeight: 600 }}>
-                Pilih waktu dan hidangan yang sesuai untuk tempahan anda.
+                Select your preferred dishes for your reservation.
               </p>
               <div className="cuisine-select-grid">
                 {cuisineOptions.map((cuisine) => (
@@ -390,14 +390,14 @@ const BookingFlow = () => {
               {formData.activeCuisine ? (
                 <div style={{ marginTop: '1.8rem' }}>
                   <div className="selected-dish-summary" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
-                    <span>Menu untuk <strong>{findCuisineLabel(formData.activeCuisine)}</strong></span>
+                    <span>Menu for <strong>{findCuisineLabel(formData.activeCuisine)}</strong></span>
                     <Link to={getCuisineMenuLink(formData.activeCuisine)} className="btn-outline" style={{ fontSize: '0.95rem', padding: '0.5rem 0.85rem' }}>
-                      Lihat penuh menu
+                      View full menu
                     </Link>
                   </div>
                   {menuLoading ? (
                     <div className="selected-dish-summary" style={{ marginTop: '1rem' }}>
-                      Memuatkan menu dari admin...
+                      Loading menu from admin...
                     </div>
                   ) : (
                     <>
@@ -422,25 +422,25 @@ const BookingFlow = () => {
                     </>
                   )}
                   <div className="selected-dish-summary" style={{ marginTop: '0.75rem' }}>
-                    Anggaran Berat Pesanan: <strong>{calculateTotalWeight()}g</strong>
+                    Estimated Order Weight: <strong>{calculateTotalWeight()}g</strong>
                   </div>
                   <div className="selected-dish-summary" style={{ marginTop: '0.75rem' }}>
-                    Had Berat Disyorkan: <strong>{Math.max(1, formData.pax) * 200}g</strong>
+                    Recommended Weight Limit: <strong>{Math.max(1, formData.pax) * 200}g</strong>
                   </div>
                   {getIncludedSide() && (
                     <div className="selected-dish-summary" style={{ marginTop: '0.75rem', color: '#2f855a' }}>
-                      Termasuk sekali dengan pilihan sampingan: <strong>{getIncludedSide()}</strong>
+                      Includes complimentary side dish: <strong>{getIncludedSide()}</strong>
                     </div>
                   )}
                   <div className="selected-dish-summary" style={{ marginTop: '0.75rem', color: '#2f855a' }}>
-                    Pilihan hidangan anda telah direkodkan. Teruskan untuk memilih meja.
+                    Your dish selection has been recorded. Continue to select your table.
                   </div>
                   <div className="selected-dish-summary" style={{ marginTop: '0.75rem', fontWeight: 700 }}>
-                    Jumlah Harga: <strong>RM {calculateTotal().toFixed(2)}</strong>
+                    Total Price: <strong>RM {calculateTotal().toFixed(2)}</strong>
                   </div>
                   {formData.selectedDishes.length > 0 && (
                     <div className="selected-dish-summary" style={{ marginTop: '1rem' }}>
-                      Hidangan terpilih:
+                      Selected dishes:
                       <div className="selected-dish-tags" style={{ marginTop: '0.75rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                         {formData.selectedDishes.map((dishValue) => (
                           <span key={dishValue} className="dish-selected-tag">
@@ -450,11 +450,11 @@ const BookingFlow = () => {
                       </div>
                     </div>
                   )}
-                  <p className="step-subtitle">Tukar cuisine bila-bila masa untuk lihat menu baru.</p>
+                  <p className="step-subtitle">Change your cuisine anytime to view different menus.</p>
                 </div>
               ) : (
                 <p className="step-subtitle" style={{ marginTop: '1.8rem' }}>
-                  Sila pilih satu jenis cuisine terlebih dahulu untuk melihat menu yang ada.
+                  Please select a cuisine type first to view the available menu.
                 </p>
               )}
             </div>
@@ -462,22 +462,22 @@ const BookingFlow = () => {
 
           {step === 2 && (
             <div className="form-step">
-              <h3>Lengkapkan Maklumat Tempahan</h3>
-              <p className="step-subtitle">Sila isi maklumat seperti nama, telefon, tarikh dan waktu.</p>
+              <h3>Complete Reservation Details</h3>
+              <p className="step-subtitle">Please fill in your name, phone, date, and time.</p>
               <div className="form-group">
-                <label htmlFor="name">Nama</label>
-                <input id="name" value={formData.name} onChange={handleChange('name')} placeholder="Nama penuh" />
+                <label htmlFor="name">Name</label>
+                <input id="name" value={formData.name} onChange={handleChange('name')} placeholder="Full name" />
               </div>
               <div className="form-group">
-                <label htmlFor="phone">Telefon</label>
+                <label htmlFor="phone">Phone</label>
                 <input id="phone" value={formData.phone} onChange={handleChange('phone')} placeholder="0123456789" />
               </div>
               <div className="form-group">
-                <label htmlFor="date">Tarikh</label>
+                <label htmlFor="date">Date</label>
                 <input id="date" type="date" value={formData.date} onChange={handleChange('date')} />
               </div>
               <div className="form-group">
-                <label htmlFor="time">Masa</label>
+                <label htmlFor="time">Time</label>
                 <div className="time-slot-grid">
                   {timeSlots.map((slot) => (
                     <button
@@ -490,10 +490,10 @@ const BookingFlow = () => {
                     </button>
                   ))}
                 </div>
-                <span className="help-text">Slot tempahan dibuka dari 3:00 petang hingga 11:30 malam.</span>
+                <span className="help-text">Booking slots are open from 3:00 PM to 11:30 PM.</span>
               </div>
               <div className="form-group">
-                <label htmlFor="pax">Jumlah Tetamu</label>
+                <label htmlFor="pax">Number of Guests</label>
                 <input id="pax" type="number" min="1" value={formData.pax} onChange={handleChange('pax')} />
               </div>
             </div>
@@ -501,47 +501,47 @@ const BookingFlow = () => {
 
           {step === 3 && (
             <div className="form-step">
-              <h3>Sahkan Tempahan Anda</h3>
-              <p className="step-subtitle">Semak semula maklumat anda sebelum meneruskan ke pemilihan meja.</p>
+              <h3>Confirm Your Reservation</h3>
+              <p className="step-subtitle">Review your details before proceeding to table selection.</p>
               <p className="step-subtitle" style={{ marginTop: '0.5rem', color: '#2f855a' }}>
-                Setelah disahkan, pelanggan akan terus memilih meja di langkah seterusnya.
+                Once confirmed, you will proceed to select your table in the next step.
               </p>
               <div className="summary-card">
                 <div className="summary-item">
-                  <span>Nama</span>
-                  <strong>{formData.name || 'Tidak diisi'}</strong>
+                  <span>Name</span>
+                  <strong>{formData.name || 'Not provided'}</strong>
                 </div>
                 <div className="summary-item">
-                  <span>Telefon</span>
-                  <strong>{formData.phone || 'Tidak diisi'}</strong>
+                  <span>Phone</span>
+                  <strong>{formData.phone || 'Not provided'}</strong>
                 </div>
                 <div className="summary-item">
-                  <span>Tarikh & Masa</span>
+                  <span>Date & Time</span>
                   <strong>{formData.date || '-'} {formData.time || ''}</strong>
                 </div>
                 <div className="summary-item">
-                  <span>Jumlah Tetamu</span>
+                  <span>Number of Guests</span>
                   <strong>{formData.pax}</strong>
                 </div>
                 <div className="summary-item">
                   <span>Cuisine</span>
-                  <strong>{formData.activeCuisine ? findCuisineLabel(formData.activeCuisine) : 'Pelbagai Cuisine'}</strong>
+                  <strong>{formData.activeCuisine ? findCuisineLabel(formData.activeCuisine) : 'Various Cuisines'}</strong>
                 </div>
                 <div className="summary-item">
-                  <span>Dish / Pra-Pesanan</span>
+                  <span>Dish / Pre-order</span>
                   <strong>
                     {formData.selectedDishes.length
                       ? formData.selectedDishes.map(findDishName).join(', ')
-                      : 'Tiada'}
+                      : 'None'}
                   </strong>
                 </div>
                 <div className="summary-item">
-                  <span>Berat Pesanan</span>
+                  <span>Order Weight</span>
                   <strong>{calculateTotalWeight()}g</strong>
                 </div>
                 <div className="summary-item">
-                  <span>Status Tempahan</span>
-                  <strong>Diproses</strong>
+                  <span>Booking Status</span>
+                  <strong>Processing</strong>
                 </div>
                 <div className="summary-item total-fee">
                   <span>Jumlah Harga</span>

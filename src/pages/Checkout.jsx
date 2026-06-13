@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './Checkout.css';
@@ -8,6 +8,8 @@ const Checkout = () => {
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -17,7 +19,7 @@ const Checkout = () => {
 
     if (!stateBooking && !saved) {
       setLoading(false);
-      setError('Tiada data tempahan. Mengalihkan kembali ke borang tempahan...');
+      setError('No booking data found. Redirecting to booking form...');
       setTimeout(() => navigate('/book'), 1500);
       return;
     }
@@ -25,90 +27,85 @@ const Checkout = () => {
     try {
       const parsed = stateBooking || JSON.parse(saved);
       setBooking(parsed);
-      // persist to localStorage so refresh doesn't lose data
       if (stateBooking) localStorage.setItem('bookingData', JSON.stringify(stateBooking));
     } catch (err) {
-      setError('Data tempahan tidak sah. Sila cuba lagi.');
+      setError('Invalid booking data. Please try again.');
     } finally {
       setLoading(false);
     }
   }, [navigate]);
 
-  const handleConfirm = async () => {
+  const handlePaymentSubmit = async (e) => {
+    e.preventDefault();
     if (!booking) return;
     if (!booking.tableId) {
-      setError('Sila pilih meja sebelum membuat pembayaran.');
+      setError('Please select a table before making payment.');
       return;
     }
 
-    setLoading(true);
     setError('');
+    setIsProcessingPayment(true);
 
-    try {
-      const payload = {
-        customer_name: booking.name,
-        customer_phone: booking.phone,
-        booking_date: booking.date,
-        booking_time: booking.time,
-        total_guests: booking.pax,
-        cuisine_id: booking.preselectCuisine === 'malay' ? 1 : booking.preselectCuisine === 'chinese' ? 2 : booking.preselectCuisine === 'japanese' ? 3 : booking.preselectCuisine === 'western' ? 4 : booking.preselectCuisine === 'indian' ? 5 : null,
-        dish: booking.preselectDish || null,
-        table_id: booking.tableId || null,
-        status: 'Confirmed'
-      };
-
-      // Only include `table_capacity` if a value was selected/available.
-      // This avoids sending a column that might not exist in the remote DB schema.
-      if (booking.tableCapacity != null && booking.tableCapacity !== '') {
-        payload.table_capacity = booking.tableCapacity;
-      }
-
-      const { data: bookingData, error: insertError } = await supabase.from('bookings').insert([payload]);
-      if (insertError) {
-        throw insertError;
-      }
-
-      // Lock the table for 1.5 hours (90 minutes) from the booking time
-      if (booking.tableId) {
-        const bookingDateTime = new Date(`${booking.date}T${booking.time}`);
-        const lockExpiresAt = new Date(bookingDateTime.getTime() + 90 * 60 * 1000).toISOString();
-
-        const lockPayload = {
-          table_id: booking.tableId,
-          locked_by: booking.name,
-          lock_token: `booking-${Date.now()}`,
-          lock_expires_at: lockExpiresAt
+    // Simulate payment processing
+    setTimeout(async () => {
+      try {
+        const payload = {
+          customer_name: booking.name,
+          customer_phone: booking.phone,
+          booking_date: booking.date,
+          booking_time: booking.time,
+          total_guests: booking.pax,
+          cuisine_id: booking.preselectCuisine === 'malay' ? 1 : booking.preselectCuisine === 'chinese' ? 2 : booking.preselectCuisine === 'japanese' ? 3 : booking.preselectCuisine === 'western' ? 4 : booking.preselectCuisine === 'indian' ? 5 : null,
+          dish: booking.preselectDish || null,
+          table_id: booking.tableId || null,
+          status: 'Confirmed'
         };
 
-        const { error: lockError } = await supabase
-          .from('table_locks')
-          .upsert([lockPayload], { onConflict: 'table_id' });
-
-        if (lockError) {
-          console.warn('Table lock failed:', lockError);
+        if (booking.tableCapacity != null && booking.tableCapacity !== '') {
+          payload.table_capacity = booking.tableCapacity;
         }
-      }
 
-      localStorage.removeItem('bookingData');
-      localStorage.setItem('activeBooking', JSON.stringify({
-        ...booking,
-        tableId: booking.tableId,
-        tableNumber: booking.tableNumber,
-        status: 'Confirmed'
-      }));
-      navigate('/my-booking');
-    } catch (err) {
-      setError('Gagal mengesahkan tempahan: ' + (err.message || 'Ralat tidak diketahui'));
-    } finally {
-      setLoading(false);
-    }
+        const { data: bookingData, error: insertError } = await supabase.from('bookings').insert([payload]);
+        if (insertError) throw insertError;
+
+        if (booking.tableId) {
+          const bookingDateTime = new Date(`${booking.date}T${booking.time}`);
+          const lockExpiresAt = new Date(bookingDateTime.getTime() + 90 * 60 * 1000).toISOString();
+
+          const lockPayload = {
+            table_id: booking.tableId,
+            locked_by: booking.name,
+            lock_token: `booking-${Date.now()}`,
+            lock_expires_at: lockExpiresAt
+          };
+
+          const { error: lockError } = await supabase
+            .from('table_locks')
+            .upsert([lockPayload], { onConflict: 'table_id' });
+
+          if (lockError) console.warn('Table lock failed:', lockError);
+        }
+
+        localStorage.removeItem('bookingData');
+        localStorage.setItem('activeBooking', JSON.stringify({
+          ...booking,
+          tableId: booking.tableId,
+          tableNumber: booking.tableNumber,
+          status: 'Confirmed'
+        }));
+        navigate('/my-booking');
+      } catch (err) {
+        setError('Failed to confirm booking: ' + (err.message || 'Unknown error'));
+        setIsProcessingPayment(false);
+      }
+    }, 2000);
   };
 
   if (loading) {
     return (
       <div className="booking-page animate-fade-in">
         <div className="booking-container" style={{ padding: '3rem', textAlign: 'center' }}>
-          <p>Memproses tempahan anda...</p>
+          <p>Loading your booking details...</p>
         </div>
       </div>
     );
@@ -118,70 +115,145 @@ const Checkout = () => {
     return (
       <div className="booking-page animate-fade-in">
         <div className="booking-container" style={{ padding: '3rem', textAlign: 'center' }}>
-          <h2>Tiada tempahan ditemui</h2>
-          <p>{error || 'Sila kembali ke borang tempahan.'}</p>
+          <h2>No Booking Found</h2>
+          <p>{error || 'Please return to the booking form.'}</p>
         </div>
       </div>
     );
   }
 
+  const reservationDeposit = 50.00;
+
   return (
     <div className="booking-page animate-fade-in">
-      <div className="booking-container">
+      <div className="booking-container checkout-container-wide">
         <div className="booking-header">
-          <h2>Checkout</h2>
+          <h2>Payment & Confirmation</h2>
           <div className="step-indicator">
-            <span className="active">1. Semak</span>
+            <span className="active">1. Details</span>
             <span className="line"></span>
-            <span className="active">2. Sahkan</span>
+            <span className="active">2. Payment</span>
           </div>
         </div>
-        <div className="booking-form-wrapper">
-          <div className="summary-card">
-            <div className="summary-item">
-              <span>Nama</span>
-              <strong>{booking.name}</strong>
-            </div>
-            <div className="summary-item">
-              <span>Telefon</span>
-              <strong>{booking.phone}</strong>
-            </div>
-            <div className="summary-item">
-              <span>Tarikh & Masa</span>
-              <strong>{booking.date} {booking.time}</strong>
-            </div>
-            <div className="summary-item">
-              <span>Jumlah Tetamu</span>
-              <strong>{booking.pax}</strong>
-            </div>
-            <div className="summary-item">
-              <span>Cuisine</span>
-              <strong>{booking.preselectCuisine || 'Biasa'}</strong>
-            </div>
-            <div className="summary-item">
-              <span>Pra-pesanan</span>
-              <strong>{booking.preselectDish || 'Tiada'}</strong>
-            </div>
-            <div className="summary-item">
-              <span>Meja</span>
-              <strong>{booking.tableNumber || 'Belum dipilih'}</strong>
+
+        <div className="checkout-layout">
+          <div className="checkout-summary-col">
+            <h3>Order Summary</h3>
+            <div className="summary-card">
+              <div className="summary-item">
+                <span>Name</span>
+                <strong>{booking.name}</strong>
+              </div>
+              <div className="summary-item">
+                <span>Phone</span>
+                <strong>{booking.phone}</strong>
+              </div>
+              <div className="summary-item">
+                <span>Date & Time</span>
+                <strong>{booking.date} {booking.time}</strong>
+              </div>
+              <div className="summary-item">
+                <span>Guests</span>
+                <strong>{booking.pax}</strong>
+              </div>
+              <div className="summary-item">
+                <span>Pre-order</span>
+                <strong>{booking.preselectDish || 'None'}</strong>
+              </div>
+              <div className="summary-item">
+                <span>Table</span>
+                <strong>{booking.tableNumber || 'Not selected'}</strong>
+              </div>
+              <hr style={{ margin: '1rem 0', borderColor: 'var(--border-color)' }} />
+              <div className="summary-item total-row">
+                <span>Reservation Deposit</span>
+                <strong style={{ fontSize: '1.2rem', color: 'var(--primary-color)' }}>RM {reservationDeposit.toFixed(2)}</strong>
+              </div>
             </div>
           </div>
 
-          {error && <p className="table-error-msg">{error}</p>}
+          <div className="checkout-payment-col">
+            <h3>Payment Method</h3>
+            <form onSubmit={handlePaymentSubmit} className="payment-form">
+              <div className="payment-methods">
+                <label className={`payment-method-card ${paymentMethod === 'card' ? 'selected' : ''}`}>
+                  <input type="radio" name="payment" value="card" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} style={{ display: 'none' }} />
+                  <span className="pm-icon">💳</span> Credit / Debit Card
+                </label>
+                <label className={`payment-method-card ${paymentMethod === 'fpx' ? 'selected' : ''}`}>
+                  <input type="radio" name="payment" value="fpx" checked={paymentMethod === 'fpx'} onChange={() => setPaymentMethod('fpx')} style={{ display: 'none' }} />
+                  <span className="pm-icon">🏦</span> Online Banking (FPX)
+                </label>
+                <label className={`payment-method-card ${paymentMethod === 'ewallet' ? 'selected' : ''}`}>
+                  <input type="radio" name="payment" value="ewallet" checked={paymentMethod === 'ewallet'} onChange={() => setPaymentMethod('ewallet')} style={{ display: 'none' }} />
+                  <span className="pm-icon">📱</span> E-Wallet
+                </label>
+              </div>
 
-          <div className="button-group">
-            <button type="button" className="btn-outline" onClick={() => navigate('/select-table')}>
-              Pilih Meja Semula
-            </button>
-            <button
-              type="button"
-              className="btn-primary full-width"
-              onClick={handleConfirm}
-              disabled={loading || !booking.tableId}
-            >
-              {loading ? 'Mengesahkan...' : 'Confirm Booking'}
-            </button>
+              {paymentMethod === 'card' && (
+                <div className="card-details-form animate-fade-in">
+                  <div className="form-group">
+                    <label>Card Number</label>
+                    <input type="text" placeholder="0000 0000 0000 0000" maxLength="19" required />
+                  </div>
+                  <div className="form-row" style={{ display: 'flex', gap: '1rem' }}>
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label>Expiry Date</label>
+                      <input type="text" placeholder="MM/YY" maxLength="5" required />
+                    </div>
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label>CVV</label>
+                      <input type="password" placeholder="123" maxLength="3" required />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label>Cardholder Name</label>
+                    <input type="text" placeholder="John Doe" required />
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === 'fpx' && (
+                <div className="fpx-details-form animate-fade-in">
+                  <div className="form-group">
+                    <label>Select Bank</label>
+                    <select required className="payment-select">
+                      <option value="">Choose your bank...</option>
+                      <option value="maybank">Maybank2U</option>
+                      <option value="cimb">CIMB Clicks</option>
+                      <option value="rhb">RHB Now</option>
+                      <option value="public">Public Bank</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+              
+              {paymentMethod === 'ewallet' && (
+                <div className="ewallet-details-form animate-fade-in">
+                  <p style={{ color: 'var(--text-light)', fontSize: '0.9rem', marginBottom: '1rem' }}>You will be redirected to your e-wallet app to complete the payment.</p>
+                  <div className="form-group">
+                    <label>Select E-Wallet</label>
+                    <select required className="payment-select">
+                      <option value="">Choose E-Wallet...</option>
+                      <option value="tng">Touch 'n Go eWallet</option>
+                      <option value="grab">GrabPay</option>
+                      <option value="boost">Boost</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {error && <p className="error-text mt-2">{error}</p>}
+
+              <div className="payment-actions mt-4" style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+                <button type="button" className="btn-outline" onClick={() => navigate('/select-table')} disabled={isProcessingPayment} style={{ flex: 1 }}>
+                  Back
+                </button>
+                <button type="submit" className="btn-primary" disabled={isProcessingPayment} style={{ flex: 2 }}>
+                  {isProcessingPayment ? 'Processing...' : `Pay RM ${reservationDeposit.toFixed(2)}`}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

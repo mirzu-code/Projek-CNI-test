@@ -58,7 +58,7 @@ const SelectTable = () => {
       ]);
 
       if (bookingsError) {
-        setErrorMessage('Gagal memuatkan meja. Sila cuba lagi.');
+        setErrorMessage('Failed to load tables. Please try again.');
       } else {
         setBookedTables(
           (bookingsData || [])
@@ -135,7 +135,7 @@ const SelectTable = () => {
         <div className="booking-container">
           <div className="booking-header">
             <h2>Booking not found</h2>
-            <p>Tiada tempahan ditemui. Anda akan dialihkan ke halaman tempahan.</p>
+            <p>No booking found. You will be redirected to the booking page.</p>
           </div>
         </div>
       </div>
@@ -182,7 +182,7 @@ const SelectTable = () => {
         new Date(existingLock.lock_expires_at).getTime() > now.getTime() &&
         existingLock.lock_token !== lockToken
       ) {
-        setErrorMessage('Meja ini sedang dikunci oleh pelanggan lain. Sila pilih meja lain.');
+        setErrorMessage('This table is currently locked by another customer. Please choose a different table.');
         return false;
       }
 
@@ -208,10 +208,10 @@ const SelectTable = () => {
         if (error) throw error;
       }
 
-      setLockMessage(`Meja ${table.name} dikunci sehingga ${new Date(expiresAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.`);
+      setLockMessage(`Table ${table.name} is locked until ${new Date(expiresAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.`);
       return true;
     } catch (err) {
-      setErrorMessage('Gagal kunci meja: ' + (err.message || 'Unknown error'));
+      setErrorMessage('Failed to lock table: ' + (err.message || 'Unknown error'));
       return false;
     }
   };
@@ -243,7 +243,7 @@ const SelectTable = () => {
     if (selectedTable?.id === table.id && getLockForTable(table.id)?.lock_token === lockToken) return;
     if (table.seats < guests || bookedTables.includes(table.id)) return;
     if (isTableLockedByOther(table)) {
-      setErrorMessage('Meja ini dikunci sekarang. Sila pilih meja lain.');
+      setErrorMessage('This table is currently locked. Please choose another table.');
       return;
     }
 
@@ -266,7 +266,7 @@ const SelectTable = () => {
   const handleContinue = async () => {
     if (isProcessing) return;
     if (!selectedTable) {
-      setErrorMessage('Sila pilih meja terlebih dahulu.');
+      setErrorMessage('Please select a table first.');
       return;
     }
 
@@ -275,7 +275,7 @@ const SelectTable = () => {
     try {
       const lock = getLockForTable(selectedTable.id);
       if (!lock || lock.lock_token !== lockToken || new Date(lock.lock_expires_at).getTime() <= Date.now()) {
-        setErrorMessage('Kunci meja telah tamat. Sila pilih semula meja.');
+        setErrorMessage('Table lock has expired. Please re-select a table.');
         return;
       }
 
@@ -389,7 +389,7 @@ const SelectTable = () => {
 
             <div className="table-footer">
               <button type="button" className="btn-primary full-width" onClick={handleContinue} disabled={isProcessing}>
-                {isProcessing ? 'Memproses...' : 'Continue to Payment'}
+                {isProcessing ? 'Processing...' : 'Continue to Payment'}
               </button>
             </div>
           </div>

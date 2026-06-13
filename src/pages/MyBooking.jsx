@@ -59,7 +59,7 @@ const MyBooking = () => {
         };
 
         if (current.status !== 'Checked In' && updatedBooking.status === 'Checked In') {
-          setNotification('Anda telah melakukan daftar masuk. Selamat datang!');
+          setNotification('You have successfully checked in. Welcome!');
         }
 
         if (JSON.stringify(updatedBooking) !== JSON.stringify(current)) {
@@ -103,7 +103,7 @@ const MyBooking = () => {
             };
 
             if (current.status !== 'Checked In' && updatedBooking.status === 'Checked In') {
-              setNotification('Anda telah melakukan daftar masuk. Selamat datang!');
+              setNotification('You have successfully checked in. Welcome!');
             }
 
             setBooking(updatedBooking);
@@ -324,13 +324,13 @@ const MyBooking = () => {
 
                   // remove local active booking and notify user
                   localStorage.removeItem('activeBooking');
-                  setNotification('Tempahan dibatalkan. Kami telah memaklumkan pihak restoran.');
+                  setNotification('Booking cancelled. We have notified the restaurant.');
                   // navigate back to home after short delay so realtime update can propagate
                   setTimeout(() => {
                     navigate('/');
                   }, 800);
                 } catch (err) {
-                  setNotification('Gagal membatalkan tempahan: ' + (err.message || err));
+                  setNotification('Failed to cancel booking: ' + (err.message || err));
                 } finally {
                   setIsCancelling(false);
                 }

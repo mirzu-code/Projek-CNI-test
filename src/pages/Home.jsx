@@ -1,4 +1,4 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import './Home.css';
 
@@ -18,10 +18,10 @@ const Home = () => {
         <div className="active-booking-banner">
           <div className="home-intro" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
             <div>
-              <strong>Anda mempunyai tempahan aktif!</strong>
-              <div>{activeBooking.date} pada {activeBooking.time}</div>
+              <strong>You have an active booking!</strong>
+              <div>{activeBooking.date} at {activeBooking.time}</div>
             </div>
-            <Link to="/my-booking" className="btn-outline">Lihat Tiket</Link>
+            <Link to="/my-booking" className="btn-outline">View Ticket</Link>
           </div>
         </div>
       )}
