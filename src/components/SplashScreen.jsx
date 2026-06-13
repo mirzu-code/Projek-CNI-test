@@ -23,17 +23,8 @@ const SplashScreen = ({ onFinished }) => {
 
   return (
     <div className={`splash-screen ${fadeOut ? 'fade-out' : ''}`}>
-      <div className="splash-content animate-zoom-in">
-        <div className="sketch-container">
-          <img src="/Lembayung Image.jpeg" alt="Lembayung Store Image" className="sketch-image" />
-        </div>
-        <h1 className="splash-title">LEMBAYUNG</h1>
-        <p className="splash-subtitle">A Culinary Heritage Store</p>
-        <div className="splash-loader">
-          <div className="loader-dot"></div>
-          <div className="loader-dot"></div>
-          <div className="loader-dot"></div>
-        </div>
+      <div className="splash-content">
+        <img src="/Lembayung Image.jpeg" alt="Lembayung Logo" className="zus-style-logo" />
       </div>
     </div>
   );
