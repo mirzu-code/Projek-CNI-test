@@ -34,6 +34,7 @@ const SelectTable = () => {
   const [lockMessage, setLockMessage] = useState('');
   const [lockCountdown, setLockCountdown] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -238,24 +239,65 @@ const SelectTable = () => {
   };
 
   const handleTableSelect = async (table) => {
+    if (isProcessing) return;
+    if (selectedTable?.id === table.id && getLockForTable(table.id)?.lock_token === lockToken) return;
     if (table.seats < guests || bookedTables.includes(table.id)) return;
     if (isTableLockedByOther(table)) {
       setErrorMessage('Meja ini dikunci sekarang. Sila pilih meja lain.');
       return;
     }
 
-    if (selectedTable && selectedTable.id !== table.id) {
-      await releasePreviousLock(selectedTable.id);
-    }
+    setErrorMessage('');
+    setIsProcessing(true);
+    try {
+      if (selectedTable && selectedTable.id !== table.id) {
+        await releasePreviousLock(selectedTable.id);
+      }
 
-    const locked = await reserveTableLock(table);
-    if (locked) {
-      setSelectedTable(table);
-      setErrorMessage('');
+      const locked = await reserveTableLock(table);
+      if (locked) {
+        setSelectedTable(table);
+      }
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   const handleContinue = async () => {
+    if (isProcessing) return;
+    if (!selectedTable) {
+      setErrorMessage('Sila pilih meja terlebih dahulu.');
+      return;
+    }
+
+    setErrorMessage('');
+    setIsProcessing(true);
+    try {
+      const lock = getLockForTable(selectedTable.id);
+      if (!lock || lock.lock_token !== lockToken || new Date(lock.lock_expires_at).getTime() <= Date.now()) {
+        setErrorMessage('Kunci meja telah tamat. Sila pilih semula meja.');
+        return;
+      }
+
+      const refreshExpiry = new Date(Date.now() + lockDurationMs).toISOString();
+      await supabase
+        .from('table_locks')
+        .update({ lock_expires_at: refreshExpiry })
+        .eq('table_id', selectedTable.id)
+        .eq('lock_token', lockToken);
+
+      const nextBooking = {
+        ...bookingData,
+        tableId: selectedTable.id,
+        tableNumber: selectedTable.name,
+        tableCapacity: selectedTable.seats
+      };
+
+      navigate('/checkout', { state: { bookingData: nextBooking } });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
     if (!selectedTable) {
       setErrorMessage('Sila pilih meja terlebih dahulu.');
       return;
@@ -355,7 +397,7 @@ const SelectTable = () => {
                       type="button"
                       className={cardClasses}
                       onClick={() => handleTableSelect(table)}
-                      disabled={isBooked || tooSmall || isLockedByOther}
+                      disabled={isBooked || tooSmall || isLockedByOther || isProcessing}
                     >
                       <div className="table-icon">🪑</div>
                       <div className="table-name">{table.name}</div>
@@ -373,8 +415,8 @@ const SelectTable = () => {
             {errorMessage && <div className="error-text">{errorMessage}</div>}
 
             <div className="table-footer">
-              <button type="button" className="btn-primary full-width" onClick={handleContinue}>
-                Continue to Payment
+              <button type="button" className="btn-primary full-width" onClick={handleContinue} disabled={isProcessing}>
+                {isProcessing ? 'Memproses...' : 'Continue to Payment'}
               </button>
             </div>
           </div>

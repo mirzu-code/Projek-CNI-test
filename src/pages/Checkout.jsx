@@ -36,6 +36,11 @@ const Checkout = () => {
 
   const handleConfirm = async () => {
     if (!booking) return;
+    if (!booking.tableId) {
+      setError('Sila pilih meja sebelum membuat pembayaran.');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -169,7 +174,12 @@ const Checkout = () => {
             <button type="button" className="btn-outline" onClick={() => navigate('/select-table')}>
               Pilih Meja Semula
             </button>
-            <button type="button" className="btn-primary full-width" onClick={handleConfirm} disabled={loading}>
+            <button
+              type="button"
+              className="btn-primary full-width"
+              onClick={handleConfirm}
+              disabled={loading || !booking.tableId}
+            >
               {loading ? 'Mengesahkan...' : 'Confirm Booking'}
             </button>
           </div>
