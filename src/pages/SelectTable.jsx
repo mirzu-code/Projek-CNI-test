@@ -208,6 +208,11 @@ const SelectTable = () => {
         if (error) throw error;
       }
 
+      setTableLocks((prev) => {
+        const filtered = prev.filter((l) => l.table_id !== table.id);
+        return [...filtered, payload];
+      });
+
       setLockMessage(`Table ${table.name} is locked until ${new Date(expiresAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}.`);
       return true;
     } catch (err) {
@@ -233,6 +238,14 @@ const SelectTable = () => {
         .from('table_locks')
         .update({ lock_token: null, locked_by: null, lock_expires_at: cooldownUntil })
         .eq('table_id', tableId);
+
+      setTableLocks((prev) =>
+        prev.map((l) =>
+          l.table_id === tableId
+            ? { ...l, lock_token: null, locked_by: null, lock_expires_at: cooldownUntil }
+            : l
+        )
+      );
     } catch (err) {
       console.warn('Failed to release previous table lock:', err.message);
     }
