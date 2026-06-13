@@ -1,7 +1,32 @@
 .my-booking-page {
-  padding-bottom: 4rem;
-  background-color: var(--bg-color);
-  min-height: calc(100vh - 70px);
+  padding: 2rem 0 4rem;
+  background-color: var(--bg-app);
+  min-height: calc(100vh - 75px);
+}
+
+.booking-search-form {
+  margin-top: 1.75rem;
+}
+
+.error-text {
+  color: #b00020;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
+
+.ticket-card {
+  max-width: 720px;
+  margin: -2rem auto 0;
+}
+
+@media (max-width: 768px) {
+  .my-booking-page {
+    padding: 1rem 0 3rem;
+  }
+
+  .ticket-card {
+    margin: 0 auto;
+  }
 }
 
 .booking-header-banner {

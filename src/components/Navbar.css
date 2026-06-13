@@ -57,10 +57,22 @@
   letter-spacing: 0.08em;
   position: relative;
   padding: 0.5rem 0;
+  min-width: 90px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  line-height: 1.2;
   transition: color 0.3s ease;
+}
+
+.nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: var(--primary-color);
 }
 
 .nav-links a::before {

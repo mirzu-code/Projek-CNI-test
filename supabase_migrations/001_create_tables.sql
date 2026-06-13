@@ -9,6 +9,8 @@ create table if not exists bookings (
   booking_time text,
   total_guests int,
   status text default 'Pending',
+  order_status text default 'Pending',
+  booking_source text default 'Online',
   table_id int,
   table_number text,
   table_capacity int,

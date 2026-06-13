@@ -1,6 +1,6 @@
 .about-page {
   width: 100%;
-  background: linear-gradient(180deg, var(--bg-color) 0%, #ffffff 50%, var(--bg-color) 100%);
+  background: var(--bg-app);
 }
 
 /* ===== ABOUT HERO ===== */
@@ -186,6 +186,10 @@
 
   .about-hero-content {
     padding: 1.5rem;
+  }
+
+  .about-hero {
+    background-attachment: scroll;
   }
 
   .about-hero-content h1 {

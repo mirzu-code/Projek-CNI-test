@@ -454,6 +454,99 @@
   font-weight: 500;
 }
 
+.row-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.source-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.source-pill.online {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.source-pill.whatsapp {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.qr-panel {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.qr-panel h3 {
+  margin-top: 0;
+  color: #164;
+}
+
+.qr-card {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.qr-card img {
+  width: 200px;
+  height: 200px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+}
+
+.qr-info {
+  flex: 1;
+  min-width: 220px;
+}
+
+.qr-info p {
+  margin: 0.4rem 0;
+  color: #334155;
+}
+
+.lock-action-message {
+  background: #e8f5ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  padding: 0.9rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.table-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.admin-orders select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+}
+
+.admin-orders .btn-small {
+  white-space: nowrap;
+}
+
 @keyframes animate-fade-in {
   from {
     opacity: 0;

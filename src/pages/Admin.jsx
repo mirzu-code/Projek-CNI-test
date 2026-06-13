@@ -3,6 +3,9 @@ import { Html5QrcodeScanner } from 'html5-qrcode';
 import { supabase } from '../supabaseClient';
 import './Admin.css';
 
+const ORDER_STATUS_OPTIONS = ['Pending', 'Preparing', 'Ready', 'Served', 'Completed', 'Cancelled'];
+const WHATSAPP_LOCK_DURATION_MINUTES = 90;
+
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
@@ -26,6 +29,8 @@ const Admin = () => {
   const [scannerSuccessRes, setScannerSuccessRes] = useState(null);
   const [scannerError, setScannerError] = useState(false);
   const [isCameraActive, setIsCameraActive] = useState(false);
+  const [selectedQrBooking, setSelectedQrBooking] = useState(null);
+  const [lockActionMessage, setLockActionMessage] = useState('');
   const scannerRef = useRef(null);
   const reservationsRef = useRef(reservations);
 
@@ -55,12 +60,21 @@ const Admin = () => {
 
   const handleNavClick = (section) => {
     setActiveSection(section);
+    if (section === 'scanner') {
+      setIsCameraActive(true);
+    }
     if (isPortraitMobile()) setIsSidePanelOpen(false);
   };
 
   useEffect(() => {
     reservationsRef.current = reservations;
   }, [reservations]);
+
+  useEffect(() => {
+    if (activeSection === 'scanner') {
+      setIsCameraActive(true);
+    }
+  }, [activeSection]);
 
   useEffect(() => {
     if (isCameraActive) {
@@ -176,15 +190,16 @@ const Admin = () => {
       let match = reservationsRef.current.find(res => res.id.toLowerCase() === lowerScan);
 
       if (match) {
+        setScannerSuccessRes(match);
         if (match.status === 'Checked In') {
           playScanChime(false);
-          setScannerError(true);
+          setScannerError(false);
           setScannerMessage(`ALREADY CHECKED IN: ${match.id} - ${match.name}`);
         } else {
           playScanChime(true);
-          setScannerSuccessRes(match);
           setScannerMessage(`VERIFICATION SUCCESSFUL: Welcome ${match.name}!`);
           await handleUpdateStatus(match.id, 'Checked In');
+          setReservations((prev) => prev.map((r) => r.recordId === match.recordId ? { ...r, status: 'Checked In' } : r));
         }
       } else {
         playScanChime(false);
@@ -207,6 +222,8 @@ const Admin = () => {
     preorder: !!record.dish,
     dish: record.dish || '',
     status: record.status || 'Pending',
+    order_status: record.order_status || 'Pending',
+    booking_source: record.booking_source || 'Online',
     tableId: record.table_id || null,
     tableNumber: record.table_number || (record.table_id ? `Table ${record.table_id}` : ''),
     tableCapacity: record.table_capacity || null,
@@ -356,8 +373,74 @@ const Admin = () => {
         .update({ status: newStatus })
         .eq('id', res.recordId);
       if (error) throw error;
+      setReservations((prev) => prev.map((r) => r.recordId === res.recordId ? { ...r, status: newStatus } : r));
     } catch (err) {
       console.warn('Status update failed:', err.message);
+    }
+  };
+
+  const handleUpdateOrderStatus = async (resId, newOrderStatus) => {
+    try {
+      const res = reservations.find(r => r.id === resId);
+      if (!res) return;
+      const { error } = await supabase
+        .from('bookings')
+        .update({ order_status: newOrderStatus })
+        .eq('id', res.recordId);
+      if (error) throw error;
+      setReservations((prev) => prev.map((r) => r.recordId === res.recordId ? { ...r, order_status: newOrderStatus } : r));
+    } catch (err) {
+      console.warn('Order status update failed:', err.message);
+    }
+  };
+
+  const handleToggleBookingSource = async (resId) => {
+    try {
+      const res = reservations.find(r => r.id === resId);
+      if (!res) return;
+      const nextSource = res.booking_source === 'WhatsApp' ? 'Online' : 'WhatsApp';
+      const { error } = await supabase
+        .from('bookings')
+        .update({ booking_source: nextSource })
+        .eq('id', res.recordId);
+      if (error) throw error;
+      setReservations((prev) => prev.map((r) => r.recordId === res.recordId ? { ...r, booking_source: nextSource } : r));
+    } catch (err) {
+      console.warn('Booking source update failed:', err.message);
+    }
+  };
+
+  const handleLockTable = async (tableId, reason = 'WhatsApp Booking') => {
+    try {
+      const lockExpiresAt = new Date(Date.now() + WHATSAPP_LOCK_DURATION_MINUTES * 60000).toISOString();
+      const lockPayload = {
+        table_id: tableId,
+        locked_by: reason,
+        lock_token: `admin-lock-${Date.now()}`,
+        lock_expires_at: lockExpiresAt
+      };
+      const { error } = await supabase
+        .from('table_locks')
+        .upsert([lockPayload], { onConflict: 'table_id' });
+      if (error) throw error;
+      setLockActionMessage(`Table ${tableId} locked until ${new Date(lockExpiresAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+      refreshTableLocks();
+    } catch (err) {
+      console.warn('Table lock failed:', err.message);
+    }
+  };
+
+  const handleUnlockTable = async (tableId) => {
+    try {
+      const { error } = await supabase
+        .from('table_locks')
+        .delete()
+        .eq('table_id', tableId);
+      if (error) throw error;
+      setLockActionMessage(`Table ${tableId} unlocked`);
+      refreshTableLocks();
+    } catch (err) {
+      console.warn('Table unlock failed:', err.message);
     }
   };
 
@@ -517,6 +600,7 @@ const Admin = () => {
               <ul>
                 <li><button onClick={() => handleNavClick('overview')}>Overview</button></li>
                 <li><button onClick={() => handleNavClick('bookings')}>Bookings</button></li>
+                <li><button onClick={() => handleNavClick('orders')}>Orders</button></li>
                 <li><button onClick={() => handleNavClick('scanner')}>Scanner</button></li>
                 <li><button onClick={() => handleNavClick('tables')}>Tables</button></li>
                 <li><button onClick={() => handleNavClick('menus')}>Menus</button></li>
@@ -561,6 +645,7 @@ const Admin = () => {
                       <th>Date & Time</th>
                       <th>Guests</th>
                       <th>Table</th>
+                      <th>Source</th>
                       <th>Status</th>
                       <th>Action</th>
                     </tr>
@@ -573,11 +658,79 @@ const Admin = () => {
                         <td>{r.date} {r.time}</td>
                         <td>{r.pax}</td>
                         <td>{r.tableNumber}</td>
+                        <td>
+                          <span className={`source-pill ${r.booking_source === 'WhatsApp' ? 'whatsapp' : 'online'}`}>
+                            {r.booking_source}
+                          </span>
+                        </td>
                         <td>{r.status}</td>
                         <td>
-                          {r.status !== 'Checked In' && (
-                            <button onClick={() => handleUpdateStatus(r.id, 'Checked In')} className="btn-small">Check In</button>
-                          )}
+                          <div className="row-actions">
+                            {r.status !== 'Checked In' && (
+                              <button onClick={() => handleUpdateStatus(r.id, 'Checked In')} className="btn-small">Check In</button>
+                            )}
+                            <button onClick={() => handleToggleBookingSource(r.id)} className="btn-small btn-outline">
+                              {r.booking_source === 'WhatsApp' ? 'Mark Online' : 'Mark WhatsApp'}
+                            </button>
+                            <button onClick={() => setSelectedQrBooking(r)} className="btn-small btn-outline">QR</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                {selectedQrBooking && (
+                  <div className="qr-panel">
+                    <h3>Order Ticket: {selectedQrBooking.id}</h3>
+                    <div className="qr-card">
+                      <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(selectedQrBooking.id)}`} alt="Booking QR Code" />
+                      <div className="qr-info">
+                        <p><strong>{selectedQrBooking.name}</strong></p>
+                        <p>{selectedQrBooking.date} {selectedQrBooking.time}</p>
+                        <p>Table: {selectedQrBooking.tableNumber}</p>
+                        <p>Status: {selectedQrBooking.status}</p>
+                        <p>Source: {selectedQrBooking.booking_source}</p>
+                        <button className="btn-outline" onClick={() => setSelectedQrBooking(null)}>Close QR</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </section>
+            )}
+
+            {activeSection === 'orders' && (
+              <section className="admin-orders">
+                <h2>Order Management</h2>
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Dish</th>
+                      <th>Date & Time</th>
+                      <th>Table</th>
+                      <th>Order Status</th>
+                      <th>QR</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {reservations.map(r => (
+                      <tr key={r.recordId}>
+                        <td>{r.id}</td>
+                        <td>{r.name}</td>
+                        <td>{r.preorder ? r.dish || 'Order not specified' : 'No dish selected'}</td>
+                        <td>{r.date} {r.time}</td>
+                        <td>{r.tableNumber}</td>
+                        <td>
+                          <select value={r.order_status || 'Pending'} onChange={(e) => handleUpdateOrderStatus(r.id, e.target.value)}>
+                            {ORDER_STATUS_OPTIONS.map(option => (
+                              <option key={option} value={option}>{option}</option>
+                            ))}
+                          </select>
+                        </td>
+                        <td>
+                          <button className="btn-small btn-outline" onClick={() => setSelectedQrBooking(r)}>View</button>
                         </td>
                       </tr>
                     ))}
@@ -614,9 +767,13 @@ const Admin = () => {
                 </div>
                 {scannerSuccessRes && (
                   <div className={`scanner-result ${scannerError ? 'error' : 'success'}`}>
+                    <div className="scanner-badge">
+                      {scannerSuccessRes.status === 'Checked In' ? 'CHECKED IN' : 'VERIFIED'}
+                    </div>
                     <strong>{scannerSuccessRes.name}</strong>
                     <p>Table: {scannerSuccessRes.tableNumber}</p>
                     <p>Guests: {scannerSuccessRes.pax}</p>
+                    <p>Source: <span className={`source-pill ${scannerSuccessRes.booking_source === 'WhatsApp' ? 'whatsapp' : 'online'}`}>{scannerSuccessRes.booking_source}</span></p>
                   </div>
                 )}
               </section>
@@ -625,16 +782,27 @@ const Admin = () => {
             {activeSection === 'tables' && (
               <section className="admin-tables">
                 <h2>Table Status</h2>
+                {lockActionMessage && <div className="lock-action-message">{lockActionMessage}</div>}
                 <div className="tables-grid">
                   {TABLES.map(table => {
-                    const isLocked = tableLocks.some(lock => lock.table_id === table.id);
+                    const lock = tableLocks.find(lock => lock.table_id === table.id);
+                    const isLocked = !!lock;
                     const booking = reservations.find(r => r.tableId === table.id);
+                    const isWhatsappBooking = booking?.booking_source === 'WhatsApp';
                     return (
                       <div key={table.id} className={`table-card ${isLocked ? 'locked' : ''} ${booking ? 'booked' : ''}`}>
                         <h4>{table.name}</h4>
                         <p>Seats: {table.seats}</p>
                         {booking && <p className="booking-name">{booking.name}</p>}
-                        {isLocked && <p className="locked-label">LOCKED (1.5h)</p>}
+                        {booking && <p className={`source-pill ${isWhatsappBooking ? 'whatsapp' : 'online'}`}>{booking.booking_source}</p>}
+                        {isLocked && <p className="locked-label">LOCKED ({new Date(lock.lock_expires_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})</p>}
+                        <div className="table-actions">
+                          {isLocked ? (
+                            <button className="btn-small btn-outline" onClick={() => handleUnlockTable(table.id)}>Unlock</button>
+                          ) : (
+                            <button className="btn-small" onClick={() => handleLockTable(table.id, isWhatsappBooking ? 'WhatsApp Booking' : 'Admin lock')}>Lock</button>
+                          )}
+                        </div>
                       </div>
                     );
                   })}
