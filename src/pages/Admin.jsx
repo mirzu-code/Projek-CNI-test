@@ -541,7 +541,9 @@ const Admin = () => {
         if (error) throw error;
         imageUrl = `${supabase.storage.from('menu-images').getPublicUrl(data.path).data.publicUrl}`;
       } catch (err) {
-        console.warn('Image upload failed, using provided URL');
+        console.warn('Image upload failed:', err.message || err);
+        setMenuError(`Image upload failed: ${err.message || 'Unknown error'}`);
+        return; // Stop execution so we don't save without the new image
       }
     }
 
