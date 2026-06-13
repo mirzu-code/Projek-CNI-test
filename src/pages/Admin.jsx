@@ -806,7 +806,7 @@ const Admin = () => {
                     <h3>Order Ticket: {selectedQrBooking.id}</h3>
                     <div className="qr-card">
                       <div className="qr-image-container" style={{ position: 'relative', display: 'inline-block', alignSelf: 'center' }}>
-                        <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(selectedQrBooking.id)}`} alt="Booking QR Code" />
+                        <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(selectedQrBooking.id ? selectedQrBooking.id.toString().replace(/^RES-/i, '').trim() : '')}`} alt="Booking QR Code" />
                         {selectedQrBooking.status === 'Checked In' && (
                           <div className="checked-in-seal-overlay animate-zoom-in">
                             <div className="seal-inner">

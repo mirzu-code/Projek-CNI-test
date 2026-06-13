@@ -336,7 +336,7 @@ const MyBooking = () => {
           <div className="ticket-body">
             <div className="qr-placeholder">
               <div style={{ position: 'relative', display: 'inline-block' }}>
-                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(booking.id)}`} alt="QR Code" />
+                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(booking.id ? booking.id.toString().replace(/^RES-/i, '').trim() : '')}`} alt="QR Code" />
                 {booking.status === 'Checked In' && (
                   <div className="checked-in-seal-overlay animate-zoom-in">
                     <div className="seal-inner">
@@ -390,6 +390,9 @@ const MyBooking = () => {
           {/* Receipt Section */}
           <div className="receipt-section">
             <h4 className="receipt-title">Payment Receipt</h4>
+            <div className="receipt-order-code-row" style={{ textAlign: 'center', marginBottom: '1rem', fontSize: '0.95rem', color: 'var(--text-light)' }}>
+              Order Code: <strong style={{ color: 'var(--primary-color)' }}>{booking.id}</strong>
+            </div>
             <div className="receipt-items">
               {/* Pre-ordered Dishes */}
               {orderDetails.preorders && orderDetails.preorders.length > 0 && (
