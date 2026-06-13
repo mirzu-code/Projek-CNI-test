@@ -4,7 +4,7 @@ import './Desserts.css';
 
 const Desserts = () => {
   const { items: cuisineItems } = useCuisineMenuItems(6);
-  const dishesInfo = cuisineItems.length > 0 ? cuisineItems : [
+  const fallbackDishes = [
     {
       value: 'kuih-bingka-ubi',
       name: 'Kuih Bingka Ubi',
@@ -96,6 +96,8 @@ const Desserts = () => {
       image: 'https://source.unsplash.com/featured/600x600/?tapai%20pulut'
     }
   ];
+
+  const dishesInfo = [...cuisineItems, ...fallbackDishes.slice(cuisineItems.length)];
 
   return (
     <div className="cuisine-menu-page desserts-theme animate-fade-in">

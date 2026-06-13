@@ -1,27 +1,99 @@
-.background-music-button {
+.music-player-container {
   position: fixed;
-  right: 1rem;
-  bottom: 1rem;
-  z-index: 999;
-  width: 52px;
-  height: 52px;
-  display: inline-flex;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9000;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  background: rgba(18, 28, 20, 0.88);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 50%;
-  padding: 0;
-  font-size: 1.4rem;
-  cursor: pointer;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
-  backdrop-filter: blur(10px);
-  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  gap: 0.5rem;
 }
 
-.background-music-button:hover {
-  transform: translateY(-2px);
-  background: rgba(18, 28, 20, 1);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+.music-toggle-btn {
+  background: rgba(26, 71, 42, 0.85); /* var(--primary-color) with opacity */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.4); /* var(--accent-color) */
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #d4af37;
+  font-size: 1.5rem;
+}
+
+.music-toggle-btn:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 40px rgba(212, 175, 55, 0.3);
+  background: rgba(15, 44, 25, 0.95);
+  border-color: rgba(212, 175, 55, 0.8);
+}
+
+.music-toggle-btn:active {
+  transform: translateY(0) scale(0.95);
+}
+
+.music-status-tooltip {
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary-dark);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  border: 1px solid var(--muted-border);
+}
+
+.music-player-container:hover .music-status-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Sound wave animation when playing */
+.sound-waves {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 20px;
+}
+
+.wave {
+  width: 4px;
+  background-color: #d4af37;
+  border-radius: 2px;
+  animation: equalize 1s infinite alternate ease-in-out;
+}
+
+.wave:nth-child(1) { height: 10px; animation-delay: 0.1s; }
+.wave:nth-child(2) { height: 20px; animation-delay: 0.3s; }
+.wave:nth-child(3) { height: 12px; animation-delay: 0.5s; }
+.wave:nth-child(4) { height: 16px; animation-delay: 0.2s; }
+
+.sound-waves.paused .wave {
+  animation: none;
+  height: 4px !important;
+  transition: height 0.3s ease;
+}
+
+@keyframes equalize {
+  0% { height: 6px; }
+  100% { height: 20px; }
+}
+
+@media (max-width: 768px) {
+  .music-player-container {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+  .music-status-tooltip {
+    display: none;
+  }
 }

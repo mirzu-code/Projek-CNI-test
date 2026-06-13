@@ -3,7 +3,8 @@ import { useCuisineMenuItems } from '../hooks/useCuisineMenuItems';
 
 const WesternCuisine = () => {
   const { items: cuisineItems } = useCuisineMenuItems(4);
-  const dishesInfo = cuisineItems.length > 0 ? cuisineItems : [
+  
+  const fallbackDishes = [
     {
       value: 'angus-steak',
       name: 'Black Angus Ribeye Steak',
@@ -86,6 +87,8 @@ const WesternCuisine = () => {
       image: 'https://source.unsplash.com/featured/600x400/?steak+pie'
     }
   ];
+
+  const dishesInfo = [...cuisineItems, ...fallbackDishes.slice(cuisineItems.length)];
 
   return (
     <div className="cuisine-menu-page western-theme animate-fade-in">
@@ -171,3 +174,5 @@ const WesternCuisine = () => {
 };
 
 export default WesternCuisine;
+
+

@@ -1,10 +1,10 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useCuisineMenuItems } from '../hooks/useCuisineMenuItems';
 import './IndianCuisine.css';
 
 const IndianCuisine = () => {
   const { items: cuisineItems } = useCuisineMenuItems(5);
-  const dishesInfo = cuisineItems.length > 0 ? cuisineItems : [
+  const fallbackDishes = [
     {
       value: 'lamb-biryani',
       name: 'Aromatic Lamb Shank Biryani',
@@ -87,6 +87,8 @@ const IndianCuisine = () => {
       image: 'https://source.unsplash.com/featured/600x400/?dal+makhani'
     }
   ];
+
+  const dishesInfo = [...cuisineItems, ...fallbackDishes.slice(cuisineItems.length)];
 
   return (
     <div className="cuisine-menu-page indian-theme animate-fade-in">

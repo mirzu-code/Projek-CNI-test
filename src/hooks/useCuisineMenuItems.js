@@ -30,7 +30,17 @@ export const useCuisineMenuItems = (cuisineId) => {
           .order('id', { ascending: true });
 
         if (error) throw error;
-        setItems((data || []).map(mapMenuItem));
+        
+        const mappedData = (data || []).map(mapMenuItem);
+        
+        // Merge strategy: Keep fallback items for a full UI if less than 6 items are in DB
+        // We will fetch the fallback list from the component, but since we can't easily pass it,
+        // we'll just return the mappedData and let the component handle the merge if it wants,
+        // OR we can just pass mappedData and let the component fallback logic handle it.
+        // Wait, the component currently completely ignores fallbacks if mappedData.length > 0.
+        // Let's change the hook to return the raw mappedData, but we will edit the component instead!
+        // Wait, I am replacing the hook file. I will just pass the mappedData.
+        setItems(mappedData);
         setError('');
       } catch (err) {
         console.warn(`Failed to load cuisine ${cuisineId} menu:`, err.message || err);

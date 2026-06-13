@@ -1,4 +1,4 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useCuisineMenuItems } from '../hooks/useCuisineMenuItems';
 import './MalayCuisine.css';
 
@@ -71,7 +71,7 @@ const MalayCuisine = () => {
     }
   ];
 
-  const dishesInfo = cuisineItems.length > 0 ? cuisineItems : fallbackDishes;
+  const dishesInfo = [...cuisineItems, ...fallbackDishes.slice(cuisineItems.length)];
 
   return (
     <div className="cuisine-menu-page malay-theme animate-fade-in">

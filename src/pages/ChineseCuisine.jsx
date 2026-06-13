@@ -1,10 +1,10 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useCuisineMenuItems } from '../hooks/useCuisineMenuItems';
 import './ChineseCuisine.css';
 
 const ChineseCuisine = () => {
   const { items: cuisineItems } = useCuisineMenuItems(2);
-  const dishesInfo = cuisineItems.length > 0 ? cuisineItems : [
+  const fallbackDishes = [
     {
       value: 'steamed-fish',
       name: 'Ginger Onion Steamed Sea Bass',
@@ -87,6 +87,8 @@ const ChineseCuisine = () => {
       image: 'https://source.unsplash.com/featured/600x400/?steamed+fish+black+bean'
     }
   ];
+
+  const dishesInfo = [...cuisineItems, ...fallbackDishes.slice(cuisineItems.length)];
 
   return (
     <div className="cuisine-menu-page chinese-theme animate-fade-in">

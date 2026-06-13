@@ -3,7 +3,7 @@ import { useCuisineMenuItems } from '../hooks/useCuisineMenuItems';
 
 const JapaneseCuisine = () => {
   const { items: cuisineItems } = useCuisineMenuItems(3);
-  const dishesInfo = cuisineItems.length > 0 ? cuisineItems : [
+  const fallbackDishes = [
     {
       value: 'wagyu-ramen',
       name: 'Wagyu Beef Black Garlic Ramen',
@@ -86,6 +86,8 @@ const JapaneseCuisine = () => {
       image: 'https://source.unsplash.com/featured/600x400/?matcha+anmitsu'
     }
   ];
+
+  const dishesInfo = [...cuisineItems, ...fallbackDishes.slice(cuisineItems.length)];
 
   return (
     <div className="cuisine-menu-page japanese-theme animate-fade-in">
