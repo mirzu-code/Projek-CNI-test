@@ -1,8 +1,8 @@
 :root {
-  --primary-color: #562b45; /* Lembayung / deep twilight purple */
-  --primary-light: #7b4064;
-  --primary-dark: #3b1b2f;
-  --accent-color: #d4af37; /* Gold */
+  --primary-color: #1a472a; /* Elegant dark green representing Lembayung */
+  --primary-light: #2c6e43;
+  --primary-dark: #0f2c19;
+  --accent-color: #d4af37; /* Premium Gold */
   --accent-light: #e8c547;
   --accent-dark: #b8941f;
   --text-main: #1a1a1a;
@@ -11,9 +11,9 @@
   --bg-color: #f5f3f0;
   --bg-card: #ffffff;
   --border-color: #e8e4de;
-  --bg-app: #efefe8;
+  --bg-app: #f9f8f6;
   --surface: #ffffff;
-  --surface-soft: #fbf9f5;
+  --surface-soft: #fdfcfb;
   --text-strong: #111111;
   --muted-border: #d8d2c5;
   
@@ -21,10 +21,10 @@
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.16);
-  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.16);
 }
 
 * {
