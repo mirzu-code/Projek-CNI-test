@@ -71,13 +71,12 @@
   flex-direction: column;
   border-radius: 24px;
   overflow: hidden;
-  box-shadow: var(--shadow-xl);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(216, 210, 197, 0.4);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  border: 1px solid var(--muted-border);
   height: 100%;
   position: relative;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
+  background: var(--surface);
 }
 
 .category-hub-card::before {
@@ -86,13 +85,13 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
+  height: 4px;
   background: linear-gradient(90deg, var(--accent-color), transparent);
   z-index: 10;
 }
 
 .category-hub-card:hover {
-  transform: translateY(-10px);
+  transform: translateY(-8px);
   box-shadow: var(--shadow-xl);
 }
 
