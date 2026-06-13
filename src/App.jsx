@@ -22,10 +22,13 @@ import SplashScreen from './components/SplashScreen';
 function App() {
   const [showSplash, setShowSplash] = useState(true);
 
+  if (showSplash) {
+    return <SplashScreen onFinished={() => setShowSplash(false)} />;
+  }
+
   return (
     <Router>
-      {showSplash && <SplashScreen onFinished={() => setShowSplash(false)} />}
-      <div className="app-container">
+      <div className="app-container animate-fade-in">
         <Navbar />
         <BackgroundMusic />
         <main className="main-content">
