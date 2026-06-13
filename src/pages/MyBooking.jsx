@@ -29,12 +29,32 @@ const MyBooking = () => {
   useEffect(() => {
     let bookingChannel = null;
 
-    const loadBookingFromStorage = () => {
+    const loadBookingFromStorage = async () => {
       const savedBooking = localStorage.getItem('activeBooking');
       if (savedBooking) {
         const parsed = JSON.parse(savedBooking);
         setBooking(parsed);
         savedBookingRef.current = parsed;
+
+        if (!parsed.id && parsed.phone) {
+          try {
+            const { data } = await supabase
+              .from('bookings')
+              .select('id')
+              .eq('customer_phone', parsed.phone)
+              .order('id', { ascending: false })
+              .limit(1);
+
+            if (data && data[0]) {
+              const updated = { ...parsed, id: `RES-${data[0].id}` };
+              setBooking(updated);
+              savedBookingRef.current = updated;
+              localStorage.setItem('activeBooking', JSON.stringify(updated));
+            }
+          } catch (err) {
+            console.warn('Failed to repair missing booking ID:', err);
+          }
+        }
       }
     };
 
