@@ -14,13 +14,13 @@ const About = () => {
       name: 'Chef Kamaruddin Ibrahim',
       role: 'Head Chef & Culinary Director',
       bio: 'Holding prestigious international culinary certificates and fully recognized as a Master Chef. Exceptionally skilled and powerful in the kitchen, he can cook a wide variety of dishes from all over the world with his 25 years of fine dining expertise.',
-      image: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=400&q=80'
+      image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=400&q=80'
     },
     {
       name: 'Chef Mei Ling Chen',
       role: 'Pastry & Cuisine Artisan',
       bio: 'Also a certified Master Chef with international qualifications. Bringing absolute power and finesse to the kitchen, she masters various cuisines with professional training from Shanghai and Paris to create the perfect balance of flavors.',
-      image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=400&q=80'
+      image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=400&q=80'
     }
   ];
 
