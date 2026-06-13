@@ -23,7 +23,7 @@ const SplashScreen = ({ onFinished }) => {
     <div className={`splash-screen ${fadeOut ? 'fade-out' : ''}`}>
       <div className="splash-content">
         <div className="logo-circle-container">
-          <img src="/Lembayung Image.jpeg" alt="Lembayung Logo" className="logo-image-circle" />
+          <img src="/Lembayung%20Image.jpeg" alt="Lembayung Logo" className="logo-image-circle" />
         </div>
       </div>
     </div>
