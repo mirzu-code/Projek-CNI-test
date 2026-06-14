@@ -342,20 +342,51 @@
 }
 
 /* ===== RESPONSIVE ===== */
-/* Force 3 columns on Landscape / Desktop and 1 column centered on Portrait / Mobile */
 
-@media (max-width: 1024px) {
+/* Desktop / Landscape: always 3 columns, centered */
+.categories-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 2rem !important;
+  margin-bottom: 4rem;
+  justify-content: center;
+}
+
+.categories-grid-container {
+  width: 95%;
+  max-width: 1400px;
+  margin: 2rem auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Tablet: still 3 columns but tighter gap */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 1.25rem !important;
+  }
+
   .card-image-wrapper {
     height: 160px;
   }
 }
 
-/* Portrait orientation / Mobile screens */
-@media (max-width: 768px), (orientation: portrait) {
+/* Mobile / Portrait: 1 column, centered */
+@media (max-width: 768px) {
   .categories-grid {
     grid-template-columns: 1fr !important;
-    max-width: 450px;
-    margin: 0 auto 3rem;
+    max-width: 450px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 3rem;
+    gap: 1.5rem !important;
+  }
+
+  .categories-grid-container {
+    width: 100%;
+    padding: 0 1rem;
   }
 
   .menu-hub-header {
@@ -385,22 +416,13 @@
   }
 }
 
-/* Landscape orientation on medium screens to keep 3 columns */
-@media (min-width: 768px) and (orientation: landscape) {
-  .categories-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 1.5rem;
-  }
-}
-
 @media (max-width: 480px) {
-  .categories-grid-container {
-    width: 100%;
-    padding: 0 0.75rem;
+  .categories-grid {
+    max-width: 100% !important;
   }
 
-  .categories-grid {
-    max-width: 100%;
+  .categories-grid-container {
+    padding: 0 0.75rem;
   }
 
   .menu-hub-header h1 {
@@ -430,3 +452,4 @@
     padding: 2rem 1.25rem;
   }
 }
+
