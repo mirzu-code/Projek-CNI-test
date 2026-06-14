@@ -155,11 +155,11 @@ const Menu = () => {
               gap: '2rem',
               justifyContent: 'center',
               justifyItems: 'center',
-              margin: '0 auto 4rem',
+              margin: '3.5rem auto 4rem',
               width: 'auto',
               maxWidth: 'calc(3 * 360px + 2 * 2rem)',
               position: 'relative',
-              left: '50%',
+              left: 'calc(50% + 40px)',
               transform: 'translateX(-50%)'
             }}
           >
