@@ -6,7 +6,7 @@
 
 /* ===== HEADER ===== */
 .menu-hub-header {
-  padding: 4rem 1.5rem 3rem;
+  padding: 7rem 1.5rem 3rem; /* Increased top padding to prevent overlapping with fixed navbar */
   max-width: 860px;
   margin: 0 auto;
   text-align: center;
@@ -55,7 +55,7 @@
 .categories-grid-container {
   width: 95%;
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 2rem auto 0; /* Pushes the cards down to make header text readable */
 }
 
 .categories-grid {
