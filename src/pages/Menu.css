@@ -154,15 +154,12 @@
 }
 
 .category-info-wrapper p {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.82);
-  line-height: 1.55;
+  font-size: 0.88rem;
+  color: #ffffff;
+  line-height: 1.6;
   margin: 0;
-  font-weight: 300;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-weight: 400;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .menu-loading-state,

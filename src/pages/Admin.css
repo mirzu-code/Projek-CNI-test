@@ -670,3 +670,207 @@
   font-size: 0.65rem;
   opacity: 0.9;
 }
+
+/* Admin Cuisine Categories Quick Grid & Layouts */
+.admin-menu-desc {
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.admin-categories-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.admin-category-quick-card {
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  color: #ffffff;
+}
+
+.admin-category-quick-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+  transition: background 0.25s ease;
+}
+
+.admin-category-quick-card:hover::after {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.admin-category-quick-card.active {
+  border-color: var(--card-accent, var(--accent-color));
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1), var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.admin-category-quick-card.all-card {
+  background: var(--surface) !important;
+  border: 1px solid var(--muted-border);
+  color: var(--text-main);
+}
+
+.admin-category-quick-card.all-card::after {
+  display: none;
+}
+
+.admin-category-quick-card.all-card.active {
+  border: 2px solid var(--primary-color);
+}
+
+.category-quick-icon {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  z-index: 2;
+  position: relative;
+}
+
+.category-quick-info {
+  z-index: 2;
+  position: relative;
+}
+
+.category-quick-info h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.category-quick-info p {
+  margin: 0.2rem 0 0 0;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.admin-category-quick-card.all-card .category-quick-info p {
+  color: var(--text-light);
+}
+
+/* Cuisine Grouping in Admin Page */
+.cuisine-group-section {
+  margin-bottom: 3rem;
+  padding-left: 1rem;
+  transition: all 0.3s ease;
+}
+
+.cuisine-group-header {
+  margin-bottom: 1.25rem;
+}
+
+.cuisine-group-header h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  color: var(--primary-color);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.empty-category-text {
+  color: var(--text-light);
+  font-style: italic;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.admin-menu-item-card {
+  background: var(--surface);
+  border: 1px solid var(--muted-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-card-details {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.menu-card-details h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.menu-card-price {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin: 0 0 0.75rem 0;
+}
+
+.menu-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.menu-card-status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.status-dot.active {
+  background-color: #2ec771;
+}
+
+.status-dot.inactive {
+  background-color: #e74c3c;
+}
+
+.menu-card-details button {
+  width: 100%;
+  padding: 10px;
+  background: var(--primary-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.menu-card-details button:hover {
+  background: var(--primary-light);
+}

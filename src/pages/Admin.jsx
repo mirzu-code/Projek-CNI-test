@@ -17,7 +17,7 @@ const Admin = () => {
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
   const [activeSection, setActiveSection] = useState('overview');
   const [menus, setMenus] = useState([]);
-  const [selectedCuisineId, setSelectedCuisineId] = useState('1');
+  const [selectedCuisineId, setSelectedCuisineId] = useState('all');
   const [menuForm, setMenuForm] = useState({ id: '', name: '', price: '', cuisine_id: '1', description: '', image: '', is_active: true });
   const [menuError, setMenuError] = useState('');
   const [menuMode, setMenuMode] = useState('add');
@@ -942,88 +942,148 @@ const Admin = () => {
               </section>
             )}
 
-            {activeSection === 'menus' && (
-              <section className="admin-menus">
-                <div className="admin-menu-management">
-                              <div className="menu-form-panel">
-                    <h2>{menuMode === 'edit' ? 'Edit Menu Item' : 'Add Menu Item'}</h2>
-                    <div className="form-row">
-                      <label>Manage Cuisine</label>
-                      <select value={selectedCuisineId} onChange={handleCuisineSelectionChange}>
-                        <option value="1">Malay</option>
-                        <option value="2">Chinese</option>
-                        <option value="3">Japanese</option>
-                        <option value="4">Western</option>
-                        <option value="5">Indian</option>
-                        <option value="6">Desserts</option>
-                      </select>
-                    </div>
-                    <form onSubmit={handleMenuSubmit} className="menu-form">
-                      <div className="form-row">
-                        <label>Name</label>
-                        <input name="name" value={menuForm.name} onChange={handleMenuChange} placeholder="Dish name" />
-                      </div>
-                      <div className="form-row">
-                        <label>Price</label>
-                        <input name="price" value={menuForm.price} onChange={handleMenuChange} placeholder="e.g. 29.90" />
-                      </div>
-                      <div className="form-row">
-                        <label>Cuisine</label>
-                        <select name="cuisine_id" value={menuForm.cuisine_id} onChange={handleMenuChange}>
-                          <option value="1">Malay</option>
-                          <option value="2">Chinese</option>
-                          <option value="3">Japanese</option>
-                          <option value="4">Western</option>
-                          <option value="5">Indian</option>
-                          <option value="6">Desserts</option>
-                        </select>
-                      </div>
-                      <div className="form-row">
-                        <label>Description</label>
-                        <textarea name="description" value={menuForm.description} onChange={handleMenuChange} rows="3" placeholder="Menu description" />
-                      </div>
-                      <div className="form-row">
-                        <label>Image URL / Upload</label>
-                        <input name="image" value={menuForm.image} onChange={handleMenuChange} placeholder="Image URL or upload below" />
-                      </div>
-                      <div className="form-row">
-                        <label>Upload Image File</label>
-                        <input ref={imageFileInputRef} type="file" accept="image/*" onChange={handleImageFileChange} />
-                      </div>
-                      {imagePreviewUrl && (
-                        <div className="image-preview-panel">
-                          <img src={imagePreviewUrl} alt="Preview" />
-                        </div>
-                      )}
-                      <div className="form-row form-actions">
-                        <button type="submit" className="btn-primary">{menuMode === 'edit' ? 'Update Menu' : 'Add Menu'}</button>
-                        {menuMode === 'edit' && (
-                          <button type="button" className="btn-outline" onClick={resetMenuForm}>Cancel Edit</button>
-                        )}
-                      </div>
-                      {menuError && <div className="form-error">{menuError}</div>}
-                    </form>
-                  </div>
+            {activeSection === 'menus' && (() => {
+              const categoriesList = [
+                { id: '1', name: 'malay', title: 'Authentic Malay Cuisine', icon: '🇲🇾', bgColor: '#1a472a', accentColor: '#d4af37', bannerImage: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?auto=format&fit=crop&w=800&q=80' },
+                { id: '2', name: 'chinese', title: 'Traditional Chinese Cuisine', icon: '🇨🇳', bgColor: '#b01e23', accentColor: '#ffd700', bannerImage: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80' },
+                { id: '3', name: 'japanese', title: 'Artisan Japanese Cuisine', icon: '🇯🇵', bgColor: '#111111', accentColor: '#e83e8c', bannerImage: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80' },
+                { id: '4', name: 'western', title: 'Modern Western Cuisine', icon: '🥩', bgColor: '#2b3e50', accentColor: '#3498db', bannerImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80' },
+                { id: '5', name: 'indian', title: 'Flavorful Indian Cuisine', icon: '🍛', bgColor: '#a35d00', accentColor: '#e67e22', bannerImage: 'https://images.unsplash.com/photo-1585938338392-50a5d22b6073?auto=format&fit=crop&w=800&q=80' },
+                { id: '6', name: 'desserts', title: 'Sweet Kuih & Desserts', icon: '🍮', bgColor: '#7d4f97', accentColor: '#f9c74f', bannerImage: 'https://images.unsplash.com/photo-1551024735-1f5f2d6c2d7d?auto=format&fit=crop&w=800&q=80' }
+              ];
 
-                  <div className="menu-list-panel">
-                    <h2>Current Menu Items</h2>
-                    <p className="filter-note">Showing cuisine: <strong>{selectedCuisineId === '1' ? 'Malay' : selectedCuisineId === '2' ? 'Chinese' : selectedCuisineId === '3' ? 'Japanese' : selectedCuisineId === '4' ? 'Western' : selectedCuisineId === '5' ? 'Indian' : 'Desserts'}</strong></p>
-                    <div className="menus-grid">
-                      {menus.filter((item) => String(item.cuisine_id) === selectedCuisineId).length === 0 && <p>No menu items found for this cuisine.</p>}
-                      {menus.filter((item) => String(item.cuisine_id) === selectedCuisineId).map(m => (
-                        <div key={m.id} className="menu-card">
-                          <img src={m.image || 'https://via.placeholder.com/150?text=No+Image'} alt={m.name} style={{ width: '100%', height: '120px', objectFit: 'cover' }} />
-                          <h3>{m.name}</h3>
-                          <p>Price: RM{m.price}</p>
-                          <p>Status: {m.is_active ? 'Active' : 'Inactive'}</p>
-                          <button onClick={() => handleEditMenu(m)}>Edit</button>
+              return (
+                <section className="admin-menus">
+                  <div className="admin-menu-management">
+                    <div className="menu-form-panel">
+                      <h2>{menuMode === 'edit' ? 'Edit Menu Item' : 'Add Menu Item'}</h2>
+                      <form onSubmit={handleMenuSubmit} className="menu-form">
+                        <div className="form-row">
+                          <label>Name</label>
+                          <input name="name" value={menuForm.name} onChange={handleMenuChange} placeholder="Dish name" />
                         </div>
-                      ))}
+                        <div className="form-row">
+                          <label>Price</label>
+                          <input name="price" value={menuForm.price} onChange={handleMenuChange} placeholder="e.g. 29.90" />
+                        </div>
+                        <div className="form-row">
+                          <label>Cuisine / Category</label>
+                          <select name="cuisine_id" value={menuForm.cuisine_id} onChange={handleMenuChange}>
+                            <option value="1">Malay</option>
+                            <option value="2">Chinese</option>
+                            <option value="3">Japanese</option>
+                            <option value="4">Western</option>
+                            <option value="5">Indian</option>
+                            <option value="6">Desserts</option>
+                          </select>
+                        </div>
+                        <div className="form-row">
+                          <label>Description</label>
+                          <textarea name="description" value={menuForm.description} onChange={handleMenuChange} rows="3" placeholder="Menu description" />
+                        </div>
+                        <div className="form-row">
+                          <label>Image URL / Upload</label>
+                          <input name="image" value={menuForm.image} onChange={handleMenuChange} placeholder="Image URL or upload below" />
+                        </div>
+                        <div className="form-row">
+                          <label>Upload Image File</label>
+                          <input ref={imageFileInputRef} type="file" accept="image/*" onChange={handleImageFileChange} />
+                        </div>
+                        {imagePreviewUrl && (
+                          <div className="image-preview-panel">
+                            <img src={imagePreviewUrl} alt="Preview" />
+                          </div>
+                        )}
+                        <div className="form-row form-actions">
+                          <button type="submit" className="btn-primary">{menuMode === 'edit' ? 'Update Menu' : 'Add Menu'}</button>
+                          {menuMode === 'edit' && (
+                            <button type="button" className="btn-outline" onClick={resetMenuForm}>Cancel Edit</button>
+                          )}
+                        </div>
+                        {menuError && <div className="form-error">{menuError}</div>}
+                      </form>
+                    </div>
+
+                    <div className="menu-list-panel">
+                      <h2>Cuisine Categories Hub</h2>
+                      <p className="admin-menu-desc">Click a category card below to filter the items, or click "Show All Cuisines".</p>
+                      
+                      <div className="admin-categories-quick-grid">
+                        <div 
+                          className={`admin-category-quick-card all-card ${selectedCuisineId === 'all' ? 'active' : ''}`}
+                          onClick={() => setSelectedCuisineId('all')}
+                        >
+                          <span className="category-quick-icon">🍽️</span>
+                          <div className="category-quick-info">
+                            <h4>Show All Cuisines</h4>
+                            <p>{menus.length} total dishes</p>
+                          </div>
+                        </div>
+
+                        {categoriesList.map((cat) => {
+                          const catCount = menus.filter((m) => String(m.cuisine_id) === cat.id).length;
+                          return (
+                            <div 
+                              key={cat.id} 
+                              className={`admin-category-quick-card ${selectedCuisineId === cat.id ? 'active' : ''}`}
+                              onClick={() => setSelectedCuisineId(cat.id)}
+                              style={{ 
+                                '--card-accent': cat.accentColor,
+                                background: `linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.8)), url(${cat.bannerImage})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center'
+                              }}
+                            >
+                              <span className="category-quick-icon">{cat.icon}</span>
+                              <div className="category-quick-info">
+                                <h4>{cat.title}</h4>
+                                <p>{catCount} dishes</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <div className="menu-group-list-container">
+                        {categoriesList
+                          .filter((cat) => selectedCuisineId === 'all' || selectedCuisineId === cat.id)
+                          .map((cat) => {
+                            const catMenus = menus.filter((m) => String(m.cuisine_id) === cat.id);
+                            return (
+                              <div key={cat.id} className="cuisine-group-section" style={{ borderLeft: `4px solid ${cat.accentColor}` }}>
+                                <div className="cuisine-group-header">
+                                  <h3>{cat.icon} {cat.title} ({catMenus.length})</h3>
+                                </div>
+                                <div className="menus-grid">
+                                  {catMenus.length === 0 ? (
+                                    <p className="empty-category-text">No menu items found for this cuisine. Add one on the left.</p>
+                                  ) : (
+                                    catMenus.map((m) => (
+                                      <div key={m.id} className="menu-card admin-menu-item-card">
+                                        <img src={m.image || 'https://via.placeholder.com/150?text=No+Image'} alt={m.name} style={{ width: '100%', height: '120px', objectFit: 'cover' }} />
+                                        <div className="menu-card-details">
+                                          <h3>{m.name}</h3>
+                                          <p className="menu-card-price">RM{parseFloat(m.price).toFixed(2)}</p>
+                                          {m.description && <p className="menu-card-desc">{m.description}</p>}
+                                          <div className="menu-card-status">
+                                            <span className={`status-dot ${m.is_active ? 'active' : 'inactive'}`}></span>
+                                            {m.is_active ? 'Active' : 'Inactive'}
+                                          </div>
+                                          <button type="button" onClick={() => handleEditMenu(m)}>Edit Item</button>
+                                        </div>
+                                      </div>
+                                    ))
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </section>
-            )}
+                </section>
+              );
+            })()}
           </main>
         </div>
       </div>
