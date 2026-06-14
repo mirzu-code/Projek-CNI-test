@@ -167,7 +167,7 @@ const Desserts = () => {
           <div className="philosophy-box text-center">
             <h3>Letakkan Penutup Manis pada Tempahan Anda</h3>
             <p>
-              Pilih kuih dan pencuci mulut yang dikendalikan secara lestari untuk menutup pengalaman makan anda. 
+              Pilih kuih dan pencuci mulut yang dikendalikan secara lestari untuk menutup pengalaman makan anda.
               Pra-pesanan memastikan setiap bahagian dibuat segar dan hanya mengikut bilangan tetamu sebenar.
             </p>
             <Link to="/book" className="btn-outline light-border">Book Your Table Now</Link>

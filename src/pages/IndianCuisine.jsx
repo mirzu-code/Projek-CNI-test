@@ -140,8 +140,8 @@ const IndianCuisine = () => {
                   </div>
 
                   <div className="dish-card-actions">
-                    <Link 
-                      to="/book" 
+                    <Link
+                      to="/book"
                       state={{ preselectCuisine: 'indian', preselectDish: dish.value }}
                       className="btn-primary dish-preorder-btn indian-btn"
                     >
@@ -161,8 +161,8 @@ const IndianCuisine = () => {
           <div className="philosophy-box text-center">
             <h3>Zero Food Waste Initiative (SDG 9)</h3>
             <p>
-              Tandoor firing and lamb shank Dum preparation are complex processes that require careful resource utilization. 
-              By booking and pre-ordering, you assist us in managing clay oven capacity and spices with absolute mathematical 
+              Tandoor firing and lamb shank Dum preparation are complex processes that require careful resource utilization.
+              By booking and pre-ordering, you assist us in managing clay oven capacity and spices with absolute mathematical
               precision, achieving a zero-waste kitchen in our glasshouse.
             </p>
             <Link to="/book" className="btn-outline light-border">Book Your Table Now</Link>

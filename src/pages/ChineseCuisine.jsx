@@ -140,8 +140,8 @@ const ChineseCuisine = () => {
                   </div>
 
                   <div className="dish-card-actions">
-                    <Link 
-                      to="/book" 
+                    <Link
+                      to="/book"
                       state={{ preselectCuisine: 'chinese', preselectDish: dish.value }}
                       className="btn-primary dish-preorder-btn chinese-btn"
                     >
@@ -161,8 +161,8 @@ const ChineseCuisine = () => {
           <div className="philosophy-box text-center">
             <h3>Zero Food Waste Initiative (SDG 9)</h3>
             <p>
-              By utilizing precision-built smart capacity planning, our kitchen minimizes waste. 
-              Pre-ordering your Cantonese and Szechuan dishes allows us to procure the exact cuts of fresh seafood 
+              By utilizing precision-built smart capacity planning, our kitchen minimizes waste.
+              Pre-ordering your Cantonese and Szechuan dishes allows us to procure the exact cuts of fresh seafood
               and vegetables from local sustainable suppliers.
             </p>
             <Link to="/book" className="btn-outline light-border">Book Your Table Now</Link>

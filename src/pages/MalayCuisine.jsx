@@ -124,8 +124,8 @@ const MalayCuisine = () => {
                   </div>
 
                   <div className="dish-card-actions">
-                    <Link 
-                      to="/book" 
+                    <Link
+                      to="/book"
                       state={{ preselectCuisine: 'malay', preselectDish: dish.value }}
                       className="btn-primary dish-preorder-btn"
                     >
@@ -145,8 +145,8 @@ const MalayCuisine = () => {
           <div className="philosophy-box text-center">
             <h3>Zero Food Waste Initiative (SDG 9)</h3>
             <p>
-              Traditional cooking involves precise, slow preparation. At Lembayung, our digital capacity planning 
-              and table reservation pre-ordering system ensures that we purchase from our organic farmers exactly 
+              Traditional cooking involves precise, slow preparation. At Lembayung, our digital capacity planning
+              and table reservation pre-ordering system ensures that we purchase from our organic farmers exactly
               what is ordered — reducing raw waste to 0%. Thank you for supporting sustainable innovation!
             </p>
             <Link to="/book" className="btn-outline light-border">Book Your Table Now</Link>

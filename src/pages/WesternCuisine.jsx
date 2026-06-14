@@ -3,7 +3,7 @@ import { useCuisineMenuItems } from '../hooks/useCuisineMenuItems';
 
 const WesternCuisine = () => {
   const { items: cuisineItems } = useCuisineMenuItems(4);
-  
+
   const fallbackDishes = [
     {
       value: 'angus-steak',
@@ -140,8 +140,8 @@ const WesternCuisine = () => {
                   </div>
 
                   <div className="dish-card-actions">
-                    <Link 
-                      to="/book" 
+                    <Link
+                      to="/book"
                       state={{ preselectCuisine: 'western', preselectDish: dish.value }}
                       className="btn-primary dish-preorder-btn western-btn"
                     >
@@ -161,8 +161,8 @@ const WesternCuisine = () => {
           <div className="philosophy-box text-center">
             <h3>Zero Food Waste Initiative (SDG 9)</h3>
             <p>
-              Dry aging beef and harvesting fresh Tasmanian salmon requires deep logistical care. 
-              By pre-ordering your Ribeye Steaks and Salmon Fillets digitally, you participate directly 
+              Dry aging beef and harvesting fresh Tasmanian salmon requires deep logistical care.
+              By pre-ordering your Ribeye Steaks and Salmon Fillets digitally, you participate directly
               in our SDG 9 green commitment—allowing our butchers to prepare only what is enjoyed.
             </p>
             <Link to="/book" className="btn-outline light-border">Book Your Table Now</Link>

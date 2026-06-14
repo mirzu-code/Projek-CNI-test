@@ -858,8 +858,15 @@
   background-color: #e74c3c;
 }
 
-.menu-card-details button {
+.menu-card-actions-row {
+  display: flex;
+  gap: 0.5rem;
   width: 100%;
+  margin-top: auto;
+}
+
+.btn-edit-item {
+  flex: 1;
   padding: 10px;
   background: var(--primary-color);
   color: #ffffff;
@@ -871,6 +878,22 @@
   transition: var(--transition);
 }
 
-.menu-card-details button:hover {
+.btn-edit-item:hover {
   background: var(--primary-light);
+}
+
+.btn-delete-item {
+  padding: 10px 14px;
+  background: #e74c3c;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-delete-item:hover {
+  background: #c0392b;
 }

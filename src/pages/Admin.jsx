@@ -586,6 +586,22 @@ const Admin = () => {
     setMenuError('');
   };
 
+  const handleDeleteMenu = async (menuId) => {
+    if (window.confirm('Adakah anda pasti mahu memadam menu ini secara kekal?')) {
+      try {
+        const { error } = await supabase
+          .from('menus')
+          .delete()
+          .eq('id', menuId);
+
+        if (error) throw error;
+        loadMenus();
+      } catch (err) {
+        setMenuError(err.message || 'Gagal memadam menu');
+      }
+    }
+  };
+
   const handleImageFileChange = (e) => {
     const file = e.target.files?.[0] || null;
     if (!file) {
@@ -1069,7 +1085,10 @@ const Admin = () => {
                                             <span className={`status-dot ${m.is_active ? 'active' : 'inactive'}`}></span>
                                             {m.is_active ? 'Active' : 'Inactive'}
                                           </div>
-                                          <button type="button" onClick={() => handleEditMenu(m)}>Edit Item</button>
+                                          <div className="menu-card-actions-row">
+                                            <button type="button" className="btn-edit-item" onClick={() => handleEditMenu(m)}>Edit Item</button>
+                                            <button type="button" className="btn-delete-item" onClick={() => handleDeleteMenu(m.id)}>Delete</button>
+                                          </div>
                                         </div>
                                       </div>
                                     ))

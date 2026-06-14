@@ -139,8 +139,8 @@ const JapaneseCuisine = () => {
                   </div>
 
                   <div className="dish-card-actions">
-                    <Link 
-                      to="/book" 
+                    <Link
+                      to="/book"
                       state={{ preselectCuisine: 'japanese', preselectDish: dish.value }}
                       className="btn-primary dish-preorder-btn jp-btn"
                     >
@@ -160,8 +160,8 @@ const JapaneseCuisine = () => {
           <div className="philosophy-box text-center">
             <h3>Zero Food Waste Initiative (SDG 9)</h3>
             <p>
-              Artisan sushi and ramen require absolute fresh sourcing. In alignment with SDG 9, our digital pre-ordering 
-              system ensures that premium cuts like wagyu beef and Norwegian salmon belly are only procured upon active 
+              Artisan sushi and ramen require absolute fresh sourcing. In alignment with SDG 9, our digital pre-ordering
+              system ensures that premium cuts like wagyu beef and Norwegian salmon belly are only procured upon active
               booking—maintaining raw ingredient waste at absolute zero.
             </p>
             <Link to="/book" className="btn-outline light-border">Book Your Table Now</Link>

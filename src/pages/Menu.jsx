@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './Menu.css';
@@ -136,8 +136,8 @@ const Menu = () => {
         <span className="menu-subtitle">Lembayung Culinary Vault</span>
         <h1>A Symphony of Global Gastronomy</h1>
         <p className="menu-header-desc">
-          Prepared by culinary artisans using sustainably sourced premium local ingredients. 
-          By planning digital reservations and pre-ordering, we align with <strong>SDG 9: Industry, Innovation & Sustainable Infrastructure</strong>, 
+          Prepared by culinary artisans using sustainably sourced premium local ingredients.
+          By planning digital reservations and pre-ordering, we align with <strong>SDG 9: Industry, Innovation & Sustainable Infrastructure</strong>,
           reducing waste to absolute zero.
         </p>
       </section>
@@ -155,11 +155,11 @@ const Menu = () => {
                   <div className="image-overlay" style={{ background: `linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, ${category.bgColor}dd 100%)` }}></div>
                   <span className="category-icon-badge">{category.icon}</span>
                 </div>
-                
+
                 <div className="category-info-wrapper" style={{ backgroundColor: category.bgColor }}>
                   <h3>{category.title}</h3>
                   <p>{category.description}</p>
-                  
+
                   <div className="signature-preview">
                     <span className="preview-label">Featured Specialties:</span>
                     <div className="preview-tags">
@@ -188,7 +188,7 @@ const Menu = () => {
         <div className="callout-content text-center">
           <h2>Contribute to Sustainable Sourcing</h2>
           <p>
-            Choose your dishes and pre-order during reservation to ensure our kitchen sources and cooks with 100% precision. 
+            Choose your dishes and pre-order during reservation to ensure our kitchen sources and cooks with 100% precision.
             Enjoy a highly customized, relaxed, and green dining experience.
           </p>
           <Link to="/book" className="btn-primary callout-cta-btn">Book Table & Pre-order</Link>
