@@ -56,7 +56,7 @@ const About = () => {
               </p>
             </div>
             <div className="about-story-media">
-              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Lembayung Glasshouse Interior" className="about-img animate-zoom-in" />
+              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Lembayung Glasshouse Interior" className="about-img animate-scale-in" />
             </div>
           </div>
         </div>
