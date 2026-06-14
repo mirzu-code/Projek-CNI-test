@@ -147,22 +147,7 @@ const Menu = () => {
         {menuLoading ? (
           <div className="menu-loading-state">Loading menu data...</div>
         ) : (
-          <div
-            className="categories-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 360px)',
-              gap: '2rem',
-              justifyContent: 'center',
-              justifyItems: 'center',
-              margin: '3.5rem auto 4rem',
-              width: 'auto',
-              maxWidth: 'calc(3 * 360px + 2 * 2rem)',
-              position: 'relative',
-              left: 'calc(50% + 40px)',
-              transform: 'translateX(-50%)'
-            }}
-          >
+          <div className="categories-grid">
             {categoriesWithMenuData.map((category) => (
               <div key={category.id} className="category-hub-card animate-zoom-in" style={{ '--card-accent': category.accentColor }}>
                 <div className="card-image-wrapper">
