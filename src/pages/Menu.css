@@ -160,6 +160,11 @@
   margin: 0;
   font-weight: 400;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  min-height: 72px; /* Set uniform height for descriptions */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .menu-loading-state,
@@ -189,6 +194,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  min-height: 90px; /* Set uniform height for specialties list to align buttons */
 }
 
 .preview-label {
