@@ -48,8 +48,8 @@ const About = () => {
                 traditional wooden Malay stilt houses. This marriage of old and new defines our culinary mission.
               </p>
               <p>
-                We serve culinary treasures from across Malaysia and Asia—from rich Malay <strong>Masak Lemak</strong> and delicate Chinese *Steamed Bass*
-                to precise Japanese Wagyu Ramen. Each dish represents structural history, cooked with cutting-edge tools and sustainable precision.
+                We serve culinary treasures from across Malaysia and Asia—from rich Malay <strong>Masak Lemak</strong> and delicate Chinese <strong>Steamed Bass</strong>
+                to precise Japanese <strong> Wagyu Ramen</strong>. Each dish represents structural history, cooked with cutting-edge tools and sustainable precision.
               </p>
               <p>
                 We take our craft very seriously, but the only thing more serious than our recipes is our ability to laugh when the sambal gets extra spicy.
