@@ -3,7 +3,7 @@ import './BackgroundMusic.css';
 
 const BackgroundMusic = () => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const hasInteracted = useRef(false);
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -17,6 +17,7 @@ const BackgroundMusic = () => {
       try {
         await audioRef.current.play();
         setIsPlaying(true);
+        hasInteracted.current = true;
       } catch (err) {
         console.log('Autoplay blocked, waiting for user interaction');
       }
@@ -26,11 +27,13 @@ const BackgroundMusic = () => {
 
     // Listen for any interaction to trigger play if it was blocked
     const handleFirstInteraction = () => {
-      if (!hasInteracted && !isPlaying && audioRef.current) {
+      if (!hasInteracted.current && audioRef.current) {
         audioRef.current.play()
-          .then(() => setIsPlaying(true))
+          .then(() => {
+            setIsPlaying(true);
+            hasInteracted.current = true;
+          })
           .catch(e => console.log('Playback failed', e));
-        setHasInteracted(true);
       }
     };
 
@@ -47,7 +50,7 @@ const BackgroundMusic = () => {
       window.removeEventListener('keydown', handleFirstInteraction);
       window.removeEventListener('touchstart', handleFirstInteraction);
     };
-  }, [hasInteracted, isPlaying]);
+  }, []);
 
   const togglePlay = (e) => {
     e.stopPropagation(); // Prevent triggering the global interaction listener
