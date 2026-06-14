@@ -100,7 +100,7 @@ const Menu = () => {
       description: 'A rich tapestry of spices. Delight in slow-roasted tandoori specialties, hand-kneaded naan platters, and legendary lamb shanks cooked in rich clay ovens.',
       defaultDishes: ['Aromatic Lamb Shank Biryani', 'Tandoori Butter Chicken Masala', 'Garlic Cheese Naan Platter', 'Paneer Tikka Masala', 'Lamb Rogan Josh', 'Mutton Seekh Kebab', 'Dal Makhani'],
       icon: '🍛',
-      bannerImage: 'https://images.unsplash.com/photo-1585938338392-50a5d22b6073?auto=format&fit=crop&w=800&q=80',
+      bannerImage: '/Flavorful Indian Cuisine.jpg',
       bgColor: '#a35d00',
       accentColor: '#e67e22'
     },
@@ -110,7 +110,7 @@ const Menu = () => {
       description: 'Finish your meal with traditional kuih, modern plated desserts, and comforting sweet endings handcrafted for every reservation.',
       defaultDishes: ['Kuih Bingka Ubi', 'Ondeh-Ondeh', 'Seri Muka', 'Kuih Lapis', 'Cendol Gelato', 'Kuih Ketayap', 'Tapai Pulut'],
       icon: '🍮',
-      bannerImage: 'https://images.unsplash.com/photo-1551024735-1f5f2d6c2d7d?auto=format&fit=crop&w=800&q=80',
+      bannerImage: '/Sweet Kuih & Desserts.jpg',
       bgColor: '#7d4f97',
       accentColor: '#f9c74f'
     }
