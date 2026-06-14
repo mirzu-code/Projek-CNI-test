@@ -43,13 +43,13 @@ const About = () => {
             <div className="about-story-text">
               <h2>Preserving Heritage, Embracing Innovation</h2>
               <p>
-                Lembayung was founded in the heart of Kuala Lumpur\'s historic Kampung Baru enclave.
+                Lembayung was founded in the heart of Kuala Lumpur's historic Kampung Baru enclave.
                 Our architectural blueprint is a visual representation of progress: a futuristic glasshouse surrounded by
                 traditional wooden Malay stilt houses. This marriage of old and new defines our culinary mission.
               </p>
               <p>
-                We serve culinary treasures from across Malaysia and Asia—from rich Malay *Masak Lemak* and delicate Chinese *Steamed Bass*
-                to precise Japanese *Wagyu Ramen*. Each dish represents structural history, cooked with cutting-edge tools and sustainable precision.
+                We serve culinary treasures from across Malaysia and Asia—from rich Malay <strong>Masak Lemak</strong> and delicate Chinese *Steamed Bass*
+                to precise Japanese Wagyu Ramen. Each dish represents structural history, cooked with cutting-edge tools and sustainable precision.
               </p>
               <p>
                 We take our craft very seriously, but the only thing more serious than our recipes is our ability to laugh when the sambal gets extra spicy.
