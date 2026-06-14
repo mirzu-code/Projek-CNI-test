@@ -55,14 +55,26 @@
 .categories-grid-container {
   width: 95%;
   max-width: 1400px;
-  margin: 2rem auto 0; /* Pushes the cards down to make header text readable */
+  margin: 3.5rem auto 0; /* Pushes the cards down for better spacing under header */
 }
 
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(280px, 1fr));
   gap: 2rem;
   margin-bottom: 4rem;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .categories-grid-container {
+    margin-top: 2.5rem;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
 }
 
 /* ===== CATEGORY CARDS ===== */
