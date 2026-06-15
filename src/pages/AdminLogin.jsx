@@ -13,7 +13,7 @@ const AdminLogin = () => {
     setError('');
     // Simple client-side check for demo purposes
     if (!username || !password) {
-      setError('Sila lengkapkan kedua-dua medan.');
+      setError('Please complete both fields.');
       return;
     }
 
@@ -21,7 +21,7 @@ const AdminLogin = () => {
     if (password === 'admin123') {
       navigate('/admin-dashboard');
     } else {
-      setError('Credentials tidak sah.');
+      setError('Invalid credentials.');
     }
   };
 

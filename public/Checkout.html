@@ -60,7 +60,7 @@
         window.location.href = '/MyBooking.html';
       } catch (err) {
         errorText.style.display = 'block';
-        errorText.textContent = 'Gagal buat tempahan: ' + (err.message||err);
+        errorText.textContent = 'Failed to create booking: ' + (err.message||err);
         confirmBtn.disabled = false;
       }
     });

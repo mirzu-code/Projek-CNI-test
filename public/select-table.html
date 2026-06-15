@@ -163,7 +163,7 @@
           const { data: existingLock } = await supabase.from('table_locks').select('*').eq('table_id', table.id).maybeSingle();
           if (existingLock && existingLock.lock_token && existingLock.lock_token !== lockToken && new Date(existingLock.lock_expires_at).getTime() > now.getTime()) {
             errorText.style.display = 'block';
-            errorText.textContent = 'Meja ini sedang dikunci oleh pelanggan lain. Sila pilih meja lain.';
+            errorText.textContent = 'This table is currently locked by another customer. Please choose a different table.';
             return false;
           }
 
@@ -177,13 +177,13 @@
           }
 
           lockMessageEl.style.display = 'block';
-          lockMessageEl.textContent = `Meja ${table.name} dikunci sehingga ${new Date(expiresAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}.`;
+          lockMessageEl.textContent = `Table ${table.name} is locked until ${new Date(expiresAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}.`;
           // reload locks
           await refreshLocks();
           return true;
         } catch (err) {
           errorText.style.display = 'block';
-          errorText.textContent = 'Gagal kunci meja: ' + (err.message || 'Unknown');
+          errorText.textContent = 'Failed to lock table: ' + (err.message || 'Unknown');
           return false;
         }
       }
@@ -211,14 +211,14 @@
       continueBtn.addEventListener('click', async () => {
         if (!selectedTable) {
           errorText.style.display = 'block';
-          errorText.textContent = 'Sila pilih meja terlebih dahulu.';
+          errorText.textContent = 'Please select a table first.';
           return;
         }
         // verify lock
         const lock = tableLocks.find(l=>l.table_id===selectedTable.id);
         if (!lock || lock.lock_token !== lockToken || (lock.lock_expires_at && new Date(lock.lock_expires_at).getTime() <= Date.now())) {
           errorText.style.display = 'block';
-          errorText.textContent = 'Kunci meja telah tamat. Sila pilih semula meja.';
+          errorText.textContent = 'Table lock has expired. Please select a table again.';
           return;
         }
 

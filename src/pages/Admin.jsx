@@ -587,7 +587,7 @@ const Admin = () => {
   };
 
   const handleDeleteMenu = async (menuId) => {
-    if (window.confirm('Adakah anda pasti mahu memadam menu ini secara kekal?')) {
+    if (window.confirm('Are you sure you want to permanently delete this menu item?')) {
       try {
         const { error } = await supabase
           .from('menus')
@@ -597,7 +597,7 @@ const Admin = () => {
         if (error) throw error;
         loadMenus();
       } catch (err) {
-        setMenuError(err.message || 'Gagal memadam menu');
+        setMenuError(err.message || 'Failed to delete menu');
       }
     }
   };
@@ -624,7 +624,7 @@ const Admin = () => {
     setMenuError('');
 
     if (!menuForm.name || !menuForm.price || !menuForm.cuisine_id) {
-      setMenuError('Sila lengkapkan nama, harga dan kategori menu.');
+      setMenuError('Please complete name, price, and menu category.');
       return;
     }
 

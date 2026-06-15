@@ -556,7 +556,7 @@ const BookingFlow = () => {
                   <strong>Processing</strong>
                 </div>
                 <div className="summary-item total-fee">
-                  <span>Jumlah Harga</span>
+                  <span>Total Price</span>
                   <strong>RM {calculateTotal().toFixed(2)}</strong>
                 </div>
               </div>
@@ -568,20 +568,20 @@ const BookingFlow = () => {
           <div className="button-group">
             {step > 1 ? (
               <button type="button" className="btn-outline" onClick={handleBack}>
-                Kembali
+                Back
               </button>
             ) : (
               <Link to="/menu" className="btn-outline">
-                Kembali ke Menu
+                Back to Menu
               </Link>
             )}
             {step < 3 ? (
               <button type="button" className="btn-primary" onClick={handleNext}>
-                Seterusnya
+                Next
               </button>
             ) : (
               <button type="button" className="btn-primary full-width" onClick={submitBooking}>
-                Pilih Meja dan Teruskan
+                Select Table and Continue
               </button>
             )}
           </div>

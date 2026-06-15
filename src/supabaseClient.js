@@ -4,7 +4,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://hnpiduoeyajtpc
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 if (!supabaseAnonKey) {
-    console.error("Amaran: Maklumat .env untuk Supabase tidak lengkap! Sila tetapkan VITE_SUPABASE_ANON_KEY.")
+    console.error("Warning: Supabase .env info is incomplete! Please set VITE_SUPABASE_ANON_KEY.")
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
